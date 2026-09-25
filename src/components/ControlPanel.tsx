@@ -14,28 +14,12 @@ import {
   Copy,
   ChevronUp,
   AtSign,
-  Download,
-  Share2,
-  ThumbsUp,
-  ThumbsDown,
-  CheckCircle2,
-  ExternalLink,
-  Activity,
-  Globe
+  Download
 } from 'lucide-react';
 import type { DataItem, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from '../lib/chartPresets';
 import { COLOR_SCHEMES } from '../lib/chartPresets';
 import { triggerHaptic } from '../lib/haptics';
 import Papa from 'papaparse';
-import {
-  getLearningStats,
-  getCustomGaId,
-  setCustomGaId,
-  getCustomGscTag,
-  setCustomGscTag,
-  submitUserFeedback
-} from '../lib/learningLoop';
-import { initGoogleAnalytics, trackEvent } from '../lib/gtag';
 
 export interface ControlPanelProps {
   activeTab: 'content' | 'style' | 'settings';
@@ -189,47 +173,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   const [csvText, setCsvText] = useState('');
   const [sortAsc, setSortAsc] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  // Analytics & SEO configuration state
-  const [gaId, setGaId] = useState(getCustomGaId());
-  const [gscTag, setGscTag] = useState(getCustomGscTag());
-  const [feedbackSent, setFeedbackSent] = useState<string | null>(null);
-  const stats = getLearningStats();
-
-  const handleSaveGaId = () => {
-    triggerHaptic('light');
-    setCustomGaId(gaId);
-    initGoogleAnalytics(gaId);
-    onNotify?.('Saved Google Analytics Measurement ID!', 'success');
-  };
-
-  const handleSaveGscTag = () => {
-    triggerHaptic('light');
-    setCustomGscTag(gscTag);
-    onNotify?.('Saved Google Search Console tag!', 'success');
-  };
-
-  const handleCopyGscMeta = () => {
-    triggerHaptic('light');
-    const metaTag = `<meta name="google-site-verification" content="${gscTag}" />`;
-    navigator.clipboard.writeText(metaTag);
-    onNotify?.('Copied GSC verification meta tag!', 'success');
-  };
-
-  const handleFeedback = (sentiment: 'positive' | 'negative') => {
-    triggerHaptic('success');
-    submitUserFeedback(sentiment);
-    trackEvent('user_feedback', 'CSAT', sentiment);
-    setFeedbackSent(sentiment);
-    onNotify?.(sentiment === 'positive' ? 'Thanks for the love! ❤️' : 'Thanks! We are improving daily.', 'info');
-  };
-
-  const handleCopyShareLink = () => {
-    triggerHaptic('light');
-    const shareUrl = 'https://chartgenie.xyz/?utm_source=studio_share&utm_medium=viral_link';
-    navigator.clipboard.writeText(shareUrl);
-    onNotify?.('Copied viral studio share link!', 'viral');
-  };
 
   // Quick stats
   const total = data.reduce((acc, curr) => acc + (typeof curr.value === 'number' ? curr.value : 0), 0);
@@ -710,173 +653,28 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </div>
           </div>
 
-          {/* SEO & Search Console Card */}
-          <div className="control-section" style={{ background: '#f8fafc', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Globe size={14} color="#3b82f6" />
-                <h3 className="section-title" style={{ margin: 0, fontSize: '0.82rem' }}>SEO & Search Console</h3>
-              </div>
-              <span style={{ fontSize: '0.68rem', background: '#dcfce7', color: '#15803d', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
-                Indexed & Live
-              </span>
-            </div>
-
-            <div style={{ fontSize: '0.74rem', color: '#64748b', marginBottom: '8px', lineHeight: 1.4 }}>
-              Production domain: <strong style={{ color: '#0f172a' }}>chartgenie.xyz</strong> (Vercel Edge SSL)
-            </div>
-
-            <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
-              <input
-                type="text"
-                value={gscTag}
-                onChange={(e) => setGscTag(e.target.value)}
-                placeholder="GSC verification tag"
-                className="clean-input"
-                style={{ fontSize: '0.75rem', padding: '5px 8px' }}
-                title="Google Search Console verification token"
-              />
+          {/* Data Actions */}
+          <div className="control-section">
+            <h3 className="section-title">Data Actions</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
               <button
                 type="button"
-                onClick={handleSaveGscTag}
-                className="btn-apply-csv"
-                style={{ padding: '4px 10px', fontSize: '0.72rem', whiteSpace: 'nowrap' }}
-              >
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={handleCopyGscMeta}
                 className="quick-tool-btn"
-                style={{ padding: '4px 8px', fontSize: '0.72rem', whiteSpace: 'nowrap' }}
-                title="Copy <meta> tag for Google Search Console"
+                onClick={handleResetSample}
+                style={{ justifyContent: 'center', padding: '8px' }}
+                title="Reset to standard starter data"
               >
-                <Copy size={12} /> Meta
+                <RotateCcw size={14} color="#6366f1" /> Reset Starter
               </button>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '6px', borderTop: '1px dashed #cbd5e1' }}>
-              <a
-                href="https://chartgenie.xyz/sitemap.xml"
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: '0.72rem', color: '#3b82f6', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
-              >
-                <CheckCircle2 size={12} color="#10b981" /> sitemap.xml
-              </a>
-              <a
-                href="https://chartgenie.xyz/llms.txt"
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: '0.72rem', color: '#8b5cf6', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
-              >
-                <Sparkles size={12} color="#8b5cf6" /> llms.txt (GEO)
-              </a>
-              <a
-                href="https://search.google.com/search-console"
-                target="_blank"
-                rel="noreferrer"
-                style={{ fontSize: '0.72rem', color: '#64748b', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '3px' }}
-              >
-                Open GSC <ExternalLink size={10} />
-              </a>
-            </div>
-          </div>
-
-          {/* Google Analytics 4 (GA4) Telemetry Card */}
-          <div className="control-section" style={{ background: '#f8fafc', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0', marginTop: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Activity size={14} color="#10b981" />
-                <h3 className="section-title" style={{ margin: 0, fontSize: '0.82rem' }}>Google Analytics 4</h3>
-              </div>
-              <span style={{ fontSize: '0.68rem', background: '#e0e7ff', color: '#4338ca', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
-                {gaId ? 'Active' : 'Ready'}
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <input
-                type="text"
-                value={gaId}
-                onChange={(e) => setGaId(e.target.value)}
-                placeholder="G-XXXXXXXXXX (Measurement ID)"
-                className="clean-input"
-                style={{ fontSize: '0.75rem', padding: '5px 8px' }}
-              />
               <button
                 type="button"
-                onClick={handleSaveGaId}
-                className="btn-apply-csv"
-                style={{ padding: '4px 10px', fontSize: '0.72rem', whiteSpace: 'nowrap' }}
+                className="quick-tool-btn"
+                onClick={handleShuffle}
+                style={{ justifyContent: 'center', padding: '8px' }}
+                title="Randomize test numbers"
               >
-                Apply
+                <Shuffle size={14} color="#ec4899" /> Mock Numbers
               </button>
-            </div>
-            <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '4px' }}>
-              Auto-dispatches pageviews, chart creations, aspect ratios & exports.
-            </div>
-          </div>
-
-          {/* Self-Learning Growth & Feedback Loop Card */}
-          <div className="control-section" style={{ background: '#f8fafc', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0', marginTop: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Sparkles size={14} color="#f59e0b" />
-                <h3 className="section-title" style={{ margin: 0, fontSize: '0.82rem' }}>Self-Learning Growth Loop</h3>
-              </div>
-              <span style={{ fontSize: '0.68rem', background: '#fef3c7', color: '#92400e', padding: '2px 6px', borderRadius: '4px', fontWeight: 600 }}>
-                Learning Engine
-              </span>
-            </div>
-
-            {/* Quick stats snapshot */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '10px' }}>
-              <div style={{ background: '#ffffff', padding: '6px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Charts Created</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>{stats.chartsCreatedCount + 1}</div>
-              </div>
-              <div style={{ background: '#ffffff', padding: '6px 8px', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '0.68rem', color: '#64748b' }}>Exports Logged</div>
-                <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#0f172a' }}>{stats.exportsCount}</div>
-              </div>
-            </div>
-
-            {/* 1-Click Viral Share Link */}
-            <button
-              type="button"
-              className="quick-tool-btn"
-              onClick={handleCopyShareLink}
-              style={{ width: '100%', justifyContent: 'center', marginBottom: '10px', padding: '6px' }}
-            >
-              <Share2 size={13} color="#6366f1" /> Copy Studio Viral Link (UTM)
-            </button>
-
-            {/* 1-Click CSAT Feedback Widget */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '8px', borderTop: '1px solid #e2e8f0' }}>
-              <span style={{ fontSize: '0.72rem', color: '#475569', fontWeight: 500 }}>
-                {feedbackSent ? 'Feedback logged! ✨' : 'Is ChartGenie helpful?'}
-              </span>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                <button
-                  type="button"
-                  onClick={() => handleFeedback('positive')}
-                  className="quick-tool-btn"
-                  style={{ padding: '3px 8px', fontSize: '0.72rem' }}
-                  title="Yes, love it!"
-                >
-                  <ThumbsUp size={12} color="#10b981" /> Yes
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleFeedback('negative')}
-                  className="quick-tool-btn"
-                  style={{ padding: '3px 8px', fontSize: '0.72rem' }}
-                  title="Needs improvement"
-                >
-                  <ThumbsDown size={12} color="#ef4444" /> Needs work
-                </button>
-              </div>
             </div>
           </div>
         </div>
