@@ -15,7 +15,7 @@ declare global {
 export const getActiveGaMeasurementId = (): string => {
   const custom = getCustomGaId();
   if (custom) return custom;
-  return import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-CHARTGENIE1';
+  return import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-96D837GEH9';
 };
 
 // Dynamically initialize or update GA script if needed
@@ -23,7 +23,7 @@ export const initGoogleAnalytics = (measurementId?: string) => {
   if (typeof window === 'undefined') return;
 
   const id = measurementId || getActiveGaMeasurementId();
-  if (!id || id === 'G-CHARTGENIE1') return; // Skip dummy mock if not configured
+  if (!id) return; // Skip if no ID configured
 
   // Check if script already exists
   const scriptId = 'ga4-gtag-script';
