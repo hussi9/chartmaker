@@ -1,12 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Header } from './components/Header';
 import { OmniImporter } from './components/OmniImporter';
 import { CustomizerDrawer } from './components/CustomizerDrawer';
 import { ChartCanvas } from './components/ChartCanvas';
 import { ExportModal } from './components/ExportModal';
+import { TemplateGallery } from './components/TemplateGallery';
 import { ProgrammaticSeoRouter } from './components/ProgrammaticSeoRouter';
 import { SeoAeoSection } from './components/SeoAeoSection';
 import { COLOR_SCHEMES, SAMPLE_DATASETS } from './lib/chartPresets';
+import { decodeChartState } from './lib/urlState';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily } from './lib/chartPresets';
 
 export function App() {
@@ -22,26 +24,35 @@ export function App() {
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
   const [fontFamily, setFontFamily] = useState<FontFamily>('Plus Jakarta Sans');
   const [bgMode, setBgMode] = useState<'dark' | 'pure-dark' | 'slate' | 'light'>('dark');
+  
+  // Modals
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
+  const [isTemplatesOpen, setIsTemplatesOpen] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
-  // Handle preset switching
-  const handleSelectPreset = (key: keyof typeof SAMPLE_DATASETS) => {
-    const preset = SAMPLE_DATASETS[key];
-    setData(preset.data);
-    setTitle(preset.title);
-    setSubtitle(preset.subtitle);
-
-    if (key === 'revenueGrowth' || key === 'marketingFunnel') {
-      setChartType('bar');
-    } else if (key === 'trafficSources') {
-      setChartType('horizontalBar');
-    } else if (key === 'skillRadar') {
-      setChartType('radar');
-    } else {
-      setChartType('pie');
+  // Load URL Hash State on initial mount
+  useEffect(() => {
+    if (window.location.hash && window.location.hash.includes('state=')) {
+      const hashPart = window.location.hash.split('state=')[1];
+      const decoded = decodeChartState(hashPart);
+      if (decoded) {
+        setTitle(decoded.title);
+        setSubtitle(decoded.subtitle);
+        setChartType(decoded.chartType);
+        setData(decoded.data);
+        const matchedScheme = COLOR_SCHEMES.find((s) => s.id === decoded.schemeId);
+        if (matchedScheme) setActiveScheme(matchedScheme);
+      }
     }
+  }, []);
+
+  // Handle preset selection from Template Gallery
+  const handleSelectTemplate = (newData: DataItem[], newTitle: string, newSubtitle: string, newType: ChartType) => {
+    setData(newData);
+    setTitle(newTitle);
+    setSubtitle(newSubtitle);
+    setChartType(newType);
   };
 
   // Handle Programmatic Route Click
@@ -56,11 +67,18 @@ export function App() {
     <div className="app-container">
       {/* Header Bar */}
       <Header
-        onSelectPreset={handleSelectPreset}
+        onOpenTemplates={() => setIsTemplatesOpen(true)}
         onOpenExport={() => setIsExportOpen(true)}
         onOpenAiPrompt={() => {
           const el = document.getElementById('omni-importer-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+        chartState={{
+          title,
+          subtitle,
+          chartType,
+          schemeId: activeScheme.id,
+          data
         }}
       />
 
@@ -123,6 +141,13 @@ export function App() {
 
       {/* Answer Engine & Programmatic SEO Section */}
       <SeoAeoSection />
+
+      {/* Template Gallery Modal */}
+      <TemplateGallery
+        isOpen={isTemplatesOpen}
+        onClose={() => setIsTemplatesOpen(false)}
+        onSelectTemplate={handleSelectTemplate}
+      />
 
       {/* Export & Embed Modal */}
       <ExportModal

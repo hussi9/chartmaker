@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clipboard, Plus, Trash2, Wand2, FileSpreadsheet } from 'lucide-react';
+import { Clipboard, Plus, Trash2, Wand2, FileSpreadsheet, Download } from 'lucide-react';
 import type { DataItem } from '../lib/chartPresets';
 import Papa from 'papaparse';
 
@@ -56,11 +56,20 @@ export const OmniImporter: React.FC<OmniImporterProps> = ({
     onChangeData(data.filter((item) => item.id !== id));
   };
 
+  // Download CSV
+  const handleDownloadCsv = () => {
+    const csvString = Papa.unparse(data.map((item) => ({ Label: item.name, Value: item.value })));
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${(title || 'chart-data').toLowerCase().replace(/\s+/g, '-')}.csv`;
+    link.click();
+  };
+
   // Handle Raw Paste Parse
   const handleParsePaste = () => {
     if (!pasteContent.trim()) return;
     
-    // Parse using PapaParse
     const parsed = Papa.parse<string[]>(pasteContent.trim(), { skipEmptyLines: true });
     if (parsed.data && parsed.data.length > 0) {
       const rows = parsed.data;
@@ -115,6 +124,14 @@ export const OmniImporter: React.FC<OmniImporterProps> = ({
           { id: '2', name: 'Proteins', value: 30 },
           { id: '3', name: 'Fats', value: 25 }
         ];
+      } else if (promptLower.includes('crypto') || promptLower.includes('bitcoin')) {
+        generatedTitle = 'DeFi & Crypto Asset Allocation';
+        generatedData = [
+          { id: '1', name: 'Bitcoin (BTC)', value: 45 },
+          { id: '2', name: 'Ethereum (ETH)', value: 30 },
+          { id: '3', name: 'Solana (SOL)', value: 15 },
+          { id: '4', name: 'Stablecoins', value: 10 }
+        ];
       } else {
         generatedTitle = aiPrompt.charAt(0).toUpperCase() + aiPrompt.slice(1);
         generatedData = [
@@ -129,7 +146,7 @@ export const OmniImporter: React.FC<OmniImporterProps> = ({
       onChangeData(generatedData);
       setIsAiLoading(false);
       setActiveTab('table');
-    }, 600);
+    }, 500);
   };
 
   return (
@@ -178,7 +195,7 @@ export const OmniImporter: React.FC<OmniImporterProps> = ({
           onClick={() => setActiveTab('ai')}
           style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
         >
-          <Wand2 size={14} /> AI Generator
+          <Wand2 size={14} /> AI Prompt
         </button>
       </div>
 
@@ -230,13 +247,22 @@ export const OmniImporter: React.FC<OmniImporterProps> = ({
             </table>
           </div>
 
-          <button
-            onClick={handleAddRow}
-            className="btn-secondary"
-            style={{ width: '100%', marginTop: '12px', justifyContent: 'center', fontSize: '0.82rem' }}
-          >
-            <Plus size={14} /> Add Row
-          </button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '12px' }}>
+            <button
+              onClick={handleAddRow}
+              className="btn-secondary"
+              style={{ justifyContent: 'center', fontSize: '0.82rem' }}
+            >
+              <Plus size={14} /> Add Row
+            </button>
+            <button
+              onClick={handleDownloadCsv}
+              className="btn-secondary"
+              style={{ justifyContent: 'center', fontSize: '0.82rem', borderColor: 'rgba(16, 185, 129, 0.4)', color: '#34d399' }}
+            >
+              <Download size={14} /> Download CSV
+            </button>
+          </div>
         </div>
       )}
 

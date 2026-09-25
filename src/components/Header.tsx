@@ -1,18 +1,39 @@
-import React from 'react';
-import { Sparkles, Download, Wand2, PieChart, BarChart2, TrendingUp } from 'lucide-react';
-import { SAMPLE_DATASETS } from '../lib/chartPresets';
+import React, { useState } from 'react';
+import { Sparkles, Download, Wand2, LayoutGrid, Share2, Check } from 'lucide-react';
+import { encodeChartState } from '../lib/urlState';
+import type { DataItem, ChartType } from '../lib/chartPresets';
 
 interface HeaderProps {
-  onSelectPreset: (key: keyof typeof SAMPLE_DATASETS) => void;
+  onOpenTemplates: () => void;
   onOpenExport: () => void;
   onOpenAiPrompt: () => void;
+  chartState: {
+    title: string;
+    subtitle: string;
+    chartType: ChartType;
+    schemeId: string;
+    data: DataItem[];
+  };
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onSelectPreset,
+  onOpenTemplates,
   onOpenExport,
-  onOpenAiPrompt
+  onOpenAiPrompt,
+  chartState
 }) => {
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  const handleShareLink = () => {
+    const encoded = encodeChartState(chartState);
+    if (encoded) {
+      const shareUrl = `${window.location.origin}${window.location.pathname}#state=${encoded}`;
+      navigator.clipboard.writeText(shareUrl);
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2000);
+    }
+  };
+
   return (
     <header className="glass-panel" style={{ padding: '16px 24px', marginBottom: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
@@ -46,43 +67,33 @@ export const Header: React.FC<HeaderProps> = ({
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em'
               }}>
-                AI 2.0
+                PRO MAX
               </span>
             </div>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>
-              Instant AI-Assisted Chart & Graph Generator • Vector SVG & 4K Retina
+              AI-Powered Data Visualization Suite • Live URL Sharing & Vector SVG
             </p>
           </div>
         </div>
 
-        {/* Quick Presets & Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', background: 'rgba(255,255,255,0.04)', padding: '4px', borderRadius: '10px', border: '1px solid var(--border-glass)' }}>
-            <button
-              onClick={() => onSelectPreset('marketShare')}
-              className="tab-btn"
-              title="Load Market Share Preset"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <PieChart size={14} /> Market Share
-            </button>
-            <button
-              onClick={() => onSelectPreset('revenueGrowth')}
-              className="tab-btn"
-              title="Load SaaS Revenue Preset"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <TrendingUp size={14} /> Revenue
-            </button>
-            <button
-              onClick={() => onSelectPreset('trafficSources')}
-              className="tab-btn"
-              title="Load Traffic Sources Preset"
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <BarChart2 size={14} /> Traffic
-            </button>
-          </div>
+        {/* Actions Bar */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          <button
+            onClick={onOpenTemplates}
+            className="btn-secondary"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <LayoutGrid size={16} /> Template Gallery
+          </button>
+
+          <button
+            onClick={handleShareLink}
+            className="btn-secondary"
+            style={{ borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            {copiedShare ? <Check size={16} color="#10b981" /> : <Share2 size={16} />}
+            {copiedShare ? 'Link Copied!' : 'Share Live Chart'}
+          </button>
 
           <button
             onClick={onOpenAiPrompt}
