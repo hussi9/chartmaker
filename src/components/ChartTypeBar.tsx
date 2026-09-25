@@ -1,5 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { PieChart, CircleDot, TrendingUp, BarChart3, Activity, Layers, Sliders, ChevronDown } from 'lucide-react';
+import {
+  PieChart,
+  CircleDot,
+  TrendingUp,
+  BarChart3,
+  Activity,
+  Layers,
+  Sliders,
+  ChevronDown,
+  Columns,
+  AlignLeft,
+  Target,
+  Grid3X3,
+  Gauge,
+  Filter,
+  GitCommit
+} from 'lucide-react';
 import type { ChartType } from '../lib/chartPresets';
 import { triggerHaptic } from '../lib/haptics';
 
@@ -16,11 +32,26 @@ const PRIMARY_TYPES: { type: ChartType; label: string; icon: React.ReactNode }[]
   { type: 'area', label: 'Area', icon: <Activity size={18} /> }
 ];
 
-const MORE_TYPES: { type: ChartType; label: string; icon: React.ReactNode }[] = [
-  { type: 'stackedBar', label: 'Stacked Strip (100%)', icon: <Layers size={16} /> },
-  { type: 'horizontalBar', label: 'Horizontal Bar', icon: <BarChart3 size={16} style={{ transform: 'rotate(90deg)' }} /> },
-  { type: 'radar', label: 'Radar Matrix', icon: <Sliders size={16} /> },
-  { type: 'scatter', label: 'Scatter Plot', icon: <Activity size={16} /> }
+export interface ChartTypeOption {
+  type: ChartType;
+  label: string;
+  category: 'Bars & Columns' | 'Lines & Trends' | 'Distribution & Matrix' | 'KPIs & Funnels';
+  icon: React.ReactNode;
+}
+
+const MORE_TYPES: ChartTypeOption[] = [
+  { type: 'horizontalBar', label: 'Horizontal Bar', category: 'Bars & Columns', icon: <AlignLeft size={16} /> },
+  { type: 'stackedBar', label: '1D Stacked Strip', category: 'Bars & Columns', icon: <Layers size={16} /> },
+  { type: 'stackedColumn', label: 'Stacked Column', category: 'Bars & Columns', icon: <Columns size={16} /> },
+  { type: 'stackedHorizontal', label: 'Stacked Horizontal', category: 'Bars & Columns', icon: <AlignLeft size={16} /> },
+  { type: 'stackedArea', label: 'Stacked Area', category: 'Lines & Trends', icon: <Layers size={16} /> },
+  { type: 'stackedLine', label: 'Stacked / Step Line', category: 'Lines & Trends', icon: <GitCommit size={16} /> },
+  { type: 'threshold', label: 'Rule Chart (Average)', category: 'Lines & Trends', icon: <Target size={16} /> },
+  { type: 'heatmap', label: 'Heat Map Matrix', category: 'Distribution & Matrix', icon: <Grid3X3 size={16} /> },
+  { type: 'scatter', label: 'Scatter Plot', category: 'Distribution & Matrix', icon: <Activity size={16} /> },
+  { type: 'radar', label: 'Radar Matrix', category: 'Distribution & Matrix', icon: <Sliders size={16} /> },
+  { type: 'gauge', label: 'Gauge / Meter', category: 'KPIs & Funnels', icon: <Gauge size={16} /> },
+  { type: 'funnel', label: 'Conversion Funnel', category: 'KPIs & Funnels', icon: <Filter size={16} /> }
 ];
 
 export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelectType }) => {
@@ -89,46 +120,67 @@ export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelect
               right: 0,
               background: '#ffffff',
               border: '1px solid #e2e8f0',
-              borderRadius: '12px',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-              padding: '6px',
-              minWidth: '200px',
+              borderRadius: '14px',
+              boxShadow: '0 12px 30px -4px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08)',
+              padding: '8px',
+              minWidth: '260px',
+              maxHeight: '420px',
+              overflowY: 'auto',
               zIndex: 100,
               display: 'flex',
               flexDirection: 'column',
-              gap: '2px'
+              gap: '6px'
             }}
           >
-            {MORE_TYPES.map((m) => {
-              const isSelected = activeType === m.type;
+            {(['Bars & Columns', 'Lines & Trends', 'Distribution & Matrix', 'KPIs & Funnels'] as const).map((cat) => {
+              const items = MORE_TYPES.filter(m => m.category === cat);
               return (
-                <button
-                  key={m.type}
-                  type="button"
-                  onClick={() => {
-                    triggerHaptic('light');
-                    onSelectType(m.type);
-                    setIsMoreOpen(false);
-                  }}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '8px 12px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    background: isSelected ? '#eff6ff' : 'transparent',
-                    color: isSelected ? '#1d4ed8' : '#334155',
-                    fontWeight: isSelected ? 600 : 500,
-                    fontSize: '0.84rem',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.15s ease'
-                  }}
-                >
-                  <span style={{ color: isSelected ? '#2563eb' : '#64748b' }}>{m.icon}</span>
-                  <span>{m.label}</span>
-                </button>
+                <div key={cat} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                  <div style={{
+                    fontSize: '0.66rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    color: '#94a3b8',
+                    letterSpacing: '0.06em',
+                    padding: '4px 8px 2px'
+                  }}>
+                    {cat}
+                  </div>
+                  {items.map((m) => {
+                    const isSelected = activeType === m.type;
+                    return (
+                      <button
+                        key={m.type}
+                        type="button"
+                        onClick={() => {
+                          triggerHaptic('light');
+                          onSelectType(m.type);
+                          setIsMoreOpen(false);
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px',
+                          padding: '7px 10px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: isSelected ? '#eff6ff' : 'transparent',
+                          color: isSelected ? '#1d4ed8' : '#334155',
+                          fontWeight: isSelected ? 600 : 500,
+                          fontSize: '0.82rem',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          transition: 'all 0.12s ease'
+                        }}
+                      >
+                        <span style={{ color: isSelected ? '#2563eb' : '#64748b', display: 'flex', alignItems: 'center' }}>
+                          {m.icon}
+                        </span>
+                        <span>{m.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               );
             })}
           </div>

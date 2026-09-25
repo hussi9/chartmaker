@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ToastContainer } from '../components/Toast';
 import { MobileBottomNav } from '../components/MobileBottomNav';
 import { Header } from '../components/Header';
+import { ChartTypeBar } from '../components/ChartTypeBar';
 import type { ToastMessage } from '../components/Toast';
 
 describe('UI Component Test Suite', () => {
@@ -123,6 +124,47 @@ describe('UI Component Test Suite', () => {
       expect(saveBtn).toBeInTheDocument();
       fireEvent.click(saveBtn);
       expect(handleQuickSave).toHaveBeenCalled();
+    });
+  });
+
+  describe('ChartTypeBar Component (17 Chart Offerings)', () => {
+    it('renders primary types and expands more dropdown with categories and options', () => {
+      const handleSelectType = vi.fn();
+
+      render(
+        <ChartTypeBar
+          activeType="bar"
+          onSelectType={handleSelectType}
+        />
+      );
+
+      // Verify primary types are rendered
+      expect(screen.getByText('Bar')).toBeInTheDocument();
+      expect(screen.getByText('Line')).toBeInTheDocument();
+      expect(screen.getByText('Pie')).toBeInTheDocument();
+      expect(screen.getByText('Donut')).toBeInTheDocument();
+      expect(screen.getByText('Area')).toBeInTheDocument();
+
+      // Click More to open dropdown
+      const moreBtn = screen.getByRole('button', { name: /more/i });
+      expect(moreBtn).toBeInTheDocument();
+      fireEvent.click(moreBtn);
+
+      // Verify category headers are present
+      expect(screen.getByText('Bars & Columns')).toBeInTheDocument();
+      expect(screen.getByText('Lines & Trends')).toBeInTheDocument();
+      expect(screen.getByText('Distribution & Matrix')).toBeInTheDocument();
+      expect(screen.getByText('KPIs & Funnels')).toBeInTheDocument();
+
+      // Verify specific specialized chart types exist
+      expect(screen.getByText('Rule Chart (Average)')).toBeInTheDocument();
+      expect(screen.getByText('Heat Map Matrix')).toBeInTheDocument();
+      expect(screen.getByText('Gauge / Meter')).toBeInTheDocument();
+      expect(screen.getByText('Conversion Funnel')).toBeInTheDocument();
+
+      // Select Heat Map
+      fireEvent.click(screen.getByText('Heat Map Matrix'));
+      expect(handleSelectType).toHaveBeenCalledWith('heatmap');
     });
   });
 });

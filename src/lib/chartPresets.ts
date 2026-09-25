@@ -18,10 +18,18 @@ export type ChartType =
   | 'bar' 
   | 'horizontalBar' 
   | 'stackedBar' 
+  | 'stackedColumn'
+  | 'stackedHorizontal'
   | 'line' 
+  | 'stackedLine' 
   | 'area' 
+  | 'stackedArea' 
   | 'radar' 
-  | 'scatter';
+  | 'scatter'
+  | 'heatmap'
+  | 'threshold'
+  | 'gauge'
+  | 'funnel';
 
 export type AspectRatio = '16:9' | '1:1' | '9:16' | '4:3';
 export type FontFamily = 'Plus Jakarta Sans' | 'Inter' | 'JetBrains Mono' | 'Outfit' | 'Playfair Display';

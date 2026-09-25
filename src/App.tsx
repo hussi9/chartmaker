@@ -233,7 +233,9 @@ export function App() {
       is3d: false,
       showWatermark: true,
       showGrid: true,
-      fontSize: 'medium' as const
+      fontSize: 'medium' as const,
+      dataSource: '',
+      showAverageLine: false
     };
   };
 
@@ -244,6 +246,8 @@ export function App() {
   const [title, setTitle] = useState<string>(initial.title);
   const [subtitle, setSubtitle] = useState<string>(initial.subtitle);
   const [calloutMetric, setCalloutMetric] = useState<string>(initial.calloutMetric || '');
+  const [dataSource, setDataSource] = useState<string>((initial as any).dataSource || '');
+  const [showAverageLine, setShowAverageLine] = useState<boolean>((initial as any).showAverageLine || false);
   const [chartType, setChartType] = useState<ChartType>(initial.chartType);
   const [activeScheme, setActiveScheme] = useState<ColorScheme>(initial.activeScheme);
   const [showLegend, setShowLegend] = useState<boolean>(initial.showLegend);
@@ -308,6 +312,8 @@ export function App() {
         title,
         subtitle,
         calloutMetric,
+        dataSource,
+        showAverageLine,
         chartType,
         schemeId: activeScheme.id,
         aspectRatio,
@@ -321,7 +327,7 @@ export function App() {
       });
     }, 500);
     return () => clearTimeout(timer);
-  }, [title, subtitle, calloutMetric, chartType, activeScheme, aspectRatio, fontFamily, bgMode, showLegend, showValues, is3d, creatorHandle, data]);
+  }, [title, subtitle, calloutMetric, dataSource, showAverageLine, chartType, activeScheme, aspectRatio, fontFamily, bgMode, showLegend, showValues, is3d, creatorHandle, data]);
 
   // Save current chart to local library
   const handleQuickSave = useCallback(() => {
@@ -329,6 +335,8 @@ export function App() {
       title: title || 'Untitled Chart',
       subtitle,
       calloutMetric,
+      dataSource,
+      showAverageLine,
       chartType,
       schemeId: activeScheme.id,
       aspectRatio,
@@ -344,7 +352,7 @@ export function App() {
     triggerHaptic('success');
     confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
     addToast(`"${saved.title}" saved to My Charts!`, 'success');
-  }, [title, subtitle, calloutMetric, chartType, activeScheme, aspectRatio, fontFamily, bgMode, showLegend, showValues, is3d, creatorHandle, data, addToast]);
+  }, [title, subtitle, calloutMetric, dataSource, showAverageLine, chartType, activeScheme, aspectRatio, fontFamily, bgMode, showLegend, showValues, is3d, creatorHandle, data, addToast]);
 
   // Keyboard shortcuts (Cmd+S / Ctrl+S to save, Cmd+E / Ctrl+E to export)
   useEffect(() => {
@@ -374,6 +382,8 @@ export function App() {
     setSubtitle(chart.subtitle);
     setChartType(chart.chartType);
     setData(chart.data);
+    if (chart.dataSource !== undefined) setDataSource(chart.dataSource);
+    if (chart.showAverageLine !== undefined) setShowAverageLine(chart.showAverageLine);
     const matched = COLOR_SCHEMES.find(s => s.id === chart.schemeId);
     if (matched) setActiveScheme(matched);
     if (chart.aspectRatio) setAspectRatio(chart.aspectRatio);
@@ -437,6 +447,9 @@ export function App() {
 
   const handleSelectChartType = (type: ChartType) => {
     setChartType(type);
+    if (type === 'threshold') {
+      setShowAverageLine(true);
+    }
     trackChartCreate(type, activeScheme.id, aspectRatio, data.length);
   };
 
@@ -448,6 +461,8 @@ export function App() {
       subtitle,
       chartType,
       schemeId: activeScheme.id,
+      dataSource,
+      showAverageLine,
       data
     });
     if (encoded) {
@@ -574,6 +589,8 @@ export function App() {
           onChangeTitle={setTitle}
           subtitle={subtitle}
           onChangeSubtitle={setSubtitle}
+          dataSource={dataSource}
+          onChangeDataSource={setDataSource}
           data={data}
           onChangeData={setData}
           onOpenAiPrompt={() => setIsAiModalOpen(true)}
@@ -591,6 +608,8 @@ export function App() {
           onToggleLegend={() => setShowLegend(!showLegend)}
           showGrid={showGrid}
           onToggleGrid={() => setShowGrid(!showGrid)}
+          showAverageLine={showAverageLine}
+          onToggleAverageLine={() => setShowAverageLine(!showAverageLine)}
           is3d={is3d}
           onToggle3d={() => setIs3d(!is3d)}
           showWatermark={showWatermark}
@@ -622,8 +641,10 @@ export function App() {
               title={title}
               subtitle={subtitle}
               calloutMetric={calloutMetric}
+              dataSource={dataSource}
               showLegend={showLegend}
               showValues={showValues}
+              showAverageLine={showAverageLine}
               is3d={is3d}
               aspectRatio={aspectRatio}
               onChangeAspectRatio={handleSelectAspectRatio}
@@ -657,6 +678,7 @@ export function App() {
         chartTitle={title}
         subtitle={subtitle}
         calloutMetric={calloutMetric}
+        dataSource={dataSource}
         data={data}
         onNotify={addToast}
       />

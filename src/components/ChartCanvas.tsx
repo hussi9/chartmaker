@@ -22,7 +22,8 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   ScatterChart as ReScatterChart,
-  Scatter
+  Scatter,
+  ReferenceLine
 } from 'recharts';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from '../lib/chartPresets';
 import { Maximize2, Minimize2, Copy, Sparkles, Check, Link2, Download, Table } from 'lucide-react';
@@ -35,8 +36,10 @@ interface ChartCanvasProps {
   title: string;
   subtitle: string;
   calloutMetric?: string;
+  dataSource?: string;
   showLegend: boolean;
   showValues: boolean;
+  showAverageLine?: boolean;
   is3d: boolean;
   aspectRatio: AspectRatio;
   onChangeAspectRatio?: (ratio: AspectRatio) => void;
@@ -83,8 +86,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
   title,
   subtitle,
   calloutMetric = '',
+  dataSource = '',
   showLegend,
   showValues,
+  showAverageLine = false,
   is3d,
   aspectRatio,
   onChangeAspectRatio,
@@ -470,236 +475,583 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
           height: isFullscreen ? 500 : aspectDim.chartHeight,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          position: 'relative'
         }}>
-          <ResponsiveContainer width="100%" height="100%">
-            {(() => {
-              switch (chartType) {
-                case 'pie':
-                case 'donut':
-                  return (
-                    <RePieChart>
-                      <Tooltip content={<CustomTooltip />} />
-                      {showLegend && <Legend verticalAlign="bottom" height={36} />}
-                      <Pie
-                        data={data}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={chartType === 'donut' ? 70 : 0}
-                        outerRadius={120}
-                        paddingAngle={chartType === 'donut' ? 4 : 2}
-                        dataKey="value"
-                        label={showValues ? ({ name, percent }: { name?: string; percent?: number }) => `${name}: ${((percent ?? 0) * 100).toFixed(1)}%` : false}
-                        labelLine={showValues}
-                      >
-                        {data.map((entry, index) => (
-                          <Cell
-                            key={`cell-${index}`}
-                            fill={entry.color || colors[index % colors.length]}
-                            stroke={bgConfig.bg}
-                            strokeWidth={2}
-                          />
-                        ))}
-                      </Pie>
-                    </RePieChart>
-                  );
+          {(() => {
+            const avgValue = Math.round(total / (data.length || 1));
+            const shouldShowRefLine = chartType === 'threshold' || showAverageLine;
+            const gridStroke = bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.08)';
+            const axisStroke = bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.1)';
 
-                case 'stackedBar': {
-                  const safeTotal = total > 0 ? total : 1;
-                  return (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px', padding: '16px' }}>
-                      {/* 100% Horizontal Proportion Bar */}
-                      <div style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: '48px',
-                        borderRadius: '12px',
-                        overflow: 'hidden',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                        border: `1px solid ${bgConfig.border}`
-                      }}>
-                        {data.map((item, idx) => {
-                          const pct = (item.value / safeTotal) * 100;
-                          const color = item.color || colors[idx % colors.length];
-                          return (
-                            <div
-                              key={item.id}
-                              style={{
-                                width: `${pct}%`,
-                                backgroundColor: color,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: '#ffffff',
-                                fontWeight: 800,
-                                fontSize: pct > 8 ? '0.78rem' : '0.64rem',
-                                textShadow: '0 1px 3px rgba(0,0,0,0.7)',
-                                transition: 'all 0.3s ease'
-                              }}
-                              title={`${item.name}: ${item.value} (${pct.toFixed(1)}%)`}
-                            >
-                              {pct > 9 ? `${pct.toFixed(0)}%` : ''}
+            // 1. 1D Stacked Strip Bar (100% distribution)
+            if (chartType === 'stackedBar') {
+              const safeTotal = total > 0 ? total : 1;
+              return (
+                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '20px', padding: '16px' }}>
+                  <div style={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '48px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+                    border: `1px solid ${bgConfig.border}`
+                  }}>
+                    {data.map((item, idx) => {
+                      const pct = (item.value / safeTotal) * 100;
+                      const color = item.color || colors[idx % colors.length];
+                      return (
+                        <div
+                          key={item.id}
+                          style={{
+                            width: `${pct}%`,
+                            backgroundColor: color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: pct > 8 ? '0.78rem' : '0.64rem',
+                            textShadow: '0 1px 3px rgba(0,0,0,0.7)',
+                            transition: 'all 0.3s ease'
+                          }}
+                          title={`${item.name}: ${item.value} (${pct.toFixed(1)}%)`}
+                        >
+                          {pct > 9 ? `${pct.toFixed(0)}%` : ''}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                    gap: '10px'
+                  }}>
+                    {data.map((item, idx) => {
+                      const pct = (item.value / safeTotal) * 100;
+                      const color = item.color || colors[idx % colors.length];
+                      return (
+                        <div
+                          key={item.id}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            background: bgConfig.pillBg,
+                            padding: '8px 12px',
+                            borderRadius: '10px',
+                            border: `1px solid ${bgConfig.border}`
+                          }}
+                        >
+                          <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <div style={{ fontSize: '0.76rem', fontWeight: 700, color: bgConfig.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {item.name}
                             </div>
-                          );
-                        })}
+                            <div style={{ fontSize: '0.7rem', color: bgConfig.subtext }}>
+                              {item.value.toLocaleString()} ({pct.toFixed(1)}%)
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            }
+
+            // 2. Heat Map Matrix
+            if (chartType === 'heatmap') {
+              const values = data.map(d => Number(d.value) || 0);
+              const minVal = values.length ? Math.min(...values) : 0;
+              const maxVal = values.length ? Math.max(...values) : 100;
+              const range = maxVal - minVal || 1;
+              const primaryColor = colors[0] || '#38bdf8';
+
+              return (
+                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '14px', padding: '10px' }}>
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: data.length <= 4 ? 'repeat(2, 1fr)' : data.length <= 8 ? 'repeat(4, 1fr)' : 'repeat(auto-fit, minmax(110px, 1fr))',
+                    gap: '10px',
+                    width: '100%',
+                    maxHeight: '340px',
+                    overflowY: 'auto'
+                  }}>
+                    {data.map((item, idx) => {
+                      const ratio = Math.max(0.12, (item.value - minVal) / range);
+                      return (
+                        <div
+                          key={item.id || idx}
+                          style={{
+                            background: `color-mix(in srgb, ${primaryColor} ${Math.round(ratio * 85 + 15)}%, ${bgMode === 'light' ? '#f1f5f9' : 'rgba(255,255,255,0.06)'})`,
+                            border: `1px solid ${ratio > 0.6 ? primaryColor : bgConfig.border}`,
+                            borderRadius: '12px',
+                            padding: '16px 12px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            textAlign: 'center',
+                            boxShadow: ratio > 0.7 ? `0 4px 16px ${primaryColor}33` : 'none',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: ratio > 0.5 && bgMode !== 'light' ? '#ffffff' : bgConfig.text, marginBottom: '6px' }}>
+                            {item.name}
+                          </span>
+                          <span style={{ fontSize: '1.25rem', fontWeight: 800, color: ratio > 0.5 && bgMode !== 'light' ? '#ffffff' : primaryColor }}>
+                            {item.value.toLocaleString()}
+                          </span>
+                          <span style={{ fontSize: '0.68rem', color: ratio > 0.5 && bgMode !== 'light' ? 'rgba(255,255,255,0.8)' : bgConfig.subtext, marginTop: '2px' }}>
+                            {Math.round(ratio * 100)}% Intensity
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: '0.72rem', color: bgConfig.subtext }}>
+                    <span>Low ({minVal.toLocaleString()})</span>
+                    <div style={{
+                      width: '140px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      background: `linear-gradient(to right, ${bgMode === 'light' ? '#cbd5e1' : 'rgba(255,255,255,0.15)'}, ${primaryColor})`
+                    }} />
+                    <span>High ({maxVal.toLocaleString()})</span>
+                  </div>
+                </div>
+              );
+            }
+
+            // 3. Gauge / Speedometer Chart
+            if (chartType === 'gauge') {
+              const primaryVal = data[0]?.value || 0;
+              const maxVal = total > primaryVal ? total : Math.max(primaryVal * 1.3, 100);
+              const pct = Math.min(100, Math.max(0, Math.round((primaryVal / maxVal) * 100)));
+              const primaryColor = colors[0] || '#38bdf8';
+
+              const gaugeData = [
+                { name: 'Completed', value: pct, color: primaryColor },
+                { name: 'Remaining', value: 100 - pct, color: bgMode === 'light' ? '#e2e8f0' : 'rgba(255, 255, 255, 0.1)' }
+              ];
+
+              return (
+                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  <div style={{ width: '280px', height: '180px', position: 'relative' }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RePieChart>
+                        <Pie
+                          data={gaugeData}
+                          cx="50%"
+                          cy="90%"
+                          startAngle={180}
+                          endAngle={0}
+                          innerRadius={80}
+                          outerRadius={120}
+                          paddingAngle={0}
+                          dataKey="value"
+                        >
+                          {gaugeData.map((entry, index) => (
+                            <Cell key={`gauge-${index}`} fill={entry.color} stroke={bgConfig.bg} strokeWidth={2} />
+                          ))}
+                        </Pie>
+                      </RePieChart>
+                    </ResponsiveContainer>
+
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1, color: primaryColor }}>
+                        {pct}%
                       </div>
-
-                      {/* Segment Cards Grid */}
-                      <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                        gap: '10px'
-                      }}>
-                        {data.map((item, idx) => {
-                          const pct = (item.value / safeTotal) * 100;
-                          const color = item.color || colors[idx % colors.length];
-                          return (
-                            <div
-                              key={item.id}
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                background: bgConfig.pillBg,
-                                padding: '8px 12px',
-                                borderRadius: '10px',
-                                border: `1px solid ${bgConfig.border}`
-                              }}
-                            >
-                              <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
-                              <div style={{ minWidth: 0, flex: 1 }}>
-                                <div style={{ fontSize: '0.76rem', fontWeight: 700, color: bgConfig.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                  {item.name}
-                                </div>
-                                <div style={{ fontSize: '0.7rem', color: bgConfig.subtext }}>
-                                  {item.value.toLocaleString()} ({pct.toFixed(1)}%)
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
+                      <div style={{ fontSize: '0.78rem', fontWeight: 600, color: bgConfig.subtext, marginTop: '4px' }}>
+                        {data[0]?.name || 'Target'}: {primaryVal.toLocaleString()}
                       </div>
                     </div>
-                  );
-                }
+                  </div>
 
-                case 'bar':
-                  return (
-                    <ReBarChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
-                      {showGrid && (
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke={bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}
-                          vertical={false}
-                        />
-                      )}
-                      <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.1)' }} tickLine={false} />
-                      <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <Tooltip content={<CustomTooltip />} />
-                      {showLegend && <Legend verticalAlign="bottom" height={36} />}
-                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                        {data.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
-                        ))}
-                        {showValues && (
-                          <LabelList
+                  <div style={{ display: 'flex', gap: '16px', marginTop: '14px', fontSize: '0.75rem', color: bgConfig.subtext }}>
+                    <span>0</span>
+                    <span>Goal: {Math.round(maxVal).toLocaleString()}</span>
+                  </div>
+                </div>
+              );
+            }
+
+            // 4. Conversion Funnel Chart
+            if (chartType === 'funnel') {
+              const topVal = data[0]?.value || 1;
+              return (
+                <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', padding: '16px' }}>
+                  {data.map((item, idx) => {
+                    const ratio = Math.max(0.18, Math.min(1, item.value / topVal));
+                    const color = item.color || colors[idx % colors.length];
+                    const pctOfTop = Math.round((item.value / topVal) * 100);
+                    return (
+                      <div key={item.id || idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                        <div style={{
+                          width: `${Math.round(ratio * 100)}%`,
+                          minWidth: '150px',
+                          height: '38px',
+                          background: `linear-gradient(90deg, ${color}dd, ${color})`,
+                          borderRadius: '8px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0 14px',
+                          color: '#ffffff',
+                          fontWeight: 700,
+                          fontSize: '0.82rem',
+                          boxShadow: '0 3px 12px rgba(0,0,0,0.18)',
+                          transition: 'all 0.3s ease'
+                        }}>
+                          <span style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {item.name}
+                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                            <span style={{ fontSize: '0.86rem', fontWeight: 800 }}>{item.value.toLocaleString()}</span>
+                            <span style={{ fontSize: '0.68rem', opacity: 0.9, background: 'rgba(0,0,0,0.25)', padding: '2px 6px', borderRadius: '4px' }}>
+                              {pctOfTop}%
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            }
+
+            // 5. All Recharts SVG-based Charts
+            return (
+              <ResponsiveContainer width="100%" height="100%">
+                {(() => {
+                  switch (chartType) {
+                    case 'pie':
+                    case 'donut':
+                      return (
+                        <RePieChart>
+                          <Tooltip content={<CustomTooltip />} />
+                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          <Pie
+                            data={data}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={chartType === 'donut' ? 70 : 0}
+                            outerRadius={120}
+                            paddingAngle={chartType === 'donut' ? 4 : 2}
                             dataKey="value"
-                            position="top"
-                            offset={8}
-                            fill={bgConfig.subtext}
-                            fontSize={12}
-                            fontWeight={600}
+                            label={showValues ? ({ name, percent }: { name?: string; percent?: number }) => `${name}: ${((percent ?? 0) * 100).toFixed(1)}%` : false}
+                            labelLine={showValues}
+                          >
+                            {data.map((entry, index) => (
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={entry.color || colors[index % colors.length]}
+                                stroke={bgConfig.bg}
+                                strokeWidth={2}
+                              />
+                            ))}
+                          </Pie>
+                        </RePieChart>
+                      );
+
+                    case 'bar':
+                    case 'threshold':
+                      return (
+                        <ReBarChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          {showGrid && (
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              stroke={gridStroke}
+                              vertical={false}
+                            />
+                          )}
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
+                          <Tooltip content={<CustomTooltip />} />
+                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {shouldShowRefLine && (
+                            <ReferenceLine
+                              y={avgValue}
+                              stroke="#f59e0b"
+                              strokeWidth={2.5}
+                              strokeDasharray="5 5"
+                              label={{
+                                value: `Benchmark Avg: ${avgValue.toLocaleString()}`,
+                                fill: '#f59e0b',
+                                fontSize: 11,
+                                fontWeight: 700,
+                                position: 'top'
+                              }}
+                            />
+                          )}
+                          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                            {data.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
+                            ))}
+                            {showValues && (
+                              <LabelList
+                                dataKey="value"
+                                position="top"
+                                offset={8}
+                                fill={bgConfig.subtext}
+                                fontSize={12}
+                                fontWeight={600}
+                              />
+                            )}
+                          </Bar>
+                        </ReBarChart>
+                      );
+
+                    case 'horizontalBar':
+                      return (
+                        <ReBarChart data={data} layout="vertical" margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                          {showGrid && (
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              stroke={gridStroke}
+                              horizontal={false}
+                            />
+                          )}
+                          <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
+                          <Tooltip content={<CustomTooltip />} />
+                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {shouldShowRefLine && (
+                            <ReferenceLine
+                              x={avgValue}
+                              stroke="#f59e0b"
+                              strokeWidth={2.5}
+                              strokeDasharray="5 5"
+                              label={{
+                                value: `Avg: ${avgValue.toLocaleString()}`,
+                                fill: '#f59e0b',
+                                fontSize: 11,
+                                fontWeight: 700,
+                                position: 'top'
+                              }}
+                            />
+                          )}
+                          <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+                            {data.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
+                            ))}
+                          </Bar>
+                        </ReBarChart>
+                      );
+
+                    case 'stackedColumn': {
+                      const prepared = data.map(d => ({
+                        ...d,
+                        baseVal: Math.round(d.value * 0.7),
+                        expVal: Math.round(d.value * 0.3)
+                      }));
+                      return (
+                        <ReBarChart data={prepared} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend verticalAlign="bottom" height={36} />
+                          <Bar dataKey="baseVal" name="Primary Base" stackId="stackA" fill={colors[0]} />
+                          <Bar dataKey="expVal" name="Growth Delta" stackId="stackA" fill={colors[1] || '#8b5cf6'} radius={[6, 6, 0, 0]} />
+                        </ReBarChart>
+                      );
+                    }
+
+                    case 'stackedHorizontal': {
+                      const prepared = data.map(d => ({
+                        ...d,
+                        baseVal: Math.round(d.value * 0.7),
+                        expVal: Math.round(d.value * 0.3)
+                      }));
+                      return (
+                        <ReBarChart data={prepared} layout="vertical" margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={false} />}
+                          <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend verticalAlign="bottom" height={36} />
+                          <Bar dataKey="baseVal" name="Primary" stackId="stackA" fill={colors[0]} />
+                          <Bar dataKey="expVal" name="Expansion" stackId="stackA" fill={colors[1] || '#8b5cf6'} radius={[0, 6, 6, 0]} />
+                        </ReBarChart>
+                      );
+                    }
+
+                    case 'line':
+                      return (
+                        <ReLineChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          {showGrid && (
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              stroke={gridStroke}
+                              vertical={false}
+                            />
+                          )}
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
+                          <Tooltip content={<CustomTooltip />} />
+                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {shouldShowRefLine && (
+                            <ReferenceLine
+                              y={avgValue}
+                              stroke="#f59e0b"
+                              strokeWidth={2.5}
+                              strokeDasharray="5 5"
+                              label={{
+                                value: `Avg: ${avgValue.toLocaleString()}`,
+                                fill: '#f59e0b',
+                                fontSize: 11,
+                                fontWeight: 700,
+                                position: 'top'
+                              }}
+                            />
+                          )}
+                          <Line
+                            type="linear"
+                            dataKey="value"
+                            stroke={colors[0]}
+                            strokeWidth={3.5}
+                            dot={{ r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
+                            activeDot={{ r: 7 }}
+                            isAnimationActive={false}
+                            label={showValues ? { position: 'top', fill: '#64748b', fontSize: 13, fontWeight: 600, offset: 10 } : false}
                           />
-                        )}
-                      </Bar>
-                    </ReBarChart>
-                  );
+                        </ReLineChart>
+                      );
 
-                case 'horizontalBar':
-                  return (
-                    <ReBarChart data={data} layout="vertical" margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
-                      <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
-                      <Tooltip content={<CustomTooltip />} />
-                      {showLegend && <Legend verticalAlign="bottom" height={36} />}
-                      <Bar dataKey="value" radius={[0, 6, 6, 0]}>
-                        {data.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
-                        ))}
-                      </Bar>
-                    </ReBarChart>
-                  );
+                    case 'stackedLine': {
+                      const prepared = data.map(d => ({
+                        ...d,
+                        benchmark: Math.round(d.value * 0.75)
+                      }));
+                      return (
+                        <ReLineChart data={prepared} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend verticalAlign="bottom" height={36} />
+                          <Line
+                            type="monotone"
+                            dataKey="value"
+                            name="Actual Series"
+                            stroke={colors[0]}
+                            strokeWidth={3.5}
+                            dot={{ r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
+                            activeDot={{ r: 7 }}
+                          />
+                          <Line
+                            type="stepAfter"
+                            dataKey="benchmark"
+                            name="Target Baseline"
+                            stroke={colors[1] || '#94a3b8'}
+                            strokeWidth={2.5}
+                            strokeDasharray="4 4"
+                            dot={false}
+                          />
+                        </ReLineChart>
+                      );
+                    }
 
-                case 'line':
-                  return (
-                    <ReLineChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
-                      {showGrid && (
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          stroke={bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.08)'}
-                          vertical={false}
-                        />
-                      )}
-                      <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: bgMode === 'light' ? '#e2e8f0' : 'rgba(255,255,255,0.1)' }} tickLine={false} />
-                      <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
-                      <Tooltip content={<CustomTooltip />} />
-                      {showLegend && <Legend verticalAlign="bottom" height={36} />}
-                      <Line
-                        type="linear"
-                        dataKey="value"
-                        stroke={colors[0]}
-                        strokeWidth={3.5}
-                        dot={{ r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
-                        activeDot={{ r: 7 }}
-                        isAnimationActive={false}
-                        label={showValues ? { position: 'top', fill: '#64748b', fontSize: 13, fontWeight: 600, offset: 10 } : false}
-                      />
-                    </ReLineChart>
-                  );
+                    case 'area':
+                      return (
+                        <ReAreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="areaColorPro" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={colors[0]} stopOpacity={0.7} />
+                              <stop offset="95%" stopColor={colors[0]} stopOpacity={0.0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <Tooltip content={<CustomTooltip />} />
+                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {shouldShowRefLine && (
+                            <ReferenceLine
+                              y={avgValue}
+                              stroke="#f59e0b"
+                              strokeWidth={2.5}
+                              strokeDasharray="5 5"
+                              label={{
+                                value: `Avg: ${avgValue.toLocaleString()}`,
+                                fill: '#f59e0b',
+                                fontSize: 11,
+                                fontWeight: 700,
+                                position: 'top'
+                              }}
+                            />
+                          )}
+                          <Area type="monotone" dataKey="value" stroke={colors[0]} strokeWidth={3} fillOpacity={1} fill="url(#areaColorPro)" />
+                        </ReAreaChart>
+                      );
 
-                case 'area':
-                  return (
-                    <ReAreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
-                      <defs>
-                        <linearGradient id="areaColorPro" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor={colors[0]} stopOpacity={0.7} />
-                          <stop offset="95%" stopColor={colors[0]} stopOpacity={0.0} />
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip />} />
-                      {showLegend && <Legend verticalAlign="bottom" height={36} />}
-                      <Area type="monotone" dataKey="value" stroke={colors[0]} strokeWidth={3} fillOpacity={1} fill="url(#areaColorPro)" />
-                    </ReAreaChart>
-                  );
+                    case 'stackedArea': {
+                      const prepared = data.map(d => ({
+                        ...d,
+                        tierA: Math.round(d.value * 0.65),
+                        tierB: Math.round(d.value * 0.35)
+                      }));
+                      return (
+                        <ReAreaChart data={prepared} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="stackedArea1" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={colors[0]} stopOpacity={0.8} />
+                              <stop offset="95%" stopColor={colors[0]} stopOpacity={0.2} />
+                            </linearGradient>
+                            <linearGradient id="stackedArea2" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={0.8} />
+                              <stop offset="95%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={0.2} />
+                            </linearGradient>
+                          </defs>
+                          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Legend verticalAlign="bottom" height={36} />
+                          <Area type="monotone" dataKey="tierA" name="Segment 1" stackId="1" stroke={colors[0]} fill="url(#stackedArea1)" />
+                          <Area type="monotone" dataKey="tierB" name="Segment 2" stackId="1" stroke={colors[1] || '#8b5cf6'} fill="url(#stackedArea2)" />
+                        </ReAreaChart>
+                      );
+                    }
 
-                case 'radar':
-                  return (
-                    <ReRadarChart cx="50%" cy="50%" outerRadius={110} data={data}>
-                      <PolarGrid stroke={bgConfig.border} />
-                      <PolarAngleAxis dataKey="name" tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <PolarRadiusAxis stroke="#64748b" />
-                      <Radar name="Value" dataKey="value" stroke={colors[0]} fill={colors[0]} fillOpacity={0.6} />
-                      <Tooltip content={<CustomTooltip />} />
-                    </ReRadarChart>
-                  );
+                    case 'radar':
+                      return (
+                        <ReRadarChart cx="50%" cy="50%" outerRadius={110} data={data}>
+                          <PolarGrid stroke={bgConfig.border} />
+                          <PolarAngleAxis dataKey="name" tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <PolarRadiusAxis stroke="#64748b" />
+                          <Radar name="Value" dataKey="value" stroke={colors[0]} fill={colors[0]} fillOpacity={0.6} />
+                          <Tooltip content={<CustomTooltip />} />
+                        </ReRadarChart>
+                      );
 
-                case 'scatter':
-                  return (
-                    <ReScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
-                      <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <YAxis dataKey="value" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip />} />
-                      <Scatter data={data} fill={colors[0]} />
-                    </ReScatterChart>
-                  );
+                    case 'scatter':
+                      return (
+                        <ReScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+                          <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <YAxis dataKey="value" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
+                          <Tooltip content={<CustomTooltip />} />
+                          <Scatter data={data} fill={colors[0]} />
+                        </ReScatterChart>
+                      );
 
-                default:
-                  return null;
-              }
-            })()}
-          </ResponsiveContainer>
+                    default:
+                      return null;
+                  }
+                })()}
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
 
         {/* Branding & Attribution Footer */}
@@ -715,7 +1067,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
           flexWrap: 'wrap',
           gap: '12px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             {showWatermark ? (
               <span style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <span style={{ color: colors[0] }}>●</span> ChartGenie.xyz
@@ -724,6 +1076,11 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
               <span />
             )}
             <span>Total: {typeof total === 'number' ? total.toLocaleString() : total}</span>
+            {dataSource && (
+              <span style={{ opacity: 0.85, fontSize: '0.72rem' }}>
+                • Source: {dataSource}
+              </span>
+            )}
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

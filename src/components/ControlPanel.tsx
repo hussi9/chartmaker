@@ -29,6 +29,8 @@ export interface ControlPanelProps {
   onChangeTitle: (val: string) => void;
   subtitle: string;
   onChangeSubtitle: (val: string) => void;
+  dataSource?: string;
+  onChangeDataSource?: (val: string) => void;
   data: DataItem[];
   onChangeData: (data: DataItem[]) => void;
   onOpenAiPrompt: () => void;
@@ -47,6 +49,8 @@ export interface ControlPanelProps {
   onToggleLegend: () => void;
   showGrid: boolean;
   onToggleGrid: () => void;
+  showAverageLine?: boolean;
+  onToggleAverageLine?: () => void;
   is3d: boolean;
   onToggle3d: () => void;
   showWatermark: boolean;
@@ -139,6 +143,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   onChangeTitle,
   subtitle,
   onChangeSubtitle,
+  dataSource = '',
+  onChangeDataSource,
   data,
   onChangeData,
   onOpenAiPrompt,
@@ -156,6 +162,8 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   onToggleLegend,
   showGrid,
   onToggleGrid,
+  showAverageLine = false,
+  onToggleAverageLine,
   is3d,
   onToggle3d,
   showWatermark,
@@ -606,6 +614,19 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               </label>
             </div>
 
+            {/* Benchmark / Average Rule Line */}
+            <div className="toggle-row" style={{ marginTop: '12px' }}>
+              <span className="toggle-label">Benchmark / Average rule line</span>
+              <label className="clean-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={showAverageLine}
+                  onChange={onToggleAverageLine}
+                />
+                <span className="toggle-slider" />
+              </label>
+            </div>
+
             {/* Watermark Toggle */}
             <div className="toggle-row" style={{ marginTop: '12px' }}>
               <span className="toggle-label">ChartGenie badge</span>
@@ -698,6 +719,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               value={subtitle}
               onChange={(e) => onChangeSubtitle(e.target.value)}
               placeholder="Subtitle (optional)"
+              className="clean-input"
+              style={{ marginTop: '8px', fontSize: '0.84rem' }}
+            />
+            <input
+              type="text"
+              value={dataSource}
+              onChange={(e) => onChangeDataSource?.(e.target.value)}
+              placeholder="Data source (optional, e.g. Statista, Bloomberg, Survey)"
               className="clean-input"
               style={{ marginTop: '8px', fontSize: '0.84rem' }}
             />

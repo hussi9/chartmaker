@@ -14,6 +14,7 @@ interface ExportModalProps {
   chartTitle: string;
   subtitle?: string;
   calloutMetric?: string;
+  dataSource?: string;
   data?: DataItem[];
   onNotify?: (text: string, type?: 'success' | 'info' | 'viral') => void;
 }
@@ -25,6 +26,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   chartTitle,
   subtitle,
   calloutMetric,
+  dataSource = '',
   data,
   onNotify
 }) => {
@@ -109,6 +111,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     data.forEach(item => {
       md += `| ${item.name} | ${typeof item.value === 'number' ? item.value.toLocaleString() : item.value} |\n`;
     });
+    if (dataSource) {
+      md += `\n*Source: ${dataSource}*\n`;
+    }
     md += `\n*Visual chart generated with [ChartGenie.xyz](https://chartgenie.xyz/?utm_source=reddit_share)*\n`;
 
     await navigator.clipboard.writeText(md);
@@ -129,6 +134,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         text += `• ${item.name}: ${item.value}\n`;
       });
       if (data.length > 5) text += `• (+${data.length - 5} more categories)\n`;
+    }
+    if (dataSource) {
+      text += `\nSource: ${dataSource}\n`;
     }
     text += `\nCreated with @ChartGenie #dataviz #infographics`;
 
@@ -152,6 +160,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       });
     }
     if (calloutMetric) text += `\n💡 Insight: ${calloutMetric}\n`;
+    if (dataSource) text += `\n📌 Source: ${dataSource}\n`;
     text += `\nWhat trend stands out the most to you?\n\n#analytics #data #strategy #visualization`;
 
     await navigator.clipboard.writeText(text);

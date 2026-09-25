@@ -1,7 +1,25 @@
 import React from 'react';
 import { COLOR_SCHEMES } from '../lib/chartPresets';
 import type { ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from '../lib/chartPresets';
-import { PieChart, BarChart2, TrendingUp, Layers, Sliders, Layout, Type, Palette, AtSign } from 'lucide-react';
+import {
+  PieChart,
+  BarChart2,
+  TrendingUp,
+  Layers,
+  Sliders,
+  Layout,
+  Type,
+  Palette,
+  AtSign,
+  Activity,
+  Columns,
+  AlignLeft,
+  Target,
+  Grid3X3,
+  Gauge,
+  Filter,
+  GitCommit
+} from 'lucide-react';
 import { triggerHaptic } from '../lib/haptics';
 
 interface CustomizerDrawerProps {
@@ -54,14 +72,23 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({
   onToggleWatermark
 }) => {
   const chartTypesList: { type: ChartType; label: string; icon: React.ReactNode }[] = [
-    { type: 'pie', label: 'Pie Chart', icon: <PieChart size={15} /> },
-    { type: 'donut', label: 'Donut', icon: <PieChart size={15} /> },
-    { type: 'stackedBar', label: 'Stacked Strip', icon: <Layers size={15} /> },
-    { type: 'bar', label: 'Bar Graph', icon: <BarChart2 size={15} /> },
-    { type: 'horizontalBar', label: 'H-Bar', icon: <BarChart2 size={15} style={{ transform: 'rotate(90deg)' }} /> },
-    { type: 'line', label: 'Line Chart', icon: <TrendingUp size={15} /> },
-    { type: 'area', label: 'Area Chart', icon: <Layers size={15} /> },
-    { type: 'radar', label: 'Radar Matrix', icon: <Sliders size={15} /> }
+    { type: 'bar', label: 'Bar', icon: <BarChart2 size={14} /> },
+    { type: 'horizontalBar', label: 'H-Bar', icon: <AlignLeft size={14} /> },
+    { type: 'stackedBar', label: '1D Strip', icon: <Layers size={14} /> },
+    { type: 'stackedColumn', label: 'Stacked Col', icon: <Columns size={14} /> },
+    { type: 'stackedHorizontal', label: 'Stacked H', icon: <AlignLeft size={14} /> },
+    { type: 'line', label: 'Line', icon: <TrendingUp size={14} /> },
+    { type: 'stackedLine', label: 'Step Line', icon: <GitCommit size={14} /> },
+    { type: 'area', label: 'Area', icon: <Layers size={14} /> },
+    { type: 'stackedArea', label: 'Stacked Area', icon: <Layers size={14} /> },
+    { type: 'pie', label: 'Pie', icon: <PieChart size={14} /> },
+    { type: 'donut', label: 'Donut', icon: <PieChart size={14} /> },
+    { type: 'threshold', label: 'Rule (Avg)', icon: <Target size={14} /> },
+    { type: 'heatmap', label: 'Heat Map', icon: <Grid3X3 size={14} /> },
+    { type: 'scatter', label: 'Scatter', icon: <Activity size={14} /> },
+    { type: 'radar', label: 'Radar', icon: <Sliders size={14} /> },
+    { type: 'gauge', label: 'Gauge', icon: <Gauge size={14} /> },
+    { type: 'funnel', label: 'Funnel', icon: <Filter size={14} /> }
   ];
 
   const aspectRatios: { ratio: AspectRatio; label: string; tag: string }[] = [
@@ -87,7 +114,7 @@ export const CustomizerDrawer: React.FC<CustomizerDrawerProps> = ({
         <label style={{ fontSize: '0.74rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.05em' }}>
           Chart Format
         </label>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', marginTop: '8px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px', marginTop: '8px', maxHeight: '180px', overflowY: 'auto', paddingRight: '2px' }}>
           {chartTypesList.map((item) => (
             <button
               key={item.type}

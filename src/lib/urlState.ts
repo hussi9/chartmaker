@@ -6,6 +6,8 @@ export interface ChartStatePayload {
   chartType: ChartType;
   schemeId: string;
   data: DataItem[];
+  dataSource?: string;
+  showAverageLine?: boolean;
 }
 
 // Encode state to Base64 hash

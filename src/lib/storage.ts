@@ -14,6 +14,8 @@ export interface SavedChart {
   is3d: boolean;
   creatorHandle?: string;
   calloutMetric?: string;
+  dataSource?: string;
+  showAverageLine?: boolean;
   data: DataItem[];
   updatedAt: number;
 }
