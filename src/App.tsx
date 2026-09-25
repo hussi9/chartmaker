@@ -267,6 +267,23 @@ export function App() {
   const [isAiModalOpen, setIsAiModalOpen] = useState<boolean>(false);
   const [savedCharts, setSavedCharts] = useState<SavedChart[]>(() => getSavedCharts());
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [showFirstTimeWelcome, setShowFirstTimeWelcome] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return !localStorage.getItem('cg_welcomed_v1');
+    } catch {
+      return false;
+    }
+  });
+
+  const dismissWelcome = () => {
+    setShowFirstTimeWelcome(false);
+    try {
+      localStorage.setItem('cg_welcomed_v1', 'true');
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
@@ -477,6 +494,75 @@ export function App() {
         }}
         onNotify={addToast}
       />
+
+      {/* Playful Minimalist First-Time Greeting */}
+      {showFirstTimeWelcome && (
+        <aside
+          role="status"
+          aria-label="Welcome greeting"
+          className="welcome-banner animate-fade"
+          style={{
+            margin: '-6px auto 16px auto',
+            maxWidth: '1240px',
+            background: 'linear-gradient(135deg, rgba(238, 242, 255, 0.95), rgba(240, 253, 250, 0.95))',
+            border: '1px solid rgba(99, 102, 241, 0.25)',
+            boxShadow: '0 4px 18px -2px rgba(99, 102, 241, 0.12)',
+            borderRadius: '14px',
+            padding: '10px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+            flexWrap: 'wrap'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: '#1e293b' }}>
+            <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>✨</span>
+            <span>
+              <strong>Welcome!</strong> No signups, 100% free. Edit any number on the left or tap <strong>AI Prompt</strong> to create publication-ready charts in seconds.
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              onClick={() => {
+                dismissWelcome();
+                setIsAiModalOpen(true);
+              }}
+              style={{
+                background: 'linear-gradient(135deg, #4f46e5, #06b6d4)',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '6px 12px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+            >
+              <span>🪄 Try AI Prompt</span>
+            </button>
+            <button
+              onClick={dismissWelcome}
+              title="Dismiss"
+              style={{
+                background: 'transparent',
+                border: '1px solid rgba(148, 163, 184, 0.4)',
+                borderRadius: '8px',
+                padding: '6px 10px',
+                fontSize: '0.8rem',
+                color: '#64748b',
+                cursor: 'pointer',
+                fontWeight: 600
+              }}
+            >
+              ✕ Got it
+            </button>
+          </div>
+        </aside>
+      )}
 
       {/* Single Screen Dashboard Layout */}
       <main className="single-screen-main">
