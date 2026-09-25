@@ -58,7 +58,7 @@ export function App() {
     }
 
     const savedAuto = loadAutosave();
-    if (savedAuto && savedAuto.data && savedAuto.data.length > 0) {
+    if (savedAuto && savedAuto.data && savedAuto.data.length > 0 && !(typeof window !== 'undefined' && window.location.pathname && window.location.pathname.length > 1)) {
       const matched = COLOR_SCHEMES.find(s => s.id === savedAuto.schemeId) || COLOR_SCHEMES[0];
       return {
         data: savedAuto.data,
@@ -78,6 +78,137 @@ export function App() {
         showGrid: true,
         fontSize: 'medium' as const
       };
+    }
+
+    // Check Sub-Route URL Path
+    if (typeof window !== 'undefined' && window.location.pathname) {
+      const p = window.location.pathname;
+      if (p.includes('pie-chart-maker')) {
+        return {
+          data: [
+            { id: '1', name: 'Chrome', value: 65 },
+            { id: '2', name: 'Safari', value: 20 },
+            { id: '3', name: 'Edge', value: 10 },
+            { id: '4', name: 'Others', value: 5 }
+          ],
+          title: 'Browser Market Share',
+          subtitle: 'Global Desktop Usage 2026',
+          chartType: 'pie' as ChartType,
+          activeScheme: COLOR_SCHEMES.find(s => s.id === 'apple') || COLOR_SCHEMES[0],
+          aspectRatio: '16:9' as AspectRatio,
+          fontFamily: 'Plus Jakarta Sans' as FontFamily,
+          bgMode: 'light' as CanvasThemeMode,
+          creatorHandle: '',
+          calloutMetric: '💡 Chrome leads at 65%',
+          showLegend: true,
+          showValues: true,
+          is3d: false,
+          showWatermark: true,
+          showGrid: true,
+          fontSize: 'medium' as const
+        };
+      }
+      if (p.includes('bar-graph-maker')) {
+        return {
+          data: [
+            { id: '1', name: 'Q1 Sales', value: 120 },
+            { id: '2', name: 'Q2 Sales', value: 250 },
+            { id: '3', name: 'Q3 Sales', value: 410 },
+            { id: '4', name: 'Q4 Target', value: 680 }
+          ],
+          title: 'Quarterly Revenue Performance',
+          subtitle: 'USD Millions (2026)',
+          chartType: 'bar' as ChartType,
+          activeScheme: COLOR_SCHEMES.find(s => s.id === 'linear') || COLOR_SCHEMES[0],
+          aspectRatio: '16:9' as AspectRatio,
+          fontFamily: 'Plus Jakarta Sans' as FontFamily,
+          bgMode: 'light' as CanvasThemeMode,
+          creatorHandle: '',
+          calloutMetric: '💡 Q4 target is 680M (+65%)',
+          showLegend: false,
+          showValues: true,
+          is3d: false,
+          showWatermark: true,
+          showGrid: true,
+          fontSize: 'medium' as const
+        };
+      }
+      if (p.includes('donut-chart-maker')) {
+        return {
+          data: [
+            { id: '1', name: 'Stocks (US)', value: 55 },
+            { id: '2', name: 'Real Estate', value: 25 },
+            { id: '3', name: 'Crypto & Gold', value: 15 },
+            { id: '4', name: 'Cash', value: 5 }
+          ],
+          title: 'Asset Allocation Portfolio',
+          subtitle: 'Balanced Growth Strategy',
+          chartType: 'donut' as ChartType,
+          activeScheme: COLOR_SCHEMES.find(s => s.id === 'emerald') || COLOR_SCHEMES[0],
+          aspectRatio: '1:1' as AspectRatio,
+          fontFamily: 'Plus Jakarta Sans' as FontFamily,
+          bgMode: 'light' as CanvasThemeMode,
+          creatorHandle: '',
+          calloutMetric: '💡 Equity allocation: 55%',
+          showLegend: true,
+          showValues: true,
+          is3d: false,
+          showWatermark: true,
+          showGrid: true,
+          fontSize: 'medium' as const
+        };
+      }
+      if (p.includes('radar-chart-maker')) {
+        return {
+          data: [
+            { id: '1', name: 'Frontend', value: 95 },
+            { id: '2', name: 'Backend', value: 88 },
+            { id: '3', name: 'UI/UX Design', value: 92 },
+            { id: '4', name: 'DevOps', value: 82 },
+            { id: '5', name: 'SEO & GEO', value: 98 }
+          ],
+          title: 'Engineering Competency Radar',
+          subtitle: 'Full-Stack Performance Evaluation',
+          chartType: 'radar' as ChartType,
+          activeScheme: COLOR_SCHEMES.find(s => s.id === 'midnight') || COLOR_SCHEMES[0],
+          aspectRatio: '1:1' as AspectRatio,
+          fontFamily: 'Plus Jakarta Sans' as FontFamily,
+          bgMode: 'dark' as CanvasThemeMode,
+          creatorHandle: '',
+          calloutMetric: '💡 Overall score: 91/100',
+          showLegend: false,
+          showValues: true,
+          is3d: false,
+          showWatermark: true,
+          showGrid: true,
+          fontSize: 'medium' as const
+        };
+      }
+      if (p.includes('convert-excel-to-chart')) {
+        return {
+          data: [
+            { id: '1', name: 'Engineering', value: 450 },
+            { id: '2', name: 'Marketing', value: 280 },
+            { id: '3', name: 'Sales & BD', value: 310 },
+            { id: '4', name: 'Operations', value: 160 }
+          ],
+          title: 'Spreadsheet Budget Breakdown',
+          subtitle: 'Converted from Excel / CSV',
+          chartType: 'horizontalBar' as ChartType,
+          activeScheme: COLOR_SCHEMES.find(s => s.id === 'cyberpunk') || COLOR_SCHEMES[0],
+          aspectRatio: '16:9' as AspectRatio,
+          fontFamily: 'Plus Jakarta Sans' as FontFamily,
+          bgMode: 'light' as CanvasThemeMode,
+          creatorHandle: '',
+          calloutMetric: '💡 R&D allocation leads',
+          showLegend: false,
+          showValues: true,
+          is3d: false,
+          showWatermark: true,
+          showGrid: true,
+          fontSize: 'medium' as const
+        };
+      }
     }
 
     // Default Countries Line Chart matching the reference layout
@@ -457,6 +588,7 @@ export function App() {
         onLoadChart={handleLoadSavedChart}
         onDeleteChart={handleDeleteSavedChart}
         onSaveCurrentAsNew={handleQuickSave}
+        onNotify={addToast}
       />
 
       {/* SEO & Knowledge Section below the fold */}

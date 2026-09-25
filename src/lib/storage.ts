@@ -59,19 +59,16 @@ export function deleteChartFromLibrary(id: string): SavedChart[] {
   try {
     localStorage.setItem(STORAGE_KEY_CHARTS, JSON.stringify(filtered));
   } catch (e) {
-    console.error('Failed to delete chart', e);
+    console.error('Failed to delete chart from localStorage', e);
   }
   return filtered;
 }
 
-export function saveAutosave(state: Partial<SavedChart>) {
+export function saveAutosave(payload: Partial<SavedChart>) {
   try {
-    localStorage.setItem(STORAGE_KEY_AUTOSAVE, JSON.stringify({
-      ...state,
-      updatedAt: Date.now()
-    }));
-  } catch {
-    // Ignore storage quota errors
+    localStorage.setItem(STORAGE_KEY_AUTOSAVE, JSON.stringify(payload));
+  } catch (e) {
+    console.error('Failed to save autosave to localStorage', e);
   }
 }
 
@@ -79,8 +76,29 @@ export function loadAutosave(): Partial<SavedChart> | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_AUTOSAVE);
     if (!raw) return null;
-    return JSON.parse(raw);
-  } catch {
+    return JSON.parse(raw) as Partial<SavedChart>;
+  } catch (e) {
+    console.error('Failed to load autosave from localStorage', e);
     return null;
+  }
+}
+
+export function exportBackupJson(): string {
+  const charts = getSavedCharts();
+  const autosave = loadAutosave();
+  return JSON.stringify({ charts, autosave, version: 1, exportedAt: Date.now() }, null, 2);
+}
+
+export function importBackupJson(jsonStr: string): { success: boolean; count: number } {
+  try {
+    const data = JSON.parse(jsonStr);
+    if (data.charts && Array.isArray(data.charts)) {
+      localStorage.setItem(STORAGE_KEY_CHARTS, JSON.stringify(data.charts));
+      return { success: true, count: data.charts.length };
+    }
+    return { success: false, count: 0 };
+  } catch (e) {
+    console.error('Failed to import backup JSON', e);
+    return { success: false, count: 0 };
   }
 }

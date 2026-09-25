@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, FolderOpen, Trash2, Calendar, Sparkles, Plus } from 'lucide-react';
+import React, { useRef } from 'react';
+import { X, FolderOpen, Trash2, Calendar, Sparkles, Plus, Download, Upload } from 'lucide-react';
 import type { SavedChart } from '../lib/storage';
+import { exportBackupJson, importBackupJson } from '../lib/storage';
 import { triggerHaptic } from '../lib/haptics';
 
 interface SavedChartsModalProps {
@@ -10,6 +11,7 @@ interface SavedChartsModalProps {
   onLoadChart: (chart: SavedChart) => void;
   onDeleteChart: (id: string) => void;
   onSaveCurrentAsNew: () => void;
+  onNotify?: (text: string, type?: 'success' | 'info' | 'viral') => void;
 }
 
 export const SavedChartsModal: React.FC<SavedChartsModalProps> = ({
@@ -18,9 +20,43 @@ export const SavedChartsModal: React.FC<SavedChartsModalProps> = ({
   savedCharts,
   onLoadChart,
   onDeleteChart,
-  onSaveCurrentAsNew
+  onSaveCurrentAsNew,
+  onNotify
 }) => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   if (!isOpen) return null;
+
+  const handleExportBackup = () => {
+    triggerHaptic('light');
+    const jsonStr = exportBackupJson();
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `chartgenie-backup-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    onNotify?.('Exported JSON backup file!', 'success');
+  };
+
+  const handleImportBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (text) {
+        const res = importBackupJson(text);
+        if (res.success) {
+          triggerHaptic('success');
+          onNotify?.(`Restored ${res.count} chart(s) from backup!`, 'success');
+          window.location.reload();
+        } else {
+          onNotify?.('Invalid backup file format', 'info');
+        }
+      }
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <div style={{
@@ -46,7 +82,7 @@ export const SavedChartsModal: React.FC<SavedChartsModalProps> = ({
           <X size={22} />
         </button>
 
-        {/* Title & Save New Button */}
+        {/* Title & Actions */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', paddingRight: '36px', flexWrap: 'wrap', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <FolderOpen size={24} color="#38bdf8" />
@@ -56,16 +92,41 @@ export const SavedChartsModal: React.FC<SavedChartsModalProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={() => {
-              triggerHaptic('success');
-              onSaveCurrentAsNew();
-            }}
-            className="btn-primary"
-            style={{ fontSize: '0.8rem', padding: '8px 14px' }}
-          >
-            <Plus size={15} /> Save Current Chart
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={handleExportBackup}
+              className="btn-secondary"
+              style={{ fontSize: '0.78rem', padding: '6px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}
+              title="Export all charts as JSON backup"
+            >
+              <Download size={13} /> Backup
+            </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="btn-secondary"
+              style={{ fontSize: '0.78rem', padding: '6px 10px', display: 'flex', alignItems: 'center', gap: '4px' }}
+              title="Restore charts from JSON backup"
+            >
+              <Upload size={13} /> Restore
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleImportBackup}
+              style={{ display: 'none' }}
+            />
+            <button
+              onClick={() => {
+                triggerHaptic('success');
+                onSaveCurrentAsNew();
+              }}
+              className="btn-primary"
+              style={{ fontSize: '0.78rem', padding: '6px 12px' }}
+            >
+              <Plus size={14} /> Save Current
+            </button>
+          </div>
         </div>
 
         {/* Empty State */}
