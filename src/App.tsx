@@ -4,9 +4,10 @@ import { OmniImporter } from './components/OmniImporter';
 import { CustomizerDrawer } from './components/CustomizerDrawer';
 import { ChartCanvas } from './components/ChartCanvas';
 import { ExportModal } from './components/ExportModal';
-import { SeoSection } from './components/SeoSection';
+import { ProgrammaticSeoRouter } from './components/ProgrammaticSeoRouter';
+import { SeoAeoSection } from './components/SeoAeoSection';
 import { COLOR_SCHEMES, SAMPLE_DATASETS } from './lib/chartPresets';
-import type { DataItem, ChartType, ColorScheme } from './lib/chartPresets';
+import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily } from './lib/chartPresets';
 
 export function App() {
   // Application State
@@ -18,6 +19,9 @@ export function App() {
   const [showLegend, setShowLegend] = useState<boolean>(true);
   const [showValues, setShowValues] = useState<boolean>(true);
   const [is3d, setIs3d] = useState<boolean>(true);
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio>('16:9');
+  const [fontFamily, setFontFamily] = useState<FontFamily>('Plus Jakarta Sans');
+  const [bgMode, setBgMode] = useState<'dark' | 'pure-dark' | 'slate' | 'light'>('dark');
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
@@ -29,13 +33,23 @@ export function App() {
     setTitle(preset.title);
     setSubtitle(preset.subtitle);
 
-    if (key === 'revenueGrowth') {
+    if (key === 'revenueGrowth' || key === 'marketingFunnel') {
       setChartType('bar');
     } else if (key === 'trafficSources') {
       setChartType('horizontalBar');
+    } else if (key === 'skillRadar') {
+      setChartType('radar');
     } else {
       setChartType('pie');
     }
+  };
+
+  // Handle Programmatic Route Click
+  const handleSelectRoute = (type: ChartType, newTitle: string, newSubtitle: string) => {
+    setChartType(type);
+    setTitle(newTitle);
+    setSubtitle(newSubtitle);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -49,6 +63,9 @@ export function App() {
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
       />
+
+      {/* Programmatic SEO Router Pills */}
+      <ProgrammaticSeoRouter onSelectRoute={handleSelectRoute} />
 
       {/* Main Responsive Grid */}
       <main className="main-grid">
@@ -76,6 +93,12 @@ export function App() {
             onToggleValues={setShowValues}
             is3d={is3d}
             onToggle3d={setIs3d}
+            aspectRatio={aspectRatio}
+            onChangeAspectRatio={setAspectRatio}
+            fontFamily={fontFamily}
+            onChangeFontFamily={setFontFamily}
+            bgMode={bgMode}
+            onChangeBgMode={setBgMode}
           />
         </aside>
 
@@ -90,13 +113,16 @@ export function App() {
             showLegend={showLegend}
             showValues={showValues}
             is3d={is3d}
+            aspectRatio={aspectRatio}
+            fontFamily={fontFamily}
+            bgMode={bgMode}
             canvasRef={canvasRef}
           />
         </section>
       </main>
 
-      {/* Programmatic SEO & FAQ Section */}
-      <SeoSection />
+      {/* Answer Engine & Programmatic SEO Section */}
+      <SeoAeoSection />
 
       {/* Export & Embed Modal */}
       <ExportModal
