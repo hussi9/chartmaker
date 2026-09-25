@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Download, Copy, Code, Check, Sparkles, Share2, FileSpreadsheet, FileJson } from 'lucide-react';
+import { X, Download, Copy, Code, Check, Sparkles, Share2, FileSpreadsheet, FileJson, MessageSquare, Send, Table } from 'lucide-react';
 import { toPng, toSvg } from 'html-to-image';
 import confetti from 'canvas-confetti';
 import { trackEvent, trackExportChart } from '../lib/gtag';
@@ -12,6 +12,8 @@ interface ExportModalProps {
   onClose: () => void;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   chartTitle: string;
+  subtitle?: string;
+  calloutMetric?: string;
   data?: DataItem[];
   onNotify?: (text: string, type?: 'success' | 'info' | 'viral') => void;
 }
@@ -21,12 +23,17 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   onClose,
   canvasRef,
   chartTitle,
+  subtitle,
+  calloutMetric,
   data,
   onNotify
 }) => {
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
   const [copiedSvg, setCopiedSvg] = useState(false);
+  const [copiedReddit, setCopiedReddit] = useState(false);
+  const [copiedTwitter, setCopiedTwitter] = useState(false);
+  const [copiedLinkedIn, setCopiedLinkedIn] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
   if (!isOpen) return null;
@@ -87,6 +94,72 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
     trackEvent('share_twitter', 'viral_share', chartTitle);
     confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+  };
+
+  // Copy Reddit Post (Markdown Table + formatted description)
+  const handleCopyRedditMarkdown = async () => {
+    if (!data || data.length === 0) return;
+    triggerHaptic('light');
+
+    let md = `### ${chartTitle || 'Visual Data'}\n`;
+    if (subtitle) md += `*${subtitle}*\n\n`;
+    if (calloutMetric) md += `> **Key Takeaway:** ${calloutMetric}\n\n`;
+
+    md += `| Category | Value |\n|:---|---:|\n`;
+    data.forEach(item => {
+      md += `| ${item.name} | ${typeof item.value === 'number' ? item.value.toLocaleString() : item.value} |\n`;
+    });
+    md += `\n*Visual chart generated with [ChartGenie.xyz](https://chartgenie.xyz/?utm_source=reddit_share)*\n`;
+
+    await navigator.clipboard.writeText(md);
+    setCopiedReddit(true);
+    setTimeout(() => setCopiedReddit(false), 2000);
+    trackEvent('copy_reddit_markdown', 'social_export', chartTitle);
+    confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
+    onNotify?.('Reddit Markdown Table copied! Paste directly into Reddit.', 'viral');
+  };
+
+  // Copy Twitter / X Post text
+  const handleCopyTwitterText = async () => {
+    triggerHaptic('light');
+    let text = `📊 ${chartTitle || 'Data Breakdown'}\n\n`;
+    if (calloutMetric) text += `💡 ${calloutMetric}\n\n`;
+    if (data && data.length > 0) {
+      data.slice(0, 5).forEach(item => {
+        text += `• ${item.name}: ${item.value}\n`;
+      });
+      if (data.length > 5) text += `• (+${data.length - 5} more categories)\n`;
+    }
+    text += `\nCreated with @ChartGenie #dataviz #infographics`;
+
+    await navigator.clipboard.writeText(text);
+    setCopiedTwitter(true);
+    setTimeout(() => setCopiedTwitter(false), 2000);
+    trackEvent('copy_twitter_text', 'social_export', chartTitle);
+    confetti({ particleCount: 30, spread: 45, origin: { y: 0.6 } });
+    onNotify?.('Tweet text copied! Paste on X/Twitter with your chart image.', 'success');
+  };
+
+  // Copy LinkedIn Post text
+  const handleCopyLinkedInText = async () => {
+    triggerHaptic('light');
+    let text = `Visualizing ${chartTitle || 'Market Data'}:\n\n`;
+    if (subtitle) text += `${subtitle}\n\n`;
+    text += `Key breakdown:\n`;
+    if (data && data.length > 0) {
+      data.forEach(item => {
+        text += `👉 ${item.name}: ${item.value}\n`;
+      });
+    }
+    if (calloutMetric) text += `\n💡 Insight: ${calloutMetric}\n`;
+    text += `\nWhat trend stands out the most to you?\n\n#analytics #data #strategy #visualization`;
+
+    await navigator.clipboard.writeText(text);
+    setCopiedLinkedIn(true);
+    setTimeout(() => setCopiedLinkedIn(false), 2000);
+    trackEvent('copy_linkedin_text', 'social_export', chartTitle);
+    confetti({ particleCount: 30, spread: 45, origin: { y: 0.6 } });
+    onNotify?.('LinkedIn post template copied! Paste into your LinkedIn update.', 'success');
   };
 
   // Export PNG
@@ -392,6 +465,72 @@ export const ExportModal: React.FC<ExportModalProps> = ({
               </button>
             </div>
           )}
+        </div>
+
+        {/* Social Media & Reddit Quick Post Pack */}
+        <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid var(--border-glass)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+            <span style={{ fontSize: '0.78rem', textTransform: 'uppercase', color: '#38bdf8', fontWeight: 800, letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <MessageSquare size={14} /> Social Media & Reddit Post Pack
+            </span>
+            <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>1-Click Post Format</span>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {/* Copy Reddit Markdown Table */}
+            <button
+              onClick={handleCopyRedditMarkdown}
+              className="btn-secondary"
+              style={{
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderColor: 'rgba(255, 69, 0, 0.4)',
+                background: 'rgba(255, 69, 0, 0.08)'
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ff4500', fontWeight: 700, fontSize: '0.84rem' }}>
+                {copiedReddit ? <Check size={16} color="#10b981" /> : <Table size={16} />} Copy Reddit Markdown Table
+              </span>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>r/dataisbeautiful & r/SideProject ready</span>
+            </button>
+
+            {/* Copy Twitter / X Post Text */}
+            <button
+              onClick={handleCopyTwitterText}
+              className="btn-secondary"
+              style={{
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderColor: 'rgba(29, 155, 240, 0.4)',
+                background: 'rgba(29, 155, 240, 0.08)'
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#38bdf8', fontWeight: 700, fontSize: '0.84rem' }}>
+                {copiedTwitter ? <Check size={16} color="#10b981" /> : <Send size={16} />} Copy X / Twitter Post Text
+              </span>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Hook + Bullets + Hashtags</span>
+            </button>
+
+            {/* Copy LinkedIn Post Text */}
+            <button
+              onClick={handleCopyLinkedInText}
+              className="btn-secondary"
+              style={{
+                width: '100%',
+                justifyContent: 'space-between',
+                padding: '10px 14px',
+                borderColor: 'rgba(10, 102, 194, 0.4)',
+                background: 'rgba(10, 102, 194, 0.08)'
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#60a5fa', fontWeight: 700, fontSize: '0.84rem' }}>
+                {copiedLinkedIn ? <Check size={16} color="#10b981" /> : <Share2 size={16} />} Copy LinkedIn Post Text
+              </span>
+              <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Executive Summary Format</span>
+            </button>
+          </div>
         </div>
 
         {/* Embed Code Snippet */}

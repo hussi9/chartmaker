@@ -655,6 +655,8 @@ export function App() {
         onClose={() => setIsExportOpen(false)}
         canvasRef={canvasRef}
         chartTitle={title}
+        subtitle={subtitle}
+        calloutMetric={calloutMetric}
         data={data}
         onNotify={addToast}
       />

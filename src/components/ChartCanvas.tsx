@@ -25,7 +25,7 @@ import {
   Scatter
 } from 'recharts';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from '../lib/chartPresets';
-import { Maximize2, Minimize2, Copy, Sparkles, Check, Link2, Download } from 'lucide-react';
+import { Maximize2, Minimize2, Copy, Sparkles, Check, Link2, Download, Table } from 'lucide-react';
 import { triggerHaptic } from '../lib/haptics';
 
 interface ChartCanvasProps {
@@ -101,6 +101,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [justCopied, setJustCopied] = useState(false);
+  const [justCopiedReddit, setJustCopiedReddit] = useState(false);
 
   const colors = scheme.colors;
   const total = data.reduce((acc, curr) => acc + (typeof curr.value === 'number' ? curr.value : 0), 0);
@@ -221,6 +222,29 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
     }
   };
 
+  const handleCopyRedditTable = async () => {
+    if (!data || data.length === 0) return;
+    triggerHaptic('success');
+
+    let md = `### ${title || 'Visual Data'}\n`;
+    if (subtitle) md += `*${subtitle}*\n\n`;
+    if (calloutMetric) md += `> **Key Takeaway:** ${calloutMetric}\n\n`;
+
+    md += `| Category | Value |\n|:---|---:|\n`;
+    data.forEach(item => {
+      md += `| ${item.name} | ${typeof item.value === 'number' ? item.value.toLocaleString() : item.value} |\n`;
+    });
+    md += `\n*Visual chart generated with [ChartGenie.xyz](https://chartgenie.xyz/?utm_source=reddit_canvas)*\n`;
+
+    try {
+      await navigator.clipboard.writeText(md);
+      setJustCopiedReddit(true);
+      setTimeout(() => setJustCopiedReddit(false), 2000);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
   const toggleFullscreen = () => {
     triggerHaptic('light');
     setIsFullscreen(!isFullscreen);
@@ -276,9 +300,14 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                   triggerHaptic('light');
                   onChangeAspectRatio?.(r);
                 }}
-                title={`Switch canvas to ${r}`}
+                title={
+                  r === '16:9' ? '16:9 — Best for X/Twitter & Web' :
+                  r === '1:1' ? '1:1 — Best for LinkedIn & Instagram' :
+                  r === '9:16' ? '9:16 — Best for Stories & TikTok' :
+                  '4:3 — Best for Presentations & Notion'
+                }
               >
-                {r}
+                {r === '16:9' ? '16:9 (X/Web)' : r === '1:1' ? '1:1 (LinkedIn)' : r === '9:16' ? '9:16 (Story)' : '4:3 (Deck)'}
               </button>
             ))}
           </div>
@@ -288,12 +317,29 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Quick Copy for Reddit */}
+          <button
+            onClick={handleCopyRedditTable}
+            className="btn-secondary"
+            style={{
+              padding: '6px 12px',
+              fontSize: '0.78rem',
+              borderRadius: '8px',
+              borderColor: 'rgba(255, 69, 0, 0.4)',
+              color: '#ff4500'
+            }}
+            title="Copy formatted Reddit Markdown table with data and source link"
+          >
+            {justCopiedReddit ? <Check size={14} color="#10b981" /> : <Table size={14} />}
+            <span>{justCopiedReddit ? 'Table Copied!' : 'Reddit Table'}</span>
+          </button>
+
           {onCopyImage && (
             <button
               onClick={handleCopy}
               className="btn-secondary"
               style={{ padding: '6px 12px', fontSize: '0.78rem', borderRadius: '8px' }}
-              title="Copy chart PNG to clipboard"
+              title="Copy chart PNG to clipboard (Cmd+V into Twitter/LinkedIn/Reddit)"
             >
               {justCopied ? <Check size={14} color="#10b981" /> : <Copy size={14} />}
               <span>{justCopied ? 'Copied!' : 'Copy PNG'}</span>
