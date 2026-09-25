@@ -646,6 +646,7 @@ export function App() {
               showValues={showValues}
               showAverageLine={showAverageLine}
               is3d={is3d}
+              onToggle3d={() => setIs3d(!is3d)}
               aspectRatio={aspectRatio}
               onChangeAspectRatio={handleSelectAspectRatio}
               fontFamily={fontFamily}

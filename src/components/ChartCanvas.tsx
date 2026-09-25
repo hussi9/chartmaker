@@ -26,7 +26,7 @@ import {
   ReferenceLine
 } from 'recharts';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from '../lib/chartPresets';
-import { Maximize2, Minimize2, Copy, Sparkles, Check, Link2, Download, Table } from 'lucide-react';
+import { Maximize2, Minimize2, Copy, Sparkles, Check, Link2, Download, Table, Box } from 'lucide-react';
 import { triggerHaptic } from '../lib/haptics';
 
 interface ChartCanvasProps {
@@ -41,6 +41,7 @@ interface ChartCanvasProps {
   showValues: boolean;
   showAverageLine?: boolean;
   is3d: boolean;
+  onToggle3d?: () => void;
   aspectRatio: AspectRatio;
   onChangeAspectRatio?: (ratio: AspectRatio) => void;
   fontFamily: FontFamily;
@@ -79,6 +80,83 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
+// Pure Lightweight Native SVG 3D Filters & Cylindrical Shading (Zero Heavy Libraries)
+const Svg3dDefs: React.FC<{ data: DataItem[]; colors: string[]; is3d: boolean; bgMode: CanvasThemeMode }> = ({ data, colors, is3d, bgMode }) => (
+  <defs>
+    {/* 1. Multi-tier drop shadow filter for solid 3D depth */}
+    <filter id="solid3dShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow
+        dx="1.5"
+        dy={is3d ? "6" : "2"}
+        stdDeviation={is3d ? "4" : "1.8"}
+        floodColor="#000000"
+        floodOpacity={bgMode === 'light' ? (is3d ? "0.26" : "0.12") : (is3d ? "0.55" : "0.25")}
+      />
+      {is3d && (
+        <feDropShadow
+          dx="0"
+          dy="1"
+          stdDeviation="1.5"
+          floodColor="#000000"
+          floodOpacity="0.2"
+        />
+      )}
+    </filter>
+
+    {/* 2. Floating Circular Disc Shadow for Pie / Donut */}
+    <filter id="solid3dFloat" x="-40%" y="-40%" width="180%" height="200%">
+      <feDropShadow
+        dx="0"
+        dy={is3d ? "10" : "4"}
+        stdDeviation={is3d ? "8" : "3"}
+        floodColor="#000000"
+        floodOpacity={bgMode === 'light' ? (is3d ? "0.32" : "0.14") : (is3d ? "0.62" : "0.28")}
+      />
+    </filter>
+
+    {/* 3. Cylindrical Gradients for each data item */}
+    {data.map((item, idx) => {
+      const baseColor = item.color || colors[idx % colors.length] || '#3b82f6';
+      return (
+        <React.Fragment key={`grad-defs-${item.id || idx}`}>
+          {/* Vertical 3D Cylinder: Left specular highlight, rich core body, right cast shadow */}
+          <linearGradient id={`cylindrical-v-${idx}`} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity={is3d ? 0.42 : 0} />
+            <stop offset="18%" stopColor={baseColor} stopOpacity={1} />
+            <stop offset="78%" stopColor={baseColor} stopOpacity={1} />
+            <stop offset="100%" stopColor="#000000" stopOpacity={is3d ? 0.35 : 0} />
+          </linearGradient>
+
+          {/* Horizontal 3D Cylinder: Top specular highlight, rich core body, bottom cast shadow */}
+          <linearGradient id={`cylindrical-h-${idx}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity={is3d ? 0.42 : 0} />
+            <stop offset="22%" stopColor={baseColor} stopOpacity={1} />
+            <stop offset="78%" stopColor={baseColor} stopOpacity={1} />
+            <stop offset="100%" stopColor="#000000" stopOpacity={is3d ? 0.35 : 0} />
+          </linearGradient>
+        </React.Fragment>
+      );
+    })}
+
+    {/* 4. Area Chart 3D Glowing Surface Gradients */}
+    <linearGradient id="areaColorPro" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={colors[0] || '#3b82f6'} stopOpacity={is3d ? 0.88 : 0.65} />
+      <stop offset="60%" stopColor={colors[0] || '#3b82f6'} stopOpacity={is3d ? 0.35 : 0.15} />
+      <stop offset="100%" stopColor={colors[0] || '#3b82f6'} stopOpacity={0.0} />
+    </linearGradient>
+
+    <linearGradient id="stackedArea1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={colors[0] || '#3b82f6'} stopOpacity={is3d ? 0.88 : 0.75} />
+      <stop offset="100%" stopColor={colors[0] || '#3b82f6'} stopOpacity={is3d ? 0.25 : 0.1} />
+    </linearGradient>
+
+    <linearGradient id="stackedArea2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={is3d ? 0.88 : 0.75} />
+      <stop offset="100%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={is3d ? 0.25 : 0.1} />
+    </linearGradient>
+  </defs>
+);
+
 export const ChartCanvas: React.FC<ChartCanvasProps> = ({
   data,
   chartType,
@@ -91,6 +169,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
   showValues,
   showAverageLine = false,
   is3d,
+  onToggle3d,
   aspectRatio,
   onChangeAspectRatio,
   fontFamily,
@@ -322,6 +401,33 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Quick 3D Depth Toggle */}
+          {onToggle3d && (
+            <button
+              onClick={() => {
+                triggerHaptic('light');
+                onToggle3d();
+              }}
+              className="btn-secondary"
+              style={{
+                padding: '6px 12px',
+                fontSize: '0.78rem',
+                borderRadius: '8px',
+                background: is3d ? (bgMode === 'light' ? '#eff6ff' : 'rgba(37, 99, 235, 0.25)') : undefined,
+                borderColor: is3d ? '#2563eb' : undefined,
+                color: is3d ? (bgMode === 'light' ? '#1d4ed8' : '#60a5fa') : undefined,
+                fontWeight: is3d ? 700 : 500,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px'
+              }}
+              title={is3d ? "3D visual depth & specular lighting is active (click to switch to 2D)" : "Enable solid 3D visual depth, cylindrical gradients, and specular lighting"}
+            >
+              <Box size={13} />
+              <span>{is3d ? '3D Solid On' : '3D Depth'}</span>
+            </button>
+          )}
+
           {/* Quick Copy for Reddit */}
           <button
             onClick={handleCopyRedditTable}
@@ -492,11 +598,14 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                   <div style={{
                     display: 'flex',
                     width: '100%',
-                    height: '48px',
+                    height: is3d ? '54px' : '48px',
                     borderRadius: '12px',
                     overflow: 'hidden',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-                    border: `1px solid ${bgConfig.border}`
+                    boxShadow: is3d
+                      ? '0 10px 28px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.45)'
+                      : '0 4px 20px rgba(0,0,0,0.4)',
+                    border: `1px solid ${bgConfig.border}`,
+                    transition: 'all 0.3s ease'
                   }}>
                     {data.map((item, idx) => {
                       const pct = (item.value / safeTotal) * 100;
@@ -506,7 +615,13 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           key={item.id}
                           style={{
                             width: `${pct}%`,
-                            backgroundColor: color,
+                            background: is3d
+                              ? `linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.06) 48%, rgba(0,0,0,0.32) 100%), ${color}`
+                              : color,
+                            boxShadow: is3d
+                              ? 'inset 0 2px 2px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.4)'
+                              : 'none',
+                            borderRight: '1px solid rgba(0,0,0,0.2)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -586,8 +701,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                         <div
                           key={item.id || idx}
                           style={{
-                            background: `color-mix(in srgb, ${primaryColor} ${Math.round(ratio * 85 + 15)}%, ${bgMode === 'light' ? '#f1f5f9' : 'rgba(255,255,255,0.06)'})`,
-                            border: `1px solid ${ratio > 0.6 ? primaryColor : bgConfig.border}`,
+                            background: is3d
+                              ? `linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.12) 100%), color-mix(in srgb, ${primaryColor} ${Math.round(ratio * 85 + 15)}%, ${bgMode === 'light' ? '#f1f5f9' : 'rgba(255,255,255,0.06)'})`
+                              : `color-mix(in srgb, ${primaryColor} ${Math.round(ratio * 85 + 15)}%, ${bgMode === 'light' ? '#f1f5f9' : 'rgba(255,255,255,0.06)'})`,
+                            border: is3d ? '1px solid rgba(255,255,255,0.35)' : `1px solid ${ratio > 0.6 ? primaryColor : bgConfig.border}`,
                             borderRadius: '12px',
                             padding: '16px 12px',
                             display: 'flex',
@@ -595,8 +712,11 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             textAlign: 'center',
-                            boxShadow: ratio > 0.7 ? `0 4px 16px ${primaryColor}33` : 'none',
-                            transition: 'all 0.2s ease'
+                            boxShadow: is3d
+                              ? '0 6px 14px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -2px 0 rgba(0,0,0,0.25)'
+                              : (ratio > 0.7 ? `0 4px 16px ${primaryColor}33` : 'none'),
+                            transform: is3d ? 'translateY(-2px)' : 'none',
+                            transition: 'all 0.25s ease'
                           }}
                         >
                           <span style={{ fontSize: '0.8rem', fontWeight: 600, color: ratio > 0.5 && bgMode !== 'light' ? '#ffffff' : bgConfig.text, marginBottom: '6px' }}>
@@ -641,9 +761,16 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
 
               return (
                 <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                  <div style={{ width: '280px', height: '180px', position: 'relative' }}>
+                  <div style={{
+                    width: '280px',
+                    height: '180px',
+                    position: 'relative',
+                    filter: is3d ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.35))' : 'none',
+                    transition: 'filter 0.3s ease'
+                  }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <RePieChart>
+                        <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                         <Pie
                           data={gaugeData}
                           cx="50%"
@@ -669,7 +796,13 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       transform: 'translateX(-50%)',
                       textAlign: 'center'
                     }}>
-                      <div style={{ fontSize: '2.4rem', fontWeight: 800, lineHeight: 1, color: primaryColor }}>
+                      <div style={{
+                        fontSize: '2.4rem',
+                        fontWeight: 800,
+                        lineHeight: 1,
+                        color: primaryColor,
+                        textShadow: is3d ? '0 3px 10px rgba(0,0,0,0.35)' : 'none'
+                      }}>
                         {pct}%
                       </div>
                       <div style={{ fontSize: '0.78rem', fontWeight: 600, color: bgConfig.subtext, marginTop: '4px' }}>
@@ -700,8 +833,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                         <div style={{
                           width: `${Math.round(ratio * 100)}%`,
                           minWidth: '150px',
-                          height: '38px',
-                          background: `linear-gradient(90deg, ${color}dd, ${color})`,
+                          height: is3d ? '42px' : '38px',
+                          background: is3d
+                            ? `linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.06) 45%, rgba(0,0,0,0.28) 100%), ${color}`
+                            : `linear-gradient(90deg, ${color}dd, ${color})`,
                           borderRadius: '8px',
                           display: 'flex',
                           alignItems: 'center',
@@ -710,7 +845,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           color: '#ffffff',
                           fontWeight: 700,
                           fontSize: '0.82rem',
-                          boxShadow: '0 3px 12px rgba(0,0,0,0.18)',
+                          boxShadow: is3d
+                            ? '0 8px 20px rgba(0,0,0,0.28), inset 0 1px 2px rgba(255,255,255,0.6), inset 0 -2px 3px rgba(0,0,0,0.35)'
+                            : '0 3px 12px rgba(0,0,0,0.18)',
+                          transform: is3d ? 'translateY(-1px)' : 'none',
                           transition: 'all 0.3s ease'
                         }}>
                           <span style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -738,7 +876,12 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'pie':
                     case 'donut':
                       return (
-                        <RePieChart>
+                        <RePieChart style={{
+                          transform: is3d ? 'perspective(700px) rotateX(18deg) scale(0.96)' : 'none',
+                          filter: is3d ? 'drop-shadow(0 16px 24px rgba(0,0,0,0.32))' : 'none',
+                          transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease'
+                        }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           <Tooltip content={<CustomTooltip />} />
                           {showLegend && <Legend verticalAlign="bottom" height={36} />}
                           <Pie
@@ -747,8 +890,9 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             cy="50%"
                             innerRadius={chartType === 'donut' ? 70 : 0}
                             outerRadius={120}
-                            paddingAngle={chartType === 'donut' ? 4 : 2}
+                            paddingAngle={chartType === 'donut' ? 4 : (is3d ? 3 : 2)}
                             dataKey="value"
+                            filter={is3d ? "url(#solid3dFloat)" : undefined}
                             label={showValues ? ({ name, percent }: { name?: string; percent?: number }) => `${name}: ${((percent ?? 0) * 100).toFixed(1)}%` : false}
                             labelLine={showValues}
                           >
@@ -756,8 +900,8 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               <Cell
                                 key={`cell-${index}`}
                                 fill={entry.color || colors[index % colors.length]}
-                                stroke={bgConfig.bg}
-                                strokeWidth={2}
+                                stroke={is3d ? 'rgba(255,255,255,0.45)' : bgConfig.bg}
+                                strokeWidth={is3d ? 2.5 : 2}
                               />
                             ))}
                           </Pie>
@@ -768,6 +912,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'threshold':
                       return (
                         <ReBarChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && (
                             <CartesianGrid
                               strokeDasharray="3 3"
@@ -783,7 +928,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             <ReferenceLine
                               y={avgValue}
                               stroke="#f59e0b"
-                              strokeWidth={2.5}
+                              strokeWidth={is3d ? 3 : 2.5}
                               strokeDasharray="5 5"
                               label={{
                                 value: `Benchmark Avg: ${avgValue.toLocaleString()}`,
@@ -794,9 +939,18 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               }}
                             />
                           )}
-                          <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                          <Bar
+                            dataKey="value"
+                            radius={is3d ? [8, 8, 0, 0] : [6, 6, 0, 0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          >
                             {data.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={is3d ? `url(#cylindrical-v-${index})` : (entry.color || colors[index % colors.length])}
+                                stroke={is3d ? 'rgba(255,255,255,0.22)' : undefined}
+                                strokeWidth={is3d ? 1 : 0}
+                              />
                             ))}
                             {showValues && (
                               <LabelList
@@ -815,6 +969,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'horizontalBar':
                       return (
                         <ReBarChart data={data} layout="vertical" margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && (
                             <CartesianGrid
                               strokeDasharray="3 3"
@@ -830,7 +985,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             <ReferenceLine
                               x={avgValue}
                               stroke="#f59e0b"
-                              strokeWidth={2.5}
+                              strokeWidth={is3d ? 3 : 2.5}
                               strokeDasharray="5 5"
                               label={{
                                 value: `Avg: ${avgValue.toLocaleString()}`,
@@ -841,9 +996,18 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               }}
                             />
                           )}
-                          <Bar dataKey="value" radius={[0, 6, 6, 0]}>
+                          <Bar
+                            dataKey="value"
+                            radius={is3d ? [0, 8, 8, 0] : [0, 6, 6, 0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          >
                             {data.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
+                              <Cell
+                                key={`cell-${index}`}
+                                fill={is3d ? `url(#cylindrical-h-${index})` : (entry.color || colors[index % colors.length])}
+                                stroke={is3d ? 'rgba(255,255,255,0.22)' : undefined}
+                                strokeWidth={is3d ? 1 : 0}
+                              />
                             ))}
                           </Bar>
                         </ReBarChart>
@@ -857,13 +1021,27 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       }));
                       return (
                         <ReBarChart data={prepared} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
                           <Legend verticalAlign="bottom" height={36} />
-                          <Bar dataKey="baseVal" name="Primary Base" stackId="stackA" fill={colors[0]} />
-                          <Bar dataKey="expVal" name="Growth Delta" stackId="stackA" fill={colors[1] || '#8b5cf6'} radius={[6, 6, 0, 0]} />
+                          <Bar
+                            dataKey="baseVal"
+                            name="Primary Base"
+                            stackId="stackA"
+                            fill={is3d ? 'url(#cylindrical-v-0)' : colors[0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
+                          <Bar
+                            dataKey="expVal"
+                            name="Growth Delta"
+                            stackId="stackA"
+                            fill={is3d ? 'url(#cylindrical-v-1)' : (colors[1] || '#8b5cf6')}
+                            radius={is3d ? [8, 8, 0, 0] : [6, 6, 0, 0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
                         </ReBarChart>
                       );
                     }
@@ -876,13 +1054,27 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       }));
                       return (
                         <ReBarChart data={prepared} layout="vertical" margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={false} />}
                           <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
                           <Tooltip content={<CustomTooltip />} />
                           <Legend verticalAlign="bottom" height={36} />
-                          <Bar dataKey="baseVal" name="Primary" stackId="stackA" fill={colors[0]} />
-                          <Bar dataKey="expVal" name="Expansion" stackId="stackA" fill={colors[1] || '#8b5cf6'} radius={[0, 6, 6, 0]} />
+                          <Bar
+                            dataKey="baseVal"
+                            name="Primary"
+                            stackId="stackA"
+                            fill={is3d ? 'url(#cylindrical-h-0)' : colors[0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
+                          <Bar
+                            dataKey="expVal"
+                            name="Expansion"
+                            stackId="stackA"
+                            fill={is3d ? 'url(#cylindrical-h-1)' : (colors[1] || '#8b5cf6')}
+                            radius={is3d ? [0, 8, 8, 0] : [0, 6, 6, 0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
                         </ReBarChart>
                       );
                     }
@@ -890,6 +1082,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'line':
                       return (
                         <ReLineChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && (
                             <CartesianGrid
                               strokeDasharray="3 3"
@@ -905,7 +1098,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             <ReferenceLine
                               y={avgValue}
                               stroke="#f59e0b"
-                              strokeWidth={2.5}
+                              strokeWidth={is3d ? 3 : 2.5}
                               strokeDasharray="5 5"
                               label={{
                                 value: `Avg: ${avgValue.toLocaleString()}`,
@@ -920,9 +1113,10 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             type="linear"
                             dataKey="value"
                             stroke={colors[0]}
-                            strokeWidth={3.5}
-                            dot={{ r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
-                            activeDot={{ r: 7 }}
+                            strokeWidth={is3d ? 5 : 3.5}
+                            dot={is3d ? { r: 6.5, fill: colors[0], strokeWidth: 3, stroke: '#ffffff', filter: 'url(#solid3dShadow)' } : { r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
+                            activeDot={{ r: 8 }}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
                             isAnimationActive={false}
                             label={showValues ? { position: 'top', fill: '#64748b', fontSize: 13, fontWeight: 600, offset: 10 } : false}
                           />
@@ -936,6 +1130,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       }));
                       return (
                         <ReLineChart data={prepared} margin={{ top: 25, right: 30, left: 10, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
@@ -946,16 +1141,17 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             dataKey="value"
                             name="Actual Series"
                             stroke={colors[0]}
-                            strokeWidth={3.5}
-                            dot={{ r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
-                            activeDot={{ r: 7 }}
+                            strokeWidth={is3d ? 5 : 3.5}
+                            dot={is3d ? { r: 6.5, fill: colors[0], strokeWidth: 3, stroke: '#ffffff', filter: 'url(#solid3dShadow)' } : { r: 5, fill: colors[0], strokeWidth: 2, stroke: '#ffffff' }}
+                            activeDot={{ r: 8 }}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
                           />
                           <Line
                             type="stepAfter"
                             dataKey="benchmark"
                             name="Target Baseline"
                             stroke={colors[1] || '#94a3b8'}
-                            strokeWidth={2.5}
+                            strokeWidth={is3d ? 3.5 : 2.5}
                             strokeDasharray="4 4"
                             dot={false}
                           />
@@ -966,12 +1162,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'area':
                       return (
                         <ReAreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
-                          <defs>
-                            <linearGradient id="areaColorPro" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor={colors[0]} stopOpacity={0.7} />
-                              <stop offset="95%" stopColor={colors[0]} stopOpacity={0.0} />
-                            </linearGradient>
-                          </defs>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
@@ -980,7 +1171,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             <ReferenceLine
                               y={avgValue}
                               stroke="#f59e0b"
-                              strokeWidth={2.5}
+                              strokeWidth={is3d ? 3 : 2.5}
                               strokeDasharray="5 5"
                               label={{
                                 value: `Avg: ${avgValue.toLocaleString()}`,
@@ -991,7 +1182,15 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               }}
                             />
                           )}
-                          <Area type="monotone" dataKey="value" stroke={colors[0]} strokeWidth={3} fillOpacity={1} fill="url(#areaColorPro)" />
+                          <Area
+                            type="monotone"
+                            dataKey="value"
+                            stroke={colors[0]}
+                            strokeWidth={is3d ? 4 : 3}
+                            fillOpacity={1}
+                            fill="url(#areaColorPro)"
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
                         </ReAreaChart>
                       );
 
@@ -1003,23 +1202,32 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       }));
                       return (
                         <ReAreaChart data={prepared} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
-                          <defs>
-                            <linearGradient id="stackedArea1" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor={colors[0]} stopOpacity={0.8} />
-                              <stop offset="95%" stopColor={colors[0]} stopOpacity={0.2} />
-                            </linearGradient>
-                            <linearGradient id="stackedArea2" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={0.8} />
-                              <stop offset="95%" stopColor={colors[1] || '#8b5cf6'} stopOpacity={0.2} />
-                            </linearGradient>
-                          </defs>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />}
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
                           <Legend verticalAlign="bottom" height={36} />
-                          <Area type="monotone" dataKey="tierA" name="Segment 1" stackId="1" stroke={colors[0]} fill="url(#stackedArea1)" />
-                          <Area type="monotone" dataKey="tierB" name="Segment 2" stackId="1" stroke={colors[1] || '#8b5cf6'} fill="url(#stackedArea2)" />
+                          <Area
+                            type="monotone"
+                            dataKey="tierA"
+                            name="Segment 1"
+                            stackId="1"
+                            stroke={colors[0]}
+                            strokeWidth={is3d ? 3 : 2}
+                            fill="url(#stackedArea1)"
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
+                          <Area
+                            type="monotone"
+                            dataKey="tierB"
+                            name="Segment 2"
+                            stackId="1"
+                            stroke={colors[1] || '#8b5cf6'}
+                            strokeWidth={is3d ? 3 : 2}
+                            fill="url(#stackedArea2)"
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
                         </ReAreaChart>
                       );
                     }
@@ -1027,10 +1235,19 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'radar':
                       return (
                         <ReRadarChart cx="50%" cy="50%" outerRadius={110} data={data}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           <PolarGrid stroke={bgConfig.border} />
                           <PolarAngleAxis dataKey="name" tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <PolarRadiusAxis stroke="#64748b" />
-                          <Radar name="Value" dataKey="value" stroke={colors[0]} fill={colors[0]} fillOpacity={0.6} />
+                          <Radar
+                            name="Value"
+                            dataKey="value"
+                            stroke={colors[0]}
+                            strokeWidth={is3d ? 3 : 2}
+                            fill={colors[0]}
+                            fillOpacity={is3d ? 0.75 : 0.6}
+                            filter={is3d ? "url(#solid3dFloat)" : undefined}
+                          />
                           <Tooltip content={<CustomTooltip />} />
                         </ReRadarChart>
                       );
@@ -1038,10 +1255,15 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     case 'scatter':
                       return (
                         <ReScatterChart margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+                          <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis dataKey="value" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Scatter data={data} fill={colors[0]} />
+                          <Scatter
+                            data={data}
+                            fill={colors[0]}
+                            filter={is3d ? "url(#solid3dShadow)" : undefined}
+                          />
                         </ReScatterChart>
                       );
 
