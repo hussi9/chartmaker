@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Download, Copy, Code, Check, Sparkles } from 'lucide-react';
 import { toPng, toSvg } from 'html-to-image';
 import confetti from 'canvas-confetti';
+import { trackEvent } from '../lib/gtag';
 
 interface ExportModalProps {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       link.href = dataUrl;
       link.click();
 
+      trackEvent('export_png', 'export', chartTitle, pixelRatio);
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     } catch (err) {
       console.error('PNG export failed', err);
@@ -61,6 +63,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       link.href = dataUrl;
       link.click();
 
+      trackEvent('export_svg', 'export', chartTitle);
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
     } catch (err) {
       console.error('SVG export failed', err);
@@ -82,6 +85,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       ]);
       setCopiedImage(true);
       setTimeout(() => setCopiedImage(false), 2000);
+      trackEvent('copy_clipboard', 'export', chartTitle);
       confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
     } catch (err) {
       console.error('Clipboard copy failed', err);
@@ -97,6 +101,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     navigator.clipboard.writeText(embedSnippet);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
+    trackEvent('copy_embed_code', 'export', chartTitle);
   };
 
   return (

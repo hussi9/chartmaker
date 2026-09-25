@@ -3,12 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6366f1" />
     
     <!-- Primary SEO Metadata -->
     <title>ChartGenie.xyz — Instant AI Chart & Graph Generator</title>
     <meta name="description" content="Free AI-assisted chart and graph maker. Generate publication-ready pie charts, bar graphs, and line charts with instant vector SVG and 4K Retina PNG export." />
     <link rel="canonical" href="https://chartgenie.xyz/" />
+
+    <!-- Google Search Console & Bing Webmaster Verification Tags -->
+    <meta name="google-site-verification" content="kxx7zMFGyesCFXQhPk6gUlDaXkOLODR8TWWhiIZ9yVQ" />
+    <meta name="msvalidate.01" content="5097013E659C7BECFF5FD2D52F7907B0" />
 
     <!-- OpenGraph / Social Meta Tags -->
     <meta property="og:type" content="website" />
@@ -21,6 +27,18 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="ChartGenie.xyz — Instant AI Chart Generator" />
     <meta name="twitter:description" content="Free online AI chart maker with lossless vector SVG & 4K Retina PNG exports." />
+
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CHARTGENIE1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-CHARTGENIE1', {
+        page_path: window.location.pathname,
+        send_page_view: true
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
