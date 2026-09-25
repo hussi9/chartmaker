@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Download, Copy, Code, Check, Sparkles, Share2, FileSpreadsheet, FileJson } from 'lucide-react';
 import { toPng, toSvg } from 'html-to-image';
 import confetti from 'canvas-confetti';
-import { trackEvent } from '../lib/gtag';
+import { trackEvent, trackExportChart } from '../lib/gtag';
 import { triggerHaptic } from '../lib/haptics';
 import type { DataItem } from '../lib/chartPresets';
 import Papa from 'papaparse';
@@ -103,6 +103,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       link.click();
 
       trackEvent('export_png', 'export', chartTitle, pixelRatio);
+      trackExportChart('png', pixelRatio);
       triggerHaptic('success');
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
       onNotify?.(`Downloaded ${pixelRatio === 4 ? '4K Ultra' : 'Retina 2x'} PNG!`, 'success');
@@ -127,6 +128,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       link.click();
 
       trackEvent('export_svg', 'export', chartTitle);
+      trackExportChart('svg');
       triggerHaptic('success');
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
       onNotify?.('Downloaded Vector SVG!', 'success');
@@ -152,6 +154,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       setCopiedImage(true);
       setTimeout(() => setCopiedImage(false), 2000);
       trackEvent('copy_clipboard', 'export', chartTitle);
+      trackExportChart('png', 2);
       triggerHaptic('success');
       confetti({ particleCount: 40, spread: 50, origin: { y: 0.6 } });
       onNotify?.('Chart copied to clipboard! Paste anywhere (Cmd+V)', 'viral');

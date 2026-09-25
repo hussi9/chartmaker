@@ -19,6 +19,14 @@ import { toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from './lib/chartPresets';
 import type { SavedChart } from './lib/storage';
+import {
+  initGoogleAnalytics,
+  trackChartCreate,
+  trackCopyChart,
+  trackAiPromptGenerate,
+  trackThemeSelection,
+  trackAspectRatioSelection
+} from './lib/gtag';
 
 export function App() {
   // Initialize state once from URL Hash or Autosave or default
@@ -140,6 +148,11 @@ export function App() {
     }, 3200);
   }, []);
 
+  // Initialize GA4
+  useEffect(() => {
+    initGoogleAnalytics();
+  }, []);
+
   // Autosave current work
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -255,11 +268,28 @@ export function App() {
       await navigator.clipboard.write([
         new ClipboardItem({ [blob.type]: blob })
       ]);
+      trackCopyChart();
       confetti({ particleCount: 30, spread: 50, origin: { y: 0.6 } });
       addToast('Chart copied to clipboard! (Ready to paste)', 'viral');
     } catch {
       setIsExportOpen(true);
     }
+  };
+
+  // Tracked selection handlers
+  const handleSelectScheme = (scheme: ColorScheme) => {
+    setActiveScheme(scheme);
+    trackThemeSelection(scheme.id);
+  };
+
+  const handleSelectAspectRatio = (ratio: AspectRatio) => {
+    setAspectRatio(ratio);
+    trackAspectRatioSelection(ratio);
+  };
+
+  const handleSelectChartType = (type: ChartType) => {
+    setChartType(type);
+    trackChartCreate(type, activeScheme.id, aspectRatio, data.length);
   };
 
   // Get share link
@@ -286,6 +316,7 @@ export function App() {
     if (res.title) setTitle(res.title);
     if (res.subtitle) setSubtitle(res.subtitle);
     if (res.chartType) setChartType(res.chartType);
+    trackAiPromptGenerate(res.title || 'AI Chart', true);
     confetti({ particleCount: 35, spread: 60, origin: { y: 0.5 } });
     addToast('✨ Chart generated with AI!', 'viral');
   };
@@ -332,7 +363,7 @@ export function App() {
           onAutoEmoji={handleAutoEmoji}
           onNotify={addToast}
           activeScheme={activeScheme}
-          onSelectScheme={setActiveScheme}
+          onSelectScheme={handleSelectScheme}
           fontFamily={fontFamily}
           onChangeFontFamily={setFontFamily}
           fontSize={fontSize}
@@ -354,7 +385,7 @@ export function App() {
           bgMode={bgMode}
           onChangeBgMode={setBgMode}
           aspectRatio={aspectRatio}
-          onChangeAspectRatio={setAspectRatio}
+          onChangeAspectRatio={handleSelectAspectRatio}
         />
 
         {/* Right Column: Chart Type Bar + Main Chart Card */}
@@ -362,7 +393,7 @@ export function App() {
           {/* Top Chart Type Selector Cards */}
           <ChartTypeBar
             activeType={chartType}
-            onSelectType={setChartType}
+            onSelectType={handleSelectChartType}
           />
 
           {/* Main Chart Card */}
@@ -378,7 +409,7 @@ export function App() {
               showValues={showValues}
               is3d={is3d}
               aspectRatio={aspectRatio}
-              onChangeAspectRatio={setAspectRatio}
+              onChangeAspectRatio={handleSelectAspectRatio}
               fontFamily={fontFamily}
               bgMode={bgMode}
               creatorHandle={creatorHandle}

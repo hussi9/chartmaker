@@ -1,7 +1,17 @@
 User-agent: *
 Allow: /
 
-# AI Search Crawlers
+# Standard Search Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# AI & Generative Engine Crawlers (GEO)
 User-agent: GPTBot
 Allow: /
 
@@ -12,6 +22,12 @@ User-agent: PerplexityBot
 Allow: /
 
 User-agent: GoogleOther
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
 Allow: /
 
 Sitemap: https://chartgenie.xyz/sitemap.xml

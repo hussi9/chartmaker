@@ -88,6 +88,7 @@ body {
 @media (min-width: 1024px) {
   .single-screen-main {
     height: calc(100vh - 72px);
+    max-height: calc(100vh - 72px);
     overflow: hidden;
   }
 }
@@ -123,6 +124,8 @@ body {
 /* Control Panel Card (Left Column) */
 .control-panel-card {
   width: 360px;
+  max-height: calc(100vh - 110px);
+  box-sizing: border-box;
   flex-shrink: 0;
   background: #ffffff;
   border: 1px solid var(--border-clean);

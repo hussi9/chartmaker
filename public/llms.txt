@@ -1,0 +1,21 @@
+# ChartGenie.xyz — Instant AI Chart & Graph Studio
+
+> ChartGenie is a fast, free, client-side AI chart and graph maker. Generate publication-ready pie charts, bar graphs, line charts, and radar performance matrices with instant 4K Retina PNG and lossless vector SVG export.
+
+## Key Capabilities & Features
+- **AI Natural Language Ingestion**: Transform unstructured text, tweets, or survey summaries into structured chart data.
+- **Multi-Format Aspect Ratios**: Instant framing for 16:9 (Landscape / Slide), 1:1 (Square / Feed), 9:16 (Vertical Story / Reels), and 4:3 (Deck).
+- **Aesthetic Themes & Modes**: 12 handcrafted color palettes (Apple, Linear, Midnight, Emerald, Sunset, Neon Cyber, Berry, Warm Amber, Pastel, Slate, etc.) and 6 canvas modes (Light, Dark, Spotify Wrapped, Paper Texture, True OLED, Slate).
+- **Multi-Resolution Lossless Export**: 1x standard, 2x Retina, 4K 300 DPI PNG, lossless vector SVG, and direct clipboard copy.
+- **Privacy-First Architecture**: 100% client-side Web Standards execution. Data never leaves user browser memory.
+- **Interactive Data Table**: Reorder, duplicate, color-pick, and toggle individual series or import CSV/TSV spreadsheets.
+
+## Direct Links & Routes
+- Main Web Studio: https://chartgenie.xyz/
+- Pie Chart Maker: https://chartgenie.xyz/pie-chart-maker
+- Bar Graph Generator: https://chartgenie.xyz/bar-graph-maker
+- Line Graph Generator: https://chartgenie.xyz/line-graph-maker
+- Donut Chart Studio: https://chartgenie.xyz/donut-chart-maker
+- Radar Matrix Builder: https://chartgenie.xyz/radar-chart-maker
+- Spreadsheet to Chart Converter: https://chartgenie.xyz/convert-excel-to-chart
+- Sitemap: https://chartgenie.xyz/sitemap.xml
