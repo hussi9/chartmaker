@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#6366f1" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ChartGenie" />
+    <meta name="application-name" content="ChartGenie" />
     
     <!-- Primary SEO Metadata -->
     <title>ChartGenie.xyz — Instant AI Chart & Graph Generator</title>
-    <meta name="description" content="Free AI-assisted chart and graph maker. Generate publication-ready pie charts, bar graphs, and line charts with instant vector SVG and 4K Retina PNG export." />
+    <meta name="description" content="Free AI-assisted chart and graph maker. Generate publication-ready viral pie charts, bar graphs, and line charts with instant vector SVG and 4K Retina PNG export." />
     <link rel="canonical" href="https://chartgenie.xyz/" />
 
     <!-- Google Search Console & Bing Webmaster Verification Tags -->
@@ -19,8 +25,8 @@
     <!-- OpenGraph / Social Meta Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://chartgenie.xyz/" />
-    <meta property="og:title" content="ChartGenie.xyz — Instant AI Chart & Graph Generator" />
-    <meta property="og:description" content="Create stunning pie charts, bar graphs, and line charts in seconds with AI prompt ingestion and vector SVG export." />
+    <meta property="og:title" content="ChartGenie.xyz — Instant AI Chart & Viral Graph Generator" />
+    <meta property="og:description" content="Create stunning viral charts, bar graphs, and line charts in seconds with smart AI prompt ingestion and vector SVG export." />
     <meta property="og:site_name" content="ChartGenie" />
 
     <!-- Twitter Card Meta Tags -->
@@ -43,5 +49,12 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(function() {});
+        });
+      }
+    </script>
   </body>
 </html>

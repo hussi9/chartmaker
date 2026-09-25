@@ -1,0 +1,47 @@
+{
+  "$schema": "https://styleseed.dev/schema/tokens.json",
+  "name": "ChartGenie StyleSeed Design System",
+  "version": "1.0.0",
+  "appType": "Social or Content Creator Tool",
+  "referenceBrand": "Apple Human Interface / Keynote",
+  "tokens": {
+    "colors": {
+      "brand": {
+        "obsidian": "#080a0f",
+        "white": "#ffffff",
+        "card": "rgba(18, 22, 31, 0.76)",
+        "cardHover": "rgba(26, 32, 45, 0.88)",
+        "input": "rgba(13, 17, 25, 0.85)",
+        "border": "rgba(255, 255, 255, 0.10)",
+        "borderActive": "rgba(255, 255, 255, 0.35)",
+        "accentCyan": "#38bdf8",
+        "accentPurple": "#c084fc",
+        "accentEmerald": "#34d399",
+        "accentSpotify": "#1ed760"
+      },
+      "text": {
+        "primary": "#f8fafc",
+        "muted": "#94a3b8",
+        "dim": "#64748b"
+      }
+    },
+    "typography": {
+      "fontSans": "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Plus Jakarta Sans', system-ui, sans-serif",
+      "fontMono": "'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+      "letterSpacing": "-0.012em"
+    },
+    "radii": {
+      "lg": "20px",
+      "md": "14px",
+      "sm": "10px"
+    },
+    "shadows": {
+      "glass": "0 20px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12)",
+      "glow": "0 0 32px rgba(255, 255, 255, 0.12)"
+    }
+  },
+  "screenScaffold": {
+    "name": "ChartGenie Creator Studio",
+    "purpose": "Main Creator Canvas & Storyboard for instant viral chart authoring & 4K export"
+  }
+}

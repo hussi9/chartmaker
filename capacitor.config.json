@@ -1,0 +1,15 @@
+{
+  "appId": "xyz.chartgenie.app",
+  "appName": "ChartGenie",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#090d16"
+    }
+  }
+}

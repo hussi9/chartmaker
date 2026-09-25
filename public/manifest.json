@@ -1,17 +1,35 @@
 {
   "short_name": "ChartGenie",
-  "name": "ChartGenie.xyz - Instant AI Chart & Graph Generator",
+  "name": "ChartGenie - Instant AI Chart & Viral Infographic Maker",
+  "description": "Create publication-ready viral pie charts, bar graphs, and line graphs with instant AI ingestion, vector SVG and 4K Retina PNG export.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "orientation": "any",
+  "background_color": "#090d16",
+  "theme_color": "#6366f1",
+  "categories": ["productivity", "utilities", "graphics", "business"],
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "512x512"
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": "/",
-  "background_color": "#090d16",
-  "theme_color": "#6366f1",
-  "display": "standalone",
-  "orientation": "any",
-  "description": "Free AI-assisted chart and graph maker. Generate publication-ready pie charts, bar graphs, and line charts with instant vector SVG and 4K Retina PNG export."
+  "shortcuts": [
+    {
+      "name": "New Pie Chart",
+      "short_name": "Pie Chart",
+      "url": "/#state=eyJ0aXRsZSI6IlBpZSBDaGFydCIsInN1YnRpdGxlIjoiTWFya2V0IFNoYXJlIiwiY2hhcnRUeXBlIjoicGllIiwic2NoZW1lSWQiOiJzcG90aWZ5IiwiZGF0YSI6W3siaWQiOiIxIiwibmFtZSI6IlNlZ21lbnQgQSIsInZhbHVlIjo0NX0seyJpZCI6IjIiLCJuYW1lIjoiU2VnbWVudCBCIiwidmFsdWUiOjM1fSx7ImlkIjoiMyIsIm5hbWUiOiJTZWdtZW50IEMiLCJ2YWx1ZSI6MjB9XX0=",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Viral Memes & Trends",
+      "short_name": "Viral Memes",
+      "url": "/",
+      "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }]
+    }
+  ]
 }
