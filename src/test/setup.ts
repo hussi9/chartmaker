@@ -29,6 +29,10 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+// Mock URL.createObjectURL/revokeObjectURL — jsdom doesn't implement these.
+if (!URL.createObjectURL) URL.createObjectURL = () => 'blob:mock';
+if (!URL.revokeObjectURL) URL.revokeObjectURL = () => {};
+
 // Mock navigator.clipboard
 Object.assign(navigator, {
   clipboard: {
