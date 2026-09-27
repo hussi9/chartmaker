@@ -100,3 +100,12 @@
 .cg-insight[data-on='true'] .cg-insight-state { color: rgba(255, 255, 255, 0.75); }
 .cg-caption-box { min-height: 96px; font: 400 13px/1.5 var(--font-ui); }
 .cg-caption-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Export set + checks */
+.cg-editor-right-foot { margin-top: auto; border-top: 1px solid var(--line-2); }
+.cg-exportset-sizes { display: flex; flex-direction: column; }
+.cg-checks-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 12px; line-height: 1.5; }
+.cg-check { display: flex; gap: 8px; align-items: flex-start; }
+.cg-check-mark { flex: none; font-weight: 700; color: var(--teal-deep); }
+.cg-check[data-pass='false'] .cg-check-mark { color: var(--coral); }
+.cg-check-name { font-weight: 600; }

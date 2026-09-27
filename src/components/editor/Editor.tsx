@@ -13,6 +13,9 @@ import { LookStrip } from './LookStrip';
 import { StylePanel } from './StylePanel';
 import { InsightsPanel } from './InsightsPanel';
 import { CaptionPanel } from './CaptionPanel';
+import { ExportSetPanel } from './ExportSetPanel';
+import { ChecksList } from './ChecksList';
+import { ExportMenu } from './ExportMenu';
 import { Button } from '../common/Button';
 import { checks } from '../../chart/checks';
 import { insights } from '../../insights';
@@ -72,7 +75,10 @@ export function Editor(): React.JSX.Element {
         </>
       ),
       actions: (
-        <Button onClick={share} icon={<Link2 size={14} />} aria-label="Share link"><span className="cg-btn-text">Share link</span></Button>
+        <>
+          <Button onClick={share} icon={<Link2 size={14} />} aria-label="Share link"><span className="cg-btn-text">Share link</span></Button>
+          <ExportMenu />
+        </>
       ),
     });
     return () => useTopBar.getState().set({ crumb: undefined, status: undefined, actions: undefined });
@@ -119,6 +125,10 @@ export function Editor(): React.JSX.Element {
         {ui.rightTab === 'insights' && <InsightsPanel />}
         {ui.rightTab === 'caption' && <CaptionPanel />}
         {ui.rightTab === 'style' && <StylePanel />}
+        <div className="cg-editor-right-foot">
+          <ExportSetPanel />
+          <ChecksList results={results} />
+        </div>
       </aside>
     </div>
   );
