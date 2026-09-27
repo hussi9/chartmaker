@@ -68,7 +68,7 @@ export function useIntake(initialText = '') {
 }
 
 export function Intake(): React.JSX.Element {
-  const search = useSearch({ strict: false }) as { text?: string; url?: string };
+  const search = useSearch({ strict: false }) as { text?: string; url?: string; shared?: boolean };
   const narrow = useUi((s) => s.narrow);
   const navigate = useNavigate();
   const intake = useIntake(search.text ?? search.url ?? '');
@@ -79,6 +79,18 @@ export function Intake(): React.JSX.Element {
     useTopBar.getState().set({ crumb: 'New chart' });
     return () => useTopBar.getState().set({ crumb: undefined });
   }, []);
+
+  useEffect(() => {
+    if (!search.shared) return;
+    void (async () => {
+      const { db } = await import('../../db');
+      const pending = await db.shareInbox.get('pending');
+      if (!pending) { track('share_target_miss', {}); return; }
+      await db.shareInbox.delete('pending');
+      intake.handleImage(new File([pending.blob], 'shared-image', { type: pending.blob.type || 'image/png' }));
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.shared]);
 
   const open = (type: ChartType, rank: number) => {
     const id = useDoc.getState().newDoc({ ...baseSpec, type });

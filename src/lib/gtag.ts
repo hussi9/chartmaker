@@ -46,6 +46,7 @@ const EVENTS = {
   series_update: { cadence: ['weekly', 'monthly', 'quarterly'] },
   brand_apply: {},
   check_fail: { id: ['contrast', 'textSize', 'cropZone', 'altText'] },
+  share_target_miss: {},
   template_use: { type: 'chartType' },
   look_change: { look: ['clean', 'bold', 'dark', 'newsletter'] },
   size_change: { size: ['16:9', '1:1', '9:16', '4:3'] },

@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createRouter, createMemoryHistory, RouterProvider } from '@tanstack/react-router';
 import { routeTree } from '@/routeTree.gen';
 import { db, openDb, resetDbForTests } from '@/db';
@@ -64,5 +64,26 @@ describe('the real "/new" route with a real query string (same bug class)', () =
   it('prefills shared text that is literally "true" or "false"', async () => {
     mount('/new?text=true');
     expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('true');
+  });
+});
+
+describe('a shared picture is picked up from shareInbox (review item: share with no file)', () => {
+  it('reads and clears the pending blob when /new?shared=1 loads', async () => {
+    const { db } = await import('@/db');
+    const blob = new Blob(['x'], { type: 'image/png' });
+    await db.shareInbox.put({ id: 'pending', blob, at: Date.now() });
+    mount('/new?shared=1');
+    await screen.findByLabelText('Paste your numbers');
+    await waitFor(async () => expect(await db.shareInbox.get('pending')).toBeUndefined());
+  });
+
+  it('is a silent no-op when nothing is pending', async () => {
+    mount('/new?shared=1');
+    expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('');
+  });
+
+  it('/new?text=hello still works exactly as before (no file field required)', async () => {
+    mount('/new?text=hello');
+    expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('hello');
   });
 });
