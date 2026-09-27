@@ -22,7 +22,8 @@ import { insights } from '../../insights';
 import { canvasMeasurer } from '../../chart/measure';
 import { shareUrls } from '../../codec/state';
 import { track } from '../../lib/gtag';
-import { db } from '../../db';
+import { db, type BrandDoc } from '../../db';
+import { applyBrand, blobToDataUrl, safePalette } from '../../chart/cvd';
 import './editor.css';
 
 const homeTo = '/' as LinkProps['to'];
@@ -37,6 +38,8 @@ export function Editor(): React.JSX.Element {
   const doc = useDoc();
   const ui = useUi();
   const [scale, setScale] = useState(0.5);
+  const [brand, setBrand] = useState<BrandDoc | null>(null);
+  useEffect(() => { if (ui.storage === 'ok') void db.brand.get('brand').then((b) => setBrand(b ?? null)); }, [ui.storage]);
   const measure = useMemo(() => canvasMeasurer(), []);
 
   // Route id → store. A freshly created doc is already in the store; otherwise load it.
@@ -117,7 +120,14 @@ export function Editor(): React.JSX.Element {
           look={doc.spec.look}
           onType={(t) => doc.setSpec((d) => { d.type = t; })}
           onLook={(l) => { doc.setSpec((d) => { d.look = l; }); track('look_change', { look: l }); }}
-          hasBrand={false}
+          hasBrand={brand !== null}
+          onApplyBrand={async () => {
+            if (!brand) return;
+            const logo = brand.logo ? await blobToDataUrl(brand.logo).catch(() => undefined) : undefined;
+            const next = applyBrand(doc.spec, brand, logo);
+            doc.setSpec((d) => { d.palette = next.palette; d.data = next.data; d.options = next.options; });
+            track('brand_apply', {});
+          }}
         />
       </section>
       <aside className="cg-editor-right" role="region" aria-label="Style">
@@ -130,7 +140,7 @@ export function Editor(): React.JSX.Element {
         </div>
         {ui.rightTab === 'insights' && <InsightsPanel />}
         {ui.rightTab === 'caption' && <CaptionPanel />}
-        {ui.rightTab === 'style' && <StylePanel />}
+        {ui.rightTab === 'style' && <StylePanel brandPalette={brand ? { id: 'brand', name: 'My brand', colors: brand.safe ? safePalette(brand.palette) : brand.palette } : undefined} />}
         <div className="cg-editor-right-foot">
           <ExportSetPanel />
           <ChecksList results={results} />

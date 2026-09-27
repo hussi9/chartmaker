@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ChartsRouteImport } from './routes/charts'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as SeriesRouteImport } from './routes/series'
@@ -26,6 +27,11 @@ const IndexRoute = IndexRouteImport.update({
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BrandRoute = BrandRouteImport.update({
+  id: '/brand',
+  path: '/brand',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChartsRoute = ChartsRouteImport.update({
@@ -62,6 +68,7 @@ const SStateRoute = SStateRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
   '/series': typeof SeriesRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
   '/series': typeof SeriesRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
   '/series': typeof SeriesRoute
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$'
+    | '/brand'
     | '/charts'
     | '/new'
     | '/series'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/brand'
     | '/charts'
     | '/new'
     | '/series'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$'
+    | '/brand'
     | '/charts'
     | '/new'
     | '/series'
@@ -126,6 +138,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
+  BrandRoute: typeof BrandRoute
   ChartsRoute: typeof ChartsRoute
   NewRoute: typeof NewRoute
   SeriesRoute: typeof SeriesRoute
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/$'
       fullPath: '/$'
       preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/brand': {
+      id: '/brand'
+      path: '/brand'
+      fullPath: '/brand'
+      preLoaderRoute: typeof BrandRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/charts': {
@@ -198,6 +218,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
+  BrandRoute: BrandRoute,
   ChartsRoute: ChartsRoute,
   NewRoute: NewRoute,
   SeriesRoute: SeriesRoute,

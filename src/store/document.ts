@@ -7,6 +7,7 @@ import { db } from '../db';
 import { defaultSpec, type ChartSpec, type Row } from '../chart/types';
 import { svgString } from '../chart/render/svgString';
 import { useUi } from './ui';
+import { applyBrand } from '../chart/cvd';
 
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error' | 'unavailable';
 
@@ -52,7 +53,10 @@ export const useDoc = create<DocState>()(
 
       newDoc(partial = {}) {
         const id = newId();
-        set({ id, spec: defaultSpec(partial), dirty: true, saveState: 'idle' });
+        const brand = useUi.getState().brand;
+        const base = defaultSpec(partial);
+        const spec = brand?.applyToNew && !partial.palette ? applyBrand(base, brand, brand.logoDataUrl) : base;
+        set({ id, spec, dirty: true, saveState: 'idle' });
         useDoc.temporal.getState().clear();
         scheduleSave();
         return id;

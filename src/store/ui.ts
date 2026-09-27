@@ -1,6 +1,6 @@
 // Cross-screen UI state: storage health, layout width, panel tabs, toasts.
 import { create } from 'zustand';
-import type { StorageState } from '../db';
+import type { BrandDoc, StorageState } from '../db';
 import type { PostSizeId, Tone } from '../chart/types';
 import type { Platform } from '../chart/safezones';
 
@@ -11,6 +11,7 @@ export interface UiState {
   storage: StorageState;
   narrow: boolean;
   handle?: string;
+  brand?: BrandDoc & { logoDataUrl?: string };
   rightTab: 'insights' | 'caption' | 'style';
   safeZones: Platform[];
   exportSizes: PostSizeId[];
@@ -30,6 +31,7 @@ export const useUi = create<UiState>()((set, get) => ({
   storage: 'unavailable',
   narrow: false,
   handle: undefined,
+  brand: undefined,
   rightTab: 'insights',
   safeZones: ['x'],
   exportSizes: ['16:9', '1:1', '9:16'],
