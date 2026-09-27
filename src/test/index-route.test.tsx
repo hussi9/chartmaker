@@ -54,3 +54,15 @@ describe('the real "/" route with a real query string', () => {
     expect(await screen.findByRole('heading', { name: /pick a look/i })).toBeInTheDocument();
   });
 });
+
+describe('the real "/new" route with a real query string (same bug class)', () => {
+  it('prefills shared text that happens to look numeric, boolean, or decimal', async () => {
+    mount('/new?text=2024');
+    expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('2024');
+  });
+
+  it('prefills shared text that is literally "true" or "false"', async () => {
+    mount('/new?text=true');
+    expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('true');
+  });
+});
