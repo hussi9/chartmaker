@@ -54,12 +54,13 @@ describe('PasteBox picture chip', () => {
     expect(screen.getByText(/couldn.t find a clear table/i)).toBeInTheDocument();
   });
 
-  it('shows a thumbnail of the picked image next to the detected rows', () => {
-    const onImage = vi.fn();
-    render(<PasteBox {...baseProps} onImage={onImage} />);
-    const input = screen.getByLabelText('Picture file') as HTMLInputElement;
-    const file = new File(['x'], 'photo.png', { type: 'image/png' });
-    fireEvent.change(input, { target: { files: [file] } });
+  it('shows a thumbnail next to the detected rows when the caller supplies one (owned by useIntake — review item I4)', () => {
+    render(<PasteBox {...baseProps} thumbUrl="blob:fake-url" />);
     expect(screen.getByAltText('Picture you added')).toBeInTheDocument();
+  });
+
+  it('shows no thumbnail when the caller has none yet', () => {
+    render(<PasteBox {...baseProps} />);
+    expect(screen.queryByAltText('Picture you added')).toBeNull();
   });
 });

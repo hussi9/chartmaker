@@ -1,6 +1,6 @@
 // "Paste anything": a big box that detects rows as you type, drop or pick a
 // CSV, or add a picture (read on-device — see src/insights/detectImage.ts).
-import { useEffect, useRef, useState, type DragEvent } from 'react';
+import { useRef, type DragEvent } from 'react';
 import type { Detection } from '../../insights/intake';
 import { detectCsvFile } from '../../insights/intake';
 import { SAMPLE_ROWS, type Unit } from '../../chart/types';
@@ -24,29 +24,25 @@ export interface PasteBoxProps {
   onImage?: (file: File) => void;
   imageState?: 'idle' | 'loading-engine' | 'reading';
   imageWarning?: string | null;
+  // Owned by the caller (useIntake), not this component — both a hand-picked
+  // image and one hydrated from a shared picture set the same File there, so
+  // either path shows a thumbnail here (review item I4).
+  thumbUrl?: string | null;
 }
 
 export function sampleText(): string {
   return SAMPLE_ROWS.map((r) => `${r.label.padEnd(10)} ${r.value}`).join('\n');
 }
 
-export function PasteBox({ text, onText, detection, unit, onUnit, compact, onImage, imageState = 'idle', imageWarning }: PasteBoxProps): React.JSX.Element {
+export function PasteBox({ text, onText, detection, unit, onUnit, compact, onImage, imageState = 'idle', imageWarning, thumbUrl }: PasteBoxProps): React.JSX.Element {
   const fileRef = useRef<HTMLInputElement>(null);
   const imageFileRef = useRef<HTMLInputElement>(null);
-  const [thumbUrl, setThumbUrl] = useState<string | null>(null);
   const kinds: { id: Detection['kind']; label: string }[] = [{ id: 'cells', label: 'Cells' }, { id: 'sentence', label: 'Sentence' }, { id: 'csv', label: 'CSV' }];
-
-  useEffect(() => () => { if (thumbUrl) URL.revokeObjectURL(thumbUrl); }, [thumbUrl]);
-
-  const pickImage = (file: File) => {
-    setThumbUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return URL.createObjectURL(file); });
-    onImage?.(file);
-  };
 
   const onDrop = async (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
-    if (file?.type.startsWith('image/')) { pickImage(file); return; }
+    if (file?.type.startsWith('image/')) { onImage?.(file); return; }
     if (file) { const d = await detectCsvFile(file); onText(d.rows.map((r) => `${r.label}\t${r.value}`).join('\n')); return; }
     const t = e.dataTransfer.getData('text');
     if (t) onText(t);
@@ -92,7 +88,7 @@ export function PasteBox({ text, onText, detection, unit, onUnit, compact, onIma
       {detection.warnings.map((w) => <span key={w} className="cg-hint cg-warn">{w}</span>)}
       {imageWarning && <span className="cg-hint cg-warn">{imageWarning}</span>}
       <input ref={fileRef} type="file" accept=".csv,text/csv" hidden aria-label="CSV file" onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const d = await detectCsvFile(f); onText(d.rows.map((r) => `${r.label}\t${r.value}`).join('\n')); e.target.value = ''; }} />
-      <input ref={imageFileRef} type="file" accept="image/*" capture="environment" hidden aria-label="Picture file" onChange={(e) => { const f = e.target.files?.[0]; if (f) pickImage(f); e.target.value = ''; }} />
+      <input ref={imageFileRef} type="file" accept="image/*" capture="environment" hidden aria-label="Picture file" onChange={(e) => { const f = e.target.files?.[0]; if (f) onImage?.(f); e.target.value = ''; }} />
     </div>
   );
 }

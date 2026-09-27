@@ -39,7 +39,7 @@ beforeEach(async () => {
 
 function mount(path: string) {
   const router = createRouter({ routeTree, history: createMemoryHistory({ initialEntries: [path] }) });
-  return render(<RouterProvider router={router} />);
+  return { ...render(<RouterProvider router={router} />), router };
 }
 
 describe('the real "/" route with a real query string', () => {
@@ -97,5 +97,38 @@ describe('a shared picture is picked up from shareInbox (review item: share with
   it('/new?text=hello still works exactly as before (no file field required)', async () => {
     mount('/new?text=hello');
     expect(await screen.findByLabelText('Paste your numbers')).toHaveValue('hello');
+  });
+
+  it('shows the picked-up picture as a thumbnail, same as picking one by hand (review item I4)', async () => {
+    const { db } = await import('@/db');
+    const blob = new Blob(['x'], { type: 'image/png' });
+    await db.shareInbox.put({ id: 'pending', blob, at: Date.now() });
+    mount('/new?shared=1');
+    await screen.findByLabelText('Paste your numbers');
+    expect(await screen.findByAltText('Picture you added')).toBeInTheDocument();
+  });
+
+  it('clears ?shared=1 from the URL after consuming it, so a reload or back-navigation does not re-fire (review item I4)', async () => {
+    const { db } = await import('@/db');
+    const blob = new Blob(['x'], { type: 'image/png' });
+    await db.shareInbox.put({ id: 'pending', blob, at: Date.now() });
+    const { router } = mount('/new?shared=1');
+    await screen.findByLabelText('Paste your numbers');
+    await waitFor(() => expect(router.state.location.search.shared).toBeUndefined());
+  });
+
+  it('clears ?shared=1 even when nothing was pending, so the miss event does not refire on reload (review item I4)', async () => {
+    const { router } = mount('/new?shared=1');
+    await screen.findByLabelText('Paste your numbers');
+    await waitFor(() => expect(router.state.location.search.shared).toBeUndefined());
+  });
+
+  it('shows a warning instead of an unhandled rejection when reading the pending share fails (review item I4)', async () => {
+    const { db } = await import('@/db');
+    const getSpy = vi.spyOn(db.shareInbox, 'get').mockRejectedValueOnce(new Error('IDB is unavailable'));
+    mount('/new?shared=1');
+    await screen.findByLabelText('Paste your numbers');
+    expect(await screen.findByText(/couldn.t load the shared picture|try again/i)).toBeInTheDocument();
+    getSpy.mockRestore();
   });
 });

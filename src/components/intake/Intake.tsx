@@ -23,13 +23,27 @@ const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
 const IMAGE_TIMEOUT_MS = 20_000;
 const TOO_LARGE = 'That picture is too large — try a smaller picture (under 15MB).';
 const TOO_SLOW = "That took too long to read. Try again, or paste the numbers instead.";
+const SHARE_LOAD_FAILED = "Couldn't load the shared picture. Try again, or paste the numbers instead.";
 
 export function useIntake(initialText = '') {
   const [text, setText] = useState(initialText);
   const [unitOverride, setUnitOverride] = useState<Unit | 'number' | null>(null);
   const [imageState, setImageState] = useState<'idle' | 'loading-engine' | 'reading'>('idle');
   const [imageWarning, setImageWarning] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [thumbUrl, setThumbUrl] = useState<string | null>(null);
   const requestRef = useRef(0);
+
+  // Both entry paths (PasteBox's own picker/drop and a shared picture picked
+  // up from shareInbox) call handleImage with a File — owning the thumbnail
+  // here, keyed off that one File, means either path shows it (review item
+  // I4; PasteBox previously only ever set this for its own local picks).
+  useEffect(() => {
+    if (!imageFile) return;
+    const url = URL.createObjectURL(imageFile);
+    setThumbUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [imageFile]);
   const detection = useMemo(() => detect(text), [text]);
   const unit: Unit | 'number' = unitOverride ?? detection.unit ?? 'number';
   const rows = useMemo(() => detection.rows.map((r) => ({ ...r, id: newId(), ...(unit === 'number' ? { unit: undefined } : { unit }) })), [detection.rows, unit]);
@@ -41,6 +55,7 @@ export function useIntake(initialText = '') {
   const handleImage = useCallback((file: File) => {
     if (file.size > MAX_IMAGE_BYTES) { setImageWarning(TOO_LARGE); return; }
     setImageWarning(null);
+    setImageFile(file);
     const myRequest = ++requestRef.current;
     const isMine = () => requestRef.current === myRequest;
     // The first picture in a session pays for a multi-MB model download;
@@ -78,7 +93,7 @@ export function useIntake(initialText = '') {
     );
   }, []);
 
-  return { text, setText, detection, unit, setUnit: setUnitOverride, rows, suggestions, baseSpec, imageState, imageWarning, handleImage };
+  return { text, setText, detection, unit, setUnit: setUnitOverride, rows, suggestions, baseSpec, imageState, imageWarning, setImageWarning, thumbUrl, handleImage };
 }
 
 export function Intake(): React.JSX.Element {
@@ -97,11 +112,21 @@ export function Intake(): React.JSX.Element {
   useEffect(() => {
     if (!search.shared) return;
     void (async () => {
-      const { db } = await import('../../db');
-      const pending = await db.shareInbox.get('pending');
-      if (!pending) { track('share_target_miss', {}); return; }
-      await db.shareInbox.delete('pending');
-      intake.handleImage(new File([pending.blob], 'shared-image', { type: pending.blob.type || 'image/png' }));
+      try {
+        const { db } = await import('../../db');
+        const pending = await db.shareInbox.get('pending');
+        if (!pending) { track('share_target_miss', {}); return; }
+        await db.shareInbox.delete('pending');
+        intake.handleImage(new File([pending.blob], 'shared-image', { type: pending.blob.type || 'image/png' }));
+      } catch {
+        intake.setImageWarning(SHARE_LOAD_FAILED);
+      } finally {
+        // Drop ?shared=1 once consumed (found or not, succeeded or not) so a
+        // reload or back-navigation doesn't re-run this and re-fire
+        // share_target_miss — the very metric meant to catch a broken share,
+        // turned into noise by its own successful re-run (review item I4).
+        void navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, shared: undefined }), replace: true } as never);
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search.shared]);
@@ -118,7 +143,7 @@ export function Intake(): React.JSX.Element {
     <div className="cg-intake">
       <div className="cg-intake-left">
         <h1 className="cg-h1 cg-intake-h1">Paste anything.<br /><span className="cg-intake-accent">We’ll chart it.</span></h1>
-        <PasteBox text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} onImage={intake.handleImage} imageState={intake.imageState} imageWarning={intake.imageWarning} />
+        <PasteBox text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} onImage={intake.handleImage} imageState={intake.imageState} imageWarning={intake.imageWarning} thumbUrl={intake.thumbUrl} />
         <div className="cg-intake-cta">
           <Button variant="primary" size="lg" disabled={rows.length === 0} onClick={() => { const top = suggestions[0]; if (top) open(top.type, 0); }} aria-label="Continue with these rows">Continue with these rows →</Button>
           {rows.length > 0 && <span className="cg-hint">Units: <b>{intake.unit === 'number' ? 'plain numbers' : intake.unit}</b> · change with the control above</span>}

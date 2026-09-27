@@ -75,7 +75,7 @@ export function QuickPost({ intake }: { intake: ReturnType<typeof useIntake> }):
     return (
       <div className="cg-quick">
         <h1 className="cg-h1" style={{ fontSize: 30 }}>Paste your numbers</h1>
-        <PasteBox compact text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} onImage={intake.handleImage} imageState={intake.imageState} imageWarning={intake.imageWarning} />
+        <PasteBox compact text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} onImage={intake.handleImage} imageState={intake.imageState} imageWarning={intake.imageWarning} thumbUrl={intake.thumbUrl} />
         <Button variant="primary" size="lg" className="cg-quick-cta" disabled={rows.length === 0} onClick={start} aria-label="See 3 charts">See 3 charts →</Button>
       </div>
     );
