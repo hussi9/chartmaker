@@ -7,6 +7,9 @@ export interface ChartDoc { id: string; spec: ChartSpec; thumb?: Blob; createdAt
 export interface SeriesDoc { id: string; chartId: string; cadence: 'weekly' | 'monthly' | 'quarterly'; nextDue: number; snapshots: { at: number; rows: Row[] }[]; notifiedAt?: number }
 export interface BrandDoc { id: 'brand'; palette: string[]; safe: boolean; handle?: string; logo?: Blob; corner: 'br' | 'bl' | 'tr' | 'tl'; applyToNew: boolean }
 export interface SettingsDoc { id: 'settings'; handle?: string; lastRoute?: string; migratedAt?: number }
+// A photo shared to the app from the OS share sheet, handed off by the
+// service worker (src/sw.ts) until the /new?shared=1 page reads it.
+export interface ShareInboxDoc { id: 'pending'; blob: Blob; at: number }
 
 export type StorageState = 'ok' | 'unavailable';
 
@@ -15,6 +18,7 @@ class ChartGenieDb extends Dexie {
   series!: Table<SeriesDoc, string>;
   brand!: Table<BrandDoc, 'brand'>;
   settings!: Table<SettingsDoc, 'settings'>;
+  shareInbox!: Table<ShareInboxDoc, string>;
 
   constructor() {
     super('chartgenie');
@@ -24,6 +28,7 @@ class ChartGenieDb extends Dexie {
       brand: 'id',
       settings: 'id',
     });
+    this.version(2).stores({ shareInbox: 'id' });
   }
 }
 

@@ -144,3 +144,20 @@ describe('backup restore with a bad chart', () => {
     expect(await db.charts.get('bad')).toBeUndefined();
   });
 });
+
+describe('shareInbox table (v2 schema)', () => {
+  it('stores and reads back a pending shared blob', async () => {
+    const blob = new NodeBlob(['hello'], { type: 'image/png' }) as unknown as Blob;
+    await db.shareInbox.put({ id: 'pending', blob, at: 1234 });
+    const doc = await db.shareInbox.get('pending');
+    expect(doc?.at).toBe(1234);
+    expect(doc?.blob).toBeInstanceOf(NodeBlob);
+  });
+
+  it('a second put overwrites the first (only ever one pending share)', async () => {
+    await db.shareInbox.put({ id: 'pending', blob: new NodeBlob(['a']) as unknown as Blob, at: 1 });
+    await db.shareInbox.put({ id: 'pending', blob: new NodeBlob(['b']) as unknown as Blob, at: 2 });
+    expect(await db.shareInbox.count()).toBe(1);
+    expect((await db.shareInbox.get('pending'))?.at).toBe(2);
+  });
+});
