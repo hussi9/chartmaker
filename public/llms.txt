@@ -4,6 +4,7 @@
 
 ## What it does
 - **Paste anything**: spreadsheet cells, a CSV, or a sentence like “Revenue grew from 12k in Jan to 34k in Jun” become rows; units (%, $, k/M) are detected and you confirm the rows before charting.
+- **Add a picture**: a photo of a whiteboard or printed table, or a dropped screenshot, is read on the device — no image is sent anywhere. A "Picture" button next to Paste and CSV opens the camera on a phone or a file picker on desktop. On Chrome, Edge or ChromeOS with the app installed, sharing a photo from the OS share sheet also works; iOS and Safari don't support that share path, so the in-app button is what covers them.
 - **Chart suggestions**: three ranked looks from the shape of the data (two points → before/after, dates → line, parts of 100 → donut, a drop-off → funnel).
 - **19 chart looks**: bars, ranked bars, stacked bars, 100% stacked, line, area, stacked line and area, pie, donut, radar, scatter, heat grid, rule chart, gauge, conversion funnel, KPI headline and a 2×2 priority matrix.
 - **Four post sizes**: 16:9 (X / web, 1600×900), 1:1 (LinkedIn, 1080×1080), 9:16 (Story, 1080×1920) and 4:3 (deck, 1600×1200), with platform crop-zone overlays.

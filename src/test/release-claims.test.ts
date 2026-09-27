@@ -47,3 +47,13 @@ describe('manifest share target', () => {
     expect(manifest.file_handlers.some((h: { accept: Record<string, string[]> }) => 'image/*' in h.accept)).toBe(true);
   });
 });
+
+describe('picture-intake claims stay honest', () => {
+  // Excludes the sanctioned negated phrasing ("nothing is sent to a server", "never sent") this repo already uses to make the true privacy claim.
+  const FORBIDDEN_PICTURE_CLAIMS = /works on (all|every) (browser|phone|device)|available on iphone|available on ios|(?<!nothing )(?<!never )\bis sent to (?:our|a) server\b|cloud (ocr|vision|api)/i;
+  it('no copy overclaims the picture/share-target feature', () => {
+    for (const path of ['public/llms.txt', 'README.md', 'index.html']) {
+      expect(readFileSync(path, 'utf8'), path).not.toMatch(FORBIDDEN_PICTURE_CLAIMS);
+    }
+  });
+});

@@ -5,6 +5,7 @@ Live at [chartgenie.xyz](https://chartgenie.xyz). Paste numbers, get a post-read
 ## What it does
 
 - **Paste anything.** Spreadsheet cells, a CSV, or a sentence like "Revenue grew from 12k in Jan to 34k in Jun" become rows. Units (%, $, k/M) are detected and you confirm the rows before charting. `.csv` files can be dropped in, opened with the installed app, or shared to it from the OS share sheet.
+- **Add a picture.** A photo of a whiteboard or printed table, or a dropped screenshot, is read on-device (PaddleOCR, with Tesseract.js as a fallback) — nothing is uploaded. Installed on Chrome, Edge or ChromeOS, ChartGenie is also a Web Share Target for photos; iOS and Safari don't support that share path.
 - **Three suggestions** ranked from the shape of the data (two points → before/after, dates → line, parts of 100 → donut, a drop-off → funnel).
 - **Nineteen chart looks** drawn by Apache ECharts inside ChartGenie's own frame: bars, ranked bars, stacked and 100% stacked, line, area, stacked line/area, pie, donut, radar, scatter, heat grid, rule chart, gauge, conversion funnel, KPI headline, 2×2 priority matrix.
 - **Four post sizes** with platform crop-zone overlays: 16:9 (X / web, 1600×900), 1:1 (LinkedIn, 1080×1080), 9:16 (Story, 1080×1920), 4:3 (deck, 1600×1200).
