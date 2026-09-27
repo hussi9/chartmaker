@@ -159,7 +159,7 @@ export function DataGrid(): React.JSX.Element {
           const draftKey = `value-${r.id}`;
           return (
             <div key={r.id} className="cg-row" style={{ height: ROW_H }}>
-              <button type="button" className="cg-dot" style={{ background: color }} aria-label={`Colour for ${r.label || 'row'}`} title="Click to cycle the palette" onClick={() => cycleColour(i)} />
+              <button type="button" className="cg-dot" style={{ background: color, ["--dot" as string]: color }} aria-label={`Colour for ${r.label || 'row'}`} title="Click to cycle the palette" onClick={() => cycleColour(i)} />
               <input
                 ref={register(`label-${i}`)}
                 className="cg-cell-input"

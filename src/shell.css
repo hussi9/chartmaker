@@ -20,7 +20,7 @@
 
 /* Top bar */
 .cg-topbar { position: sticky; top: 0; z-index: 20; height: var(--topbar-h); display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-6); border-bottom: 1px solid var(--line-2); background: var(--paper-2); }
-.cg-brand { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--ink); text-decoration: none; }
+.cg-brand { font-family: var(--font-display); font-weight: 800; font-size: 16px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: var(--tap); }
 .cg-crumb-sep { color: var(--ink-4); }
 .cg-crumb { font-size: 13px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cg-topbar-status { display: inline-flex; align-items: center; gap: 8px; }
@@ -81,3 +81,9 @@
 /* Page gutters */
 .cg-page { padding: var(--space-8) var(--space-7); display: flex; flex-direction: column; gap: var(--space-4); }
 .cg-shell-narrow .cg-page { padding: var(--space-5) var(--space-4); }
+
+/* Phone top bar: brand, status dot, icon actions */
+.cg-shell-narrow .cg-crumb, .cg-shell-narrow .cg-crumb-sep { display: none; }
+.cg-shell-narrow .cg-autosave-text, .cg-shell-narrow .cg-btn-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.cg-shell-narrow .cg-topbar-actions .cg-btn { padding: 0 12px; }
+.cg-shell-narrow .cg-topbar-actions .cg-btn .cg-btn-icon { margin: 0; }

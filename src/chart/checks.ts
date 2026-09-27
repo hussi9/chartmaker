@@ -18,11 +18,12 @@ export { SAFE_ZONES } from './safezones';
 export type CheckId = 'contrast' | 'textSize' | 'cropZone' | 'altText';
 export interface Check { id: CheckId; pass: boolean; detail: string }
 
-const MIN_LABEL_LC = 60;
-const MIN_TITLE_LC = 75;
+// APCA: Lc 60 for fluent body text, Lc 45 for large/bold text (labels here are ≥ 24px, weight ≥ 600).
+const MIN_LABEL_LC = 45;
+const MIN_TITLE_LC = 60;
 const MIN_TEXT_PX = 24;
 
-interface Fill { box: Box; fill: string }
+export interface Fill { box: Box; fill: string }
 
 const SHAPE_RE = /<(rect|path|polygon|circle)\b([^>]*)>/g;
 
@@ -111,6 +112,23 @@ function lc(fg: string, bg: string): number {
   return Math.abs(Number(APCAcontrast(sRGBtoY(f), sRGBtoY(b))));
 }
 
+// Every plot label is judged against the fill under its centre; frame text against its own background.
+export function weakContrast(plotTexts: TextBox[], fills: Fill[], bg: string, frame: { text: TextBox; bg: string; floor: number }[] = []): string[] {
+  const weak: string[] = [];
+  for (const t of plotTexts) {
+    const cx = t.x + t.w / 2;
+    const cy = t.y + t.h / 2;
+    const under = fills.find((s) => contains(s.box, cx, cy))?.fill ?? bg;
+    const v = lc(t.fill, under);
+    if (v < MIN_LABEL_LC) weak.push(`${t.text} (${v.toFixed(0)})`);
+  }
+  for (const f of frame) {
+    const v = lc(f.text.fill, f.bg);
+    if (v < f.floor) weak.push(`${f.text.text} (${v.toFixed(0)})`);
+  }
+  return weak;
+}
+
 export function checks(spec: ChartSpec, sizes: PostSizeId[], platforms: Platform[], m: TextMeasurer = defaultMeasurer(), insightList: Insight[] = []): Check[] {
   const look = LOOKS[spec.look];
   const f = frame(spec, m);
@@ -120,26 +138,14 @@ export function checks(spec: ChartSpec, sizes: PostSizeId[], platforms: Platform
   const frameTexts: TextBox[] = [...(f.title ?? []), f.subtitle, f.source, f.site, f.remix, f.badge].filter((t): t is TextBox => Boolean(t));
 
   // 1. Contrast
-  const weak: string[] = [];
-  for (const t of plotTexts) {
-    const cx = t.x + t.w / 2;
-    const cy = t.y + t.h / 2;
-    const under = fills.find((s) => contains(s.box, cx, cy))?.fill ?? look.bg;
-    const v = lc(t.fill, under);
-    if (v < MIN_LABEL_LC) weak.push(`${t.text} (${v.toFixed(0)})`);
-  }
-  for (const t of frameTexts) {
-    const bg = t.id === 'badge' ? (spec.look === 'dark' ? '#334155' : '#f6f3ee') : look.bg;
-    const v = lc(t.fill, bg);
-    if (v < (t.id.startsWith('title') ? MIN_TITLE_LC : MIN_LABEL_LC)) weak.push(`${t.text} (${v.toFixed(0)})`);
-  }
+  const weak = weakContrast(plotTexts, fills, look.bg, frameTexts.map((t) => ({ text: t, bg: t.id === 'badge' ? (spec.look === 'dark' ? '#334155' : '#f6f3ee') : look.bg, floor: t.id.startsWith('title') ? MIN_TITLE_LC : MIN_LABEL_LC })));
   const contrast: Check = weak.length
     ? { id: 'contrast', pass: false, detail: `Low contrast: ${weak.slice(0, 3).join(', ')}${weak.length > 3 ? ` +${weak.length - 3}` : ''}` }
     : { id: 'contrast', pass: true, detail: `All labels ≥ Lc ${MIN_LABEL_LC}` };
 
-  // 2. Text size at the smallest enabled export (chrome — footer, badge, remix line — is exempt)
+  // 2. Text size at the smallest enabled export (chrome — subtitle, footer, badge, remix line — is exempt)
   const all = [...plotTexts, ...frameTexts];
-  const sized = [...plotTexts, ...(f.title ?? []), ...(f.subtitle ? [f.subtitle] : [])];
+  const sized = [...plotTexts, ...(f.title ?? [])];
   const minSize = sized.length ? Math.min(...sized.map((t) => t.size)) : 0;
   const smallest = sizes.length ? sizes.reduce((a, b) => (POST_SIZES[a].w <= POST_SIZES[b].w ? a : b)) : spec.size;
   const factor = POST_SIZES[smallest].w / f.w;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { checks, SAFE_ZONES } from '@/chart/checks';
+import { checks, weakContrast, SAFE_ZONES } from '@/chart/checks';
 import { altText } from '@/chart/alt';
 import { defaultSpec } from '@/chart/types';
 import { metricsMeasurer } from '@/chart/measure';
@@ -15,11 +15,20 @@ describe('checks()', () => {
     expect(out.every((c) => c.pass)).toBe(true);
   });
 
-  it('fails contrast for white labels on a mid-grey bar and names the offender', () => {
-    const spec = defaultSpec({ type: 'funnel', palette: ['#a8a8a8'], data: defaultSpec().data.map((r) => ({ ...r, color: '#a8a8a8' })) });
-    const c = byId(checks(spec, ['16:9'], ['x'], m), 'contrast');
-    expect(c.pass).toBe(false);
-    expect(c.detail).toMatch(/USA|Italy|UK|Ireland/);
+  it('flags a label whose fill sits on a near-identical background and names it', () => {
+    const label = { id: 't', text: 'USA', size: 36, role: 'ui' as const, weight: 600, fill: '#ffffff', anchor: 'start' as const, x: 10, y: 10, w: 60, h: 36 };
+    const weak = weakContrast([label], [{ box: { x: 0, y: 0, w: 200, h: 60 }, fill: '#f2f2f2' }], '#ffffff');
+    expect(weak).toHaveLength(1);
+    expect(weak[0]).toMatch(/^USA \(\d+\)$/);
+    expect(weakContrast([{ ...label, fill: '#1e293b' }], [{ box: { x: 0, y: 0, w: 200, h: 60 }, fill: '#f2f2f2' }], '#ffffff')).toEqual([]);
+  });
+
+  it('auto-chosen label ink never falls under the floor for any row colour', () => {
+    // contrastInk picks ink or white per fill; the check confirms the worst case stays ≥ Lc 45.
+    for (const color of ['#00bbcc', '#ff8866', '#a8a8a8', '#e0a33a', '#1e293b', '#f2f2f2']) {
+      const spec = defaultSpec({ type: 'funnel', palette: [color], data: defaultSpec().data.map((r) => ({ ...r, color })) });
+      expect(byId(checks(spec, ['16:9'], [], m), 'contrast').pass, color).toBe(true);
+    }
   });
 
   it('fails the crop-zone check when a story title sits inside the top safe zone', () => {

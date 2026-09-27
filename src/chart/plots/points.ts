@@ -1,6 +1,6 @@
 import type { PlotDef } from './types';
 import { FONT_STACK } from '../echarts';
-import { baseOption, categoryAxis, valueAxis, labelStyle, needRows, mix } from './common';
+import { baseOption, categoryAxis, valueAxis, labelStyle, needRows, mix, contrastInk } from './common';
 import type { Row } from '../types';
 
 export const scatter: PlotDef = {
@@ -148,15 +148,19 @@ export const heatmap: PlotDef = {
     const rowsN = Math.ceil(rows.length / cols);
     const base = rows[0]?.color ?? ctx.palette[0];
     const values = rows.map((r) => r.value);
+    const lo = Math.min(...values);
+    const hi = Math.max(...values);
+    const tint = mix(base, look.bg, 0.85);
+    const cellColor = (v: number) => mix(tint, base, hi === lo ? 1 : (v - lo) / (hi - lo));
     return {
       ...baseOption(ctx),
       grid: { left: 0, right: 0, top: 0, bottom: 0, containLabel: false },
       xAxis: { type: 'category', data: Array.from({ length: cols }, (_, i) => String(i)), show: false },
       yAxis: { type: 'category', data: Array.from({ length: rowsN }, (_, i) => String(i)), show: false, inverse: true },
-      visualMap: { show: false, min: Math.min(...values), max: Math.max(...values), inRange: { color: [mix(base, look.bg, 0.85), base] } },
+      visualMap: { show: false, min: lo, max: hi, inRange: { color: [tint, base] } },
       series: [{
         type: 'heatmap',
-        data: rows.map((r, i) => ({ name: r.label, value: [i % cols, Math.floor(i / cols), r.value] })),
+        data: rows.map((r, i) => ({ name: r.label, value: [i % cols, Math.floor(i / cols), r.value], label: { color: contrastInk(cellColor(r.value)) } })),
         itemStyle: { borderColor: look.bg, borderWidth: 6, borderRadius: look.radius },
         label: {
           show: true,

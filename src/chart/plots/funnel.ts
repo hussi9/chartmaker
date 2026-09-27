@@ -24,7 +24,8 @@ export const funnel: PlotDef = {
   build(ctx) {
     const { rows, look, spec } = ctx;
     const top = Math.max(1, ...rows.map((r) => r.value));
-    const MIN = 0.18;
+    const MIN = 0.28;
+    const OUTSIDE_BELOW = 0.42; // rows narrower than this carry their value outside, to the right
     const widths = rows.map((r) => Math.max(MIN, r.value / top));
     const offsets = widths.map((w) => (1 - w) / 2);
     const labels = rows.map((r) => r.label).reverse();
@@ -52,7 +53,13 @@ export const funnel: PlotDef = {
       silent: true,
       z: 3,
       itemStyle: { color: 'transparent' },
-      data: rev(rows.map((r, i) => ({ value: offsets[i] + widths[i], label: { color: contrastInk(r.color ?? ctx.palette[0]) }, name: valueText(r) }))),
+      data: rev(rows.map((r, i) => ({
+        value: offsets[i] + widths[i],
+        name: valueText(r),
+        label: widths[i] < OUTSIDE_BELOW
+          ? { position: 'right' as const, color: look.ink, distance: 12 }
+          : { position: 'insideRight' as const, color: contrastInk(r.color ?? ctx.palette[0]), distance: 16 },
+      }))),
       label: { show: spec.values !== 'none', position: 'insideRight' as const, distance: 16, formatter: (p: { name: string }) => p.name, fontFamily: FONT_STACK.mono, fontSize: look.value, fontWeight: 600 },
       emphasis: { disabled: true },
     };
