@@ -1,5 +1,7 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
+import { VitePWA } from 'vite-plugin-pwa'
+import { fileURLToPath, URL } from 'node:url'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { PreviewServer, ViteDevServer } from 'vite'
@@ -32,7 +34,27 @@ function rejectUnknownPages(req: { url?: string; headers: { accept?: string } },
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), {
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (/node_modules[\\/](echarts|zrender)[\\/]/.test(id)) return 'echarts'
+          if (/node_modules[\\/](react|react-dom|scheduler|@tanstack|zustand|zundo|immer)[\\/]/.test(id)) return 'vendor'
+          return undefined
+        },
+      },
+    },
+  },
+  worker: { format: 'es' },
+  plugins: [
+    react({ compiler: true }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: false,
+      workbox: { globPatterns: ['**/*.{js,css,html,woff2,svg,png,wasm}'], maximumFileSizeToCacheInBytes: 4_000_000 },
+    }),
+    {
     name: 'published-pages',
     transformIndexHtml: {
       order: 'post' as const,
@@ -70,6 +92,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts']
+    setupFiles: ['./src/test/setup.ts'],
+    exclude: ['e2e/**', 'node_modules/**', '.archive/**', 'docs/**'],
   }
 })

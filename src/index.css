@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+@import './design/tokens.css';
 
 :root {
   /* UI/UX Pro Max Clean Palette */

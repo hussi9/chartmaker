@@ -1,0 +1,58 @@
+/* ChartGenie design tokens — from docs/design-handoff-2026-09-27 (ChartGenie Redesign v1/v2). Light only. */
+:root {
+  --page: #e9e5de;
+  --paper: #f6f3ee;
+  --paper-2: #fbf9f6;
+  --well: #efebe4;
+
+  --ink: #1e293b;
+  --ink-2: #4b5563;
+  --ink-3: #6b7280;
+  --ink-4: #9ca3af;
+
+  --line: #d6d0c6;
+  --line-2: #e3ded6;
+  --line-3: #efeae2;
+
+  --teal: #0e9384;
+  --teal-deep: #0b6f65;
+  --teal-tint: #d9f2ee;
+  --teal-bright: #2dd4bf;
+  --amber: #e0a33a;
+  --amber-tint: #fdf1dc;
+  --amber-deep: #8a5a08;
+  --coral: #e26d5a;
+
+  --rail: #1e293b;
+  --rail-ink: rgba(246, 243, 238, 0.6);
+  --rail-on: rgba(255, 255, 255, 0.08);
+
+  --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-ui: 'Geist Variable', system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --r-1: 4px;
+  --r-2: 6px;
+  --r-3: 8px;
+  --r-4: 10px;
+  --r-5: 12px;
+  --r-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+
+  --shadow-artboard: 0 24px 60px rgba(30, 41, 59, 0.18), 0 0 0 1px var(--line-2);
+  --shadow-frame: 0 20px 60px rgba(30, 41, 59, 0.12);
+  --shadow-pop: 0 4px 12px rgba(30, 41, 59, 0.2);
+
+  --topbar-h: 60px;
+  --rail-w: 72px;
+  --tabbar-h: 56px;
+  --tap: 44px;
+}

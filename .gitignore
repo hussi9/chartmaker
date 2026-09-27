@@ -28,3 +28,7 @@ dist-ssr
 .archive/
 # Local tool state
 .omx/
+.superpowers/
+test-results/
+playwright-report/
+dev-dist/
