@@ -16,6 +16,15 @@
     { "name": "New chart", "short_name": "New", "url": "/new", "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }] },
     { "name": "My charts", "short_name": "Charts", "url": "/charts", "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }] }
   ],
-  "share_target": { "action": "/new", "method": "GET", "params": { "text": "text", "url": "url", "title": "title" } },
-  "file_handlers": [{ "action": "/new", "accept": { "text/csv": [".csv"] } }]
+  "share_target": {
+    "action": "/new",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": { "text": "text", "url": "url", "title": "title" },
+    "files": [{ "name": "image", "accept": ["image/*"] }]
+  },
+  "file_handlers": [
+    { "action": "/new", "accept": { "text/csv": [".csv"] } },
+    { "action": "/new", "accept": { "image/*": [".png", ".jpg", ".jpeg", ".webp"] } }
+  ]
 }

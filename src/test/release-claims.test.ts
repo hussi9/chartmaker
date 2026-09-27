@@ -37,3 +37,13 @@ describe('published claims', () => {
     }
   });
 });
+
+describe('manifest share target', () => {
+  it('accepts a shared image via POST, not the old GET-only form', () => {
+    const manifest = JSON.parse(readFileSync('public/manifest.webmanifest', 'utf8'));
+    expect(manifest.share_target.method).toBe('POST');
+    expect(manifest.share_target.enctype).toBe('multipart/form-data');
+    expect(manifest.share_target.files).toEqual([{ name: 'image', accept: ['image/*'] }]);
+    expect(manifest.file_handlers.some((h: { accept: Record<string, string[]> }) => 'image/*' in h.accept)).toBe(true);
+  });
+});
