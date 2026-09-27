@@ -651,3 +651,7 @@ Share button (top bar): `shareUrls(spec, origin)`; copies `path` when present el
 - [ ] **Step 2:** Verify in the browser on production at 1440 and 390: `/`, `/new`, `/edit/<id>`, `/charts`, `/series`, `/brand`, `/s/<state>`, `/pie-chart-maker`, a legacy `#state` link.
 - [ ] **Step 3:** `git checkout main && git merge --no-ff redesign/publish-loop && git tag v3.0.0 && git push origin main --tags`.
 - [ ] **Step 4:** Update `README.md` (what it is, stack, `scripts/check.sh`, no CI, archive rule) and commit `docs: v3.0.0 README`.
+
+## Preview
+
+- 2026-09-27:  (commit c072d77 + e2e fixes). Playwright suite (desktop + phone) passed against it twice; `/s/<state>` serves OG tags and `/s/<state>/og.png` a 1200×675 PNG; unknown paths 404. Previews sit behind Vercel SSO; run with `BASE_URL=<preview> VERCEL_BYPASS=<automation bypass secret> npx playwright test`.
