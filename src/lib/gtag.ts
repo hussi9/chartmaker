@@ -1,121 +1,80 @@
-// Google Analytics 4 (GA4) Integration & Telemetry System
-// Supports environment variables (VITE_GA_MEASUREMENT_ID), dynamic client override, and structured conversion tracking.
+// Google Analytics 4 with a hard allow-list. Chart titles, labels, values,
+// captions and share states never reach this module's output.
 
-import { recordChartEvent, recordExportEvent, getCustomGaId } from './learningLoop';
-import { COLOR_SCHEMES } from './chartPresets';
-import type { ChartType } from './chartPresets';
-
-// Declare gtag on window
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    dataLayer?: any[];
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 
-// Get effective GA ID
-export const getActiveGaMeasurementId = (): string => {
-  const custom = getCustomGaId();
-  if (custom) return custom;
-  return import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-96D837GEH9';
-};
+export const DEFAULT_GA_ID = 'G-96D837GEH9';
 
-// Dynamically initialize or update GA script if needed
-export const initGoogleAnalytics = (measurementId?: string) => {
+export function getActiveGaMeasurementId(): string {
+  return import.meta.env.VITE_GA_MEASUREMENT_ID || DEFAULT_GA_ID;
+}
+
+export function initGoogleAnalytics(measurementId?: string): void {
   if (typeof window === 'undefined') return;
-
   const id = measurementId || getActiveGaMeasurementId();
-  if (!id) return; // Skip if no ID configured
-
-  // Check if script already exists
+  if (!id) return;
   const scriptId = 'ga4-gtag-script';
   let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-
   if (!script) {
     script = document.createElement('script');
     script.id = scriptId;
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
     document.head.appendChild(script);
-
     window.dataLayer = window.dataLayer || [];
-    window.gtag = function gtag() {
-      window.dataLayer?.push(arguments);
-    };
+    window.gtag = function gtag(...args: unknown[]) { window.dataLayer?.push(args); };
     window.gtag('js', new Date());
   }
-
   if (script.dataset.configuredId === id) return;
   script.dataset.configuredId = id;
-  window.gtag?.('config', id, {
-    page_path: window.location.pathname,
-    send_page_view: true
-  });
-};
+  window.gtag?.('config', id, { send_page_view: false, anonymize_ip: true });
+}
 
-// Generic Track Event
-export const trackEvent = (action: string, category: string, label?: string, value?: number, additionalParams?: Record<string, any>) => {
-  const allowedActions = new Set(['chart_update', 'export_chart', 'copy_clipboard', 'smart_parser_apply', 'csv_import', 'theme_change', 'aspect_ratio_change', 'native_share', 'share_twitter', 'copy_reddit_markdown', 'copy_twitter_text', 'copy_linkedin_text', 'export_png', 'export_svg', 'copy_svg_code', 'export_csv', 'export_json']);
-  if (!allowedActions.has(action)) return;
-  const chartTypes: ChartType[] = ['pie', 'donut', 'bar', 'horizontalBar', 'stackedBar', 'stackedColumn', 'stackedHorizontal', 'line', 'stackedLine', 'area', 'stackedArea', 'radar', 'scatter', 'heatmap', 'threshold', 'gauge', 'funnel'];
-  const safeParameter = (key: string, entry: unknown) => {
-    if (['scale', 'points_count', 'row_count'].includes(key)) return typeof entry === 'number' && Number.isFinite(entry) && entry >= 0;
-    if (key === 'success') return typeof entry === 'boolean';
-    if (key === 'export_format') return ['png', 'svg', 'json'].includes(String(entry));
-    if (key === 'chart_type') return chartTypes.includes(entry as ChartType);
-    if (key === 'theme_id') return COLOR_SCHEMES.some(scheme => scheme.id === entry);
-    if (key === 'aspect_ratio') return ['16:9', '1:1', '9:16', '4:3'].includes(String(entry));
-    return false;
-  };
-  const params = Object.fromEntries(Object.entries(additionalParams || {}).filter(([key, entry]) => safeParameter(key, entry)));
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', action, {
-      event_category: ['Studio', 'Conversion', 'Engagement', 'Data', 'Customization', 'viral_share', 'social_export', 'export'].includes(category) ? category : 'Other',
-      ...(typeof value === 'number' && Number.isFinite(value) ? { value } : {}),
-      ...params
-    });
+// Every event and every parameter it may carry. Strings must match the listed values.
+const EVENTS = {
+  intake_detect: { kind: ['cells', 'sentence', 'csv', 'empty'], rows: 'number' },
+  suggestion_use: { type: 'chartType', rank: 'number' },
+  export_set: { sizes: 'number', formats: ['png', 'svg', 'png+svg'] },
+  export_one: { format: ['png', 'svg', 'csv', 'copy'] },
+  share_copy: { mode: ['path', 'hash'] },
+  remix_open: {},
+  series_update: { cadence: ['weekly', 'monthly', 'quarterly'] },
+  brand_apply: {},
+  check_fail: { id: ['contrast', 'textSize', 'cropZone', 'altText'] },
+  template_use: { type: 'chartType' },
+  look_change: { look: ['clean', 'bold', 'dark', 'newsletter'] },
+  size_change: { size: ['16:9', '1:1', '9:16', '4:3'] },
+} as const;
+
+const CHART_TYPES = new Set(['pie', 'donut', 'bar', 'horizontalBar', 'stackedBar', 'stackedColumn', 'stackedHorizontal', 'line', 'stackedLine', 'area', 'stackedArea', 'radar', 'scatter', 'heatmap', 'threshold', 'gauge', 'funnel', 'kpi', 'matrix']);
+
+type Events = typeof EVENTS;
+type ParamValue<S> = S extends readonly string[] ? S[number] : S extends 'number' ? number : S extends 'chartType' ? string : never;
+export type EventParams<E extends keyof Events> = { [K in keyof Events[E]]: ParamValue<Events[E][K]> };
+
+export function track<E extends keyof Events>(event: E, params: EventParams<E>): void {
+  const schema = EVENTS[event] as Record<string, readonly string[] | 'number' | 'chartType'> | undefined;
+  if (!schema || typeof window === 'undefined' || !window.gtag) return;
+  const clean: Record<string, string | number> = {};
+  for (const [key, rule] of Object.entries(schema)) {
+    const v = (params as Record<string, unknown>)[key];
+    if (rule === 'number') { if (typeof v === 'number' && Number.isFinite(v)) clean[key] = v; continue; }
+    if (rule === 'chartType') { if (typeof v === 'string' && CHART_TYPES.has(v)) clean[key] = v; continue; }
+    if (typeof v === 'string' && rule.includes(v)) clean[key] = v;
   }
-  void label;
-};
+  window.gtag('event', event, clean);
+}
 
-// Specific Conversion & User Flow Trackers
-export const trackChartCreate = (chartType: string, themeId: string, aspect: string, pointsCount: number) => {
-  trackEvent('chart_update', 'Studio', `${chartType}:${themeId}`, pointsCount, {
-    chart_type: chartType,
-    theme_id: themeId,
-    aspect_ratio: aspect,
-    points_count: pointsCount
-  });
-  recordChartEvent(chartType, themeId, aspect);
-};
+const ROUTE_PATTERN = /^\/([a-z-]+(\/\$[a-z]+)?)?$/;
 
-export const trackExportChart = (format: 'png' | 'svg' | 'json' | 'embed', scale?: number) => {
-  trackEvent('export_chart', 'Conversion', format, scale || 1, {
-    export_format: format,
-    scale: scale || 1
-  });
-  recordExportEvent(format);
-};
-
-export const trackCopyChart = () => {
-  trackEvent('copy_clipboard', 'Engagement', 'png_image');
-  recordExportEvent('clipboard_copy');
-};
-
-export const trackSmartParserApply = (rowsCount: number) => {
-  trackEvent('smart_parser_apply', 'Data', undefined, rowsCount, { row_count: rowsCount });
-};
-
-export const trackCsvImport = (rowsCount: number) => {
-  trackEvent('csv_import', 'Data', 'user_file', rowsCount, {
-    row_count: rowsCount
-  });
-};
-
-export const trackThemeSelection = (themeId: string) => {
-  trackEvent('theme_change', 'Customization', undefined, undefined, { theme_id: themeId });
-};
-
-export const trackAspectRatioSelection = (ratio: string) => {
-  trackEvent('aspect_ratio_change', 'Customization', undefined, undefined, { aspect_ratio: ratio });
-};
+// Only route patterns ("/edit/$id", "/s/$state"), never concrete ids or share states.
+export function trackPageView(routePattern: string): void {
+  if (typeof window === 'undefined' || !window.gtag) return;
+  if (!ROUTE_PATTERN.test(routePattern)) return;
+  window.gtag('event', 'page_view', { page_path: routePattern });
+}

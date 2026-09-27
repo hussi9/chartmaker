@@ -1,0 +1,18 @@
+import { Link, type LinkProps } from '@tanstack/react-router';
+import { NAV } from './nav';
+
+// Route files land in Tasks 16–25; Task 25 removes this cast once every target exists.
+const to = (p: string) => p as LinkProps['to'];
+
+export function TabBar(): React.JSX.Element {
+  return (
+    <nav className="cg-tabbar" aria-label="Primary">
+      {NAV.map((n) => (
+        <Link key={n.to} to={to(n.to)} className="cg-tab" activeOptions={{ exact: n.to === '/' }} activeProps={{ 'aria-current': 'page', 'data-on': 'true' }}>
+          {n.icon()}
+          <span>{n.label}</span>
+        </Link>
+      ))}
+    </nav>
+  );
+}
