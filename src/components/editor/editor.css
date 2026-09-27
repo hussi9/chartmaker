@@ -1,0 +1,35 @@
+/* Editor: data grid, import menu, dialogs. Tokens only. */
+.cg-grid { display: flex; flex-direction: column; }
+.cg-grid-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line-2); }
+.cg-grid-title { font-family: var(--font-display); font-weight: 800; font-size: 15px; }
+.cg-grid-head-actions { display: flex; gap: 6px; align-items: center; }
+.cg-grid-cols, .cg-row { display: grid; grid-template-columns: 14px minmax(0, 1fr) 84px; gap: 8px; align-items: center; padding: 0 16px; }
+.cg-grid-cols { padding-top: 10px; padding-bottom: 6px; }
+.cg-grid-col-value { text-align: right; }
+.cg-grid-list { display: flex; flex-direction: column; }
+.cg-row { border-bottom: 1px solid var(--line-3); }
+.cg-row:focus-within { background: var(--teal-tint); box-shadow: inset 0 0 0 1px var(--teal); }
+.cg-row-trailing { color: var(--ink-4); border-bottom: 0; }
+.cg-dot { width: 12px; height: 12px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; }
+.cg-dot-empty { background: transparent; border: 1px dashed var(--ink-4); }
+.cg-cell-input { height: 30px; border: 0; background: transparent; font: 500 13px var(--font-ui); color: var(--ink); min-width: 0; width: 100%; padding: 0 4px; }
+.cg-cell-input:focus { outline: none; }
+.cg-cell-value { font-family: var(--font-mono); text-align: right; }
+.cg-grid-foot { display: flex; justify-content: space-between; gap: 8px; padding: 8px 16px 12px; color: var(--ink-3); }
+.cg-grid-tools { display: flex; gap: 8px; align-items: center; padding: 0 16px 14px; flex-wrap: wrap; border-bottom: 1px solid var(--line-2); }
+.cg-grid-tools .cg-seg { flex: 1; min-width: 160px; }
+
+.cg-import { position: relative; }
+.cg-menu { position: absolute; right: 0; top: calc(100% + 4px); background: #fff; border: 1px solid var(--line); border-radius: var(--r-3); box-shadow: var(--shadow-pop); min-width: 160px; padding: 4px; z-index: 25; display: flex; flex-direction: column; }
+.cg-menu-item { text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: var(--r-2); font: 500 13px var(--font-ui); color: var(--ink); cursor: pointer; min-height: 36px; }
+.cg-menu-item:hover { background: var(--well); }
+
+.cg-dialog-backdrop { position: fixed; inset: 0; background: rgba(30, 41, 59, 0.45); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.cg-dialog { background: #fff; border-radius: var(--r-5); box-shadow: var(--shadow-frame); width: min(560px, 100%); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.cg-dialog-title { font-family: var(--font-display); font-weight: 800; font-size: 20px; margin: 0; }
+.cg-dialog-body { margin: 0; font-size: 13px; color: var(--ink-2); }
+.cg-textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-2); padding: 10px; font: 500 13px var(--font-mono); color: var(--ink); resize: vertical; min-height: 120px; }
+.cg-dialog-status { color: var(--ink-3); min-height: 16px; }
+.cg-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.cg-text-on-chart { border-bottom: 0; }
