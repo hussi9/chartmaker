@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { initGoogleAnalytics, trackEvent, trackChartCreate, trackThemeSelection } from '../lib/gtag';
+import { initGoogleAnalytics, track, trackPageView } from '../lib/gtag';
 
 describe('analytics privacy', () => {
   beforeEach(() => {
@@ -12,23 +12,37 @@ describe('analytics privacy', () => {
     initGoogleAnalytics('G-TEST');
     initGoogleAnalytics('G-TEST');
     expect(document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]')).toHaveLength(1);
-    expect(window.dataLayer?.filter((args) => args[0] === 'config')).toHaveLength(1);
+    expect(window.dataLayer?.filter((args) => (args as unknown[])[0] === 'config')).toHaveLength(1);
   });
 
-  it('never sends free text from chart titles or additional parameters', () => {
+  it('sends only allow-listed events with enumerated or numeric parameters', () => {
     const send = vi.fn();
     window.gtag = send;
-    trackEvent('export_png', 'Confidential category', 'Confidential acquisition plan', 4, { chart_title: 'Secret', export_format: 'png' });
-    expect(JSON.stringify(send.mock.calls)).not.toMatch(/Confidential|Secret/);
-    expect(send).toHaveBeenCalledWith('event', 'export_png', expect.objectContaining({ export_format: 'png' }));
+    track('export_set', { sizes: 3, formats: 'png+svg' });
+    track('suggestion_use', { type: 'funnel', rank: 1 });
+    expect(send).toHaveBeenCalledWith('event', 'export_set', { sizes: 3, formats: 'png+svg' });
+    expect(send).toHaveBeenCalledWith('event', 'suggestion_use', { type: 'funnel', rank: 1 });
   });
 
-  it('keeps known chart dimensions while discarding arbitrary text', () => {
+  it('drops unknown events and free-text values', () => {
     const send = vi.fn();
     window.gtag = send;
-    trackChartCreate('bar', 'apple', '16:9', 4);
-    trackThemeSelection('Confidential chart title');
-    expect(send.mock.calls[0][2]).toMatchObject({ chart_type: 'bar', theme_id: 'apple', aspect_ratio: '16:9', points_count: 4 });
-    expect(JSON.stringify(send.mock.calls)).not.toContain('Confidential chart title');
+    // @ts-expect-error unknown event names are rejected at the type level too
+    track('chart_title_typed', { title: 'Confidential acquisition plan' });
+    track('share_copy', { mode: 'Confidential acquisition plan' as 'path' });
+    track('check_fail', { id: 'contrast', detail: 'USA (13)' } as never);
+    expect(JSON.stringify(send.mock.calls)).not.toMatch(/Confidential|USA/);
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(send).toHaveBeenCalledWith('event', 'share_copy', {});
+    expect(send).toHaveBeenCalledWith('event', 'check_fail', { id: 'contrast' });
+  });
+
+  it('page views carry the route pattern, never the state in a share URL', () => {
+    const send = vi.fn();
+    window.gtag = send;
+    trackPageView('/s/$state');
+    trackPageView('/s/H4sIAAAAAAAAA-secret');
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(send).toHaveBeenCalledWith('event', 'page_view', { page_path: '/s/$state' });
   });
 });

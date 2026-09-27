@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "ChartGenie — chart maker for posts",
+  "short_name": "ChartGenie",
+  "description": "Paste numbers, get a post-ready chart. Free, no account, saved in this browser.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f6f3ee",
+  "theme_color": "#1e293b",
+  "categories": ["productivity", "utilities", "graphics"],
+  "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "192x192 512x512", "purpose": "any maskable" }],
+  "shortcuts": [
+    { "name": "New chart", "short_name": "New", "url": "/new", "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }] },
+    { "name": "My charts", "short_name": "Charts", "url": "/charts", "icons": [{ "src": "/favicon.svg", "sizes": "96x96" }] }
+  ],
+  "share_target": { "action": "/new", "method": "GET", "params": { "text": "text", "url": "url", "title": "title" } },
+  "file_handlers": [{ "action": "/new", "accept": { "text/csv": [".csv"] } }]
+}

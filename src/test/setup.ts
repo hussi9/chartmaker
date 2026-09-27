@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom/vitest';
 
+if (typeof window !== 'undefined') {
+  // jsdom has no scrollIntoView; cmdk calls it on the selected item.
+  if (!Element.prototype.scrollIntoView) Element.prototype.scrollIntoView = () => {};
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -32,3 +36,5 @@ Object.assign(navigator, {
     readText: () => Promise.resolve(''),
   },
 });
+
+}

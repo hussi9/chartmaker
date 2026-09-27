@@ -26,3 +26,13 @@ export type PublishedRoute = keyof typeof routeMetadata;
 export function isPublishedRoute(pathname: string): pathname is PublishedRoute {
   return Object.hasOwn(routeMetadata, pathname);
 }
+
+// Client routes the SPA owns. Anything outside these and the published routes is a true 404.
+export const APP_ROUTE_PATTERNS: RegExp[] = [
+  /^\/$/, /^\/new$/, /^\/charts$/, /^\/series$/, /^\/brand$/,
+  /^\/edit\/[A-Za-z0-9_-]+$/, /^\/s(\/[A-Za-z0-9_-]+)?$/,
+];
+
+export function isAppPath(pathname: string): boolean {
+  return isPublishedRoute(pathname) || APP_ROUTE_PATTERNS.some((re) => re.test(pathname));
+}

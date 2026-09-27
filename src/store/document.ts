@@ -1,0 +1,147 @@
+// The open chart. One spec, undoable edits, debounced autosave into Dexie.
+import { create } from 'zustand';
+import { temporal } from 'zundo';
+import { immer } from 'zustand/middleware/immer';
+import { produce } from 'immer';
+import { db } from '../db';
+import { defaultSpec, type ChartSpec, type Row } from '../chart/types';
+import { svgString } from '../chart/render/svgString';
+import { useUi } from './ui';
+import { MAX_ROWS } from '../codec/state';
+import { applyBrand } from '../chart/cvd';
+
+export type SaveState = 'idle' | 'saving' | 'saved' | 'error' | 'unavailable';
+
+export interface DocState {
+  id: string | null;
+  spec: ChartSpec;
+  dirty: boolean;
+  saveState: SaveState;
+  reset(): void;
+  newDoc(partial?: Partial<ChartSpec>): string;
+  openSpec(spec: ChartSpec, id?: string): string;
+  load(id: string): Promise<boolean>;
+  setSpec(recipe: (draft: ChartSpec) => void): void;
+  setRows(rows: Row[]): void;
+  save(): Promise<void>;
+  duplicate(): Promise<string>;
+}
+
+export const AUTOSAVE_MS = 400;
+let autosaveTimer: ReturnType<typeof setTimeout> | null = null;
+
+export function newId(): string {
+  return `c_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+}
+
+export function thumbnailBlob(spec: ChartSpec): Blob {
+  return new Blob([svgString(spec)], { type: 'image/svg+xml' });
+}
+
+export const useDoc = create<DocState>()(
+  temporal(
+    immer((set, get) => ({
+      id: null,
+      spec: defaultSpec(),
+      dirty: false,
+      saveState: 'idle',
+
+      reset() {
+        if (autosaveTimer) clearTimeout(autosaveTimer);
+        autosaveTimer = null;
+        set({ id: null, spec: defaultSpec(), dirty: false, saveState: 'idle' });
+      },
+
+      newDoc(partial = {}) {
+        const id = newId();
+        const brand = useUi.getState().brand;
+        const base = defaultSpec(partial);
+        // "Apply to every new chart" means the brand wins over a template's own palette.
+        const spec = brand?.applyToNew ? applyBrand(base, brand, brand.logoDataUrl) : base;
+        set({ id, spec, dirty: true, saveState: 'idle' });
+        useDoc.temporal.getState().clear();
+        scheduleSave();
+        return id;
+      },
+
+      openSpec(spec, id = newId()) {
+        set({ id, spec, dirty: true, saveState: 'idle' });
+        useDoc.temporal.getState().clear();
+        scheduleSave();
+        return id;
+      },
+
+      async load(id) {
+        if (useUi.getState().storage !== 'ok') return false;
+        let doc;
+        try { doc = await db.charts.get(id); } catch { return false; }
+        if (!doc) return false;
+        set({ id: doc.id, spec: doc.spec, dirty: false, saveState: 'saved' });
+        useDoc.temporal.getState().clear();
+        return true;
+      },
+
+      setSpec(recipe) {
+        set((s) => {
+          recipe(s.spec);
+          if (s.spec.data.length > MAX_ROWS) {
+            s.spec.data.length = MAX_ROWS;
+            useUi.getState().toast(`${MAX_ROWS} rows max — extra rows were dropped.`);
+          }
+          s.dirty = true;
+          s.saveState = 'saving';
+        });
+        scheduleSave();
+      },
+
+      setRows(rows) {
+        get().setSpec((d) => { d.data = rows; });
+      },
+
+      async save() {
+        if (autosaveTimer) clearTimeout(autosaveTimer);
+        autosaveTimer = null;
+        const { id, spec } = get();
+        if (!id) return;
+        if (useUi.getState().storage !== 'ok') {
+          set({ saveState: 'unavailable' });
+          return;
+        }
+        try {
+          const existing = await db.charts.get(id);
+          const now = Date.now();
+          await db.charts.put({ id, spec, thumb: thumbnailBlob(spec), createdAt: existing?.createdAt ?? now, updatedAt: now, sharedAt: existing?.sharedAt, sharedUrl: existing?.sharedUrl });
+          set({ dirty: false, saveState: 'saved' });
+        } catch {
+          set({ saveState: 'error' });
+        }
+      },
+
+      async duplicate() {
+        const { spec } = get();
+        const copy = produce(spec, (d) => { d.text.title = `${d.text.title} copy`; });
+        const id = newId();
+        set({ id, spec: copy, dirty: true, saveState: 'idle' });
+        useDoc.temporal.getState().clear();
+        await get().save();
+        return id;
+      },
+    })),
+    // Only spec changes are history; autosave's dirty/saveState writes must not become undo steps.
+    { partialize: (s) => ({ spec: s.spec }), equality: (a, b) => a.spec === b.spec, limit: 100 },
+  ),
+);
+
+function scheduleSave(): void {
+  if (autosaveTimer) clearTimeout(autosaveTimer);
+  autosaveTimer = setTimeout(() => { autosaveTimer = null; void useDoc.getState().save(); }, AUTOSAVE_MS);
+}
+
+// zundo's undo/redo write the spec back through the raw setState, bypassing setSpec.
+// Treat those writes like any other edit: mark dirty and schedule the autosave.
+useDoc.subscribe((s, prev) => {
+  if (s.spec !== prev.spec && s.dirty === prev.dirty && s.saveState === prev.saveState && s.id === prev.id && s.id) {
+    useDoc.setState({ dirty: true, saveState: 'saving' });
+    scheduleSave();
+  }
+});

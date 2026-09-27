@@ -1,0 +1,24 @@
+.cg-mycharts { gap: var(--space-5); }
+.cg-mycharts-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.cg-mycharts-note { font-size: 13px; }
+.cg-restore { cursor: pointer; }
+.cg-mycharts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.cg-mycharts-grid-narrow { grid-template-columns: 1fr; }
+.cg-chartcard-thumb { background: var(--paper-2); display: grid; place-items: center; overflow: hidden; }
+.cg-chartcard-thumb-inner { width: 100%; }
+.cg-chartcard-thumb-inner .cg-artboard { max-height: 100%; }
+.cg-chartcard-foot { padding: 12px 14px; border-top: 1px solid var(--line-2); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cg-chartcard-text { min-width: 0; }
+.cg-chartcard-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cg-chartcard-meta { color: var(--ink-3); }
+.cg-chartcard-shared { color: var(--teal); }
+.cg-chartcard-actions { display: flex; gap: 4px; align-items: center; position: relative; }
+.cg-menu-danger { color: var(--coral); }
+.cg-mycharts-empty { padding: 24px; gap: 8px; align-items: flex-start; }
+.cg-mycharts-habit { min-height: 200px; }
+.cg-sharedlinks { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line-2); display: flex; flex-direction: column; gap: 10px; }
+.cg-sharedlinks-table { border-collapse: collapse; font-size: 13px; width: 100%; }
+.cg-sharedlinks-table th { text-align: left; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); font-weight: 600; padding: 0 12px 6px 0; }
+.cg-sharedlinks-table td { padding: 6px 12px 6px 0; border-top: 1px solid var(--line-3); vertical-align: middle; }
+.cg-sharedlinks-url { word-break: break-all; }
+.cg-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

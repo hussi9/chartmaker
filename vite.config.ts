@@ -1,9 +1,12 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
+import { VitePWA } from 'vite-plugin-pwa'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import { fileURLToPath, URL } from 'node:url'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { PreviewServer, ViteDevServer } from 'vite'
-import { isPublishedRoute, routeMetadata } from './src/lib/routeMetadata.ts'
+import { isAppPath, isPublishedRoute, routeMetadata } from './src/lib/routeMetadata.ts'
 
 function routeHtml(html: string, path: keyof typeof routeMetadata) {
   const meta = routeMetadata[path]
@@ -19,9 +22,11 @@ function routeHtml(html: string, path: keyof typeof routeMetadata) {
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`)
 }
 
+
+// Paths outside the app's routes get a real 404 (dev and preview); Vercel does the same via its rewrites.
 function rejectUnknownPages(req: { url?: string; headers: { accept?: string } }, res: { statusCode: number; setHeader(name: string, value: string): void; end(body: string): void }, next: () => void) {
   const path = new URL(req.url || '/', 'http://localhost').pathname
-  if (!path.startsWith('/@') && !path.startsWith('/__vite') && !isPublishedRoute(path) && !path.includes('.')) {
+  if (!path.startsWith('/@') && !path.startsWith('/__vite') && !path.includes('.') && !isAppPath(path)) {
     res.statusCode = 404
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
     res.end('<!doctype html><html><head><title>Page not found — ChartGenie</title><meta name="robots" content="noindex"></head><body><h1>Page not found</h1><a href="/">Go to ChartGenie</a></body></html>')
@@ -32,7 +37,28 @@ function rejectUnknownPages(req: { url?: string; headers: { accept?: string } },
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), {
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id: string) {
+          if (/node_modules[\\/](echarts|zrender)[\\/]/.test(id)) return 'echarts'
+          if (/node_modules[\\/](react|react-dom|scheduler|@tanstack|zustand|zundo|immer)[\\/]/.test(id)) return 'vendor'
+          return undefined
+        },
+      },
+    },
+  },
+  worker: { format: 'es' },
+  plugins: [
+    tanstackRouter({ target: 'react', autoCodeSplitting: true, routesDirectory: './src/routes', generatedRouteTree: './src/routeTree.gen.ts' }),
+    react({ compiler: true }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: false,
+      workbox: { globPatterns: ['**/*.{js,css,html,woff2,svg,png}'], globIgnores: ['**/resvg.wasm', '**/fonts/*.ttf'], maximumFileSizeToCacheInBytes: 4_000_000 },
+    }),
+    {
     name: 'published-pages',
     transformIndexHtml: {
       order: 'post' as const,
@@ -70,6 +96,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts']
+    setupFiles: ['./src/test/setup.ts'],
+    exclude: ['e2e/**', 'node_modules/**', '.archive/**', 'docs/**'],
   }
 })

@@ -1,9 +1,58 @@
 {
   "rewrites": [
-    { "source": "/pie-chart-maker", "destination": "/pie-chart-maker/index.html" },
-    { "source": "/bar-graph-maker", "destination": "/bar-graph-maker/index.html" },
-    { "source": "/convert-excel-to-chart", "destination": "/convert-excel-to-chart/index.html" }
+    {
+      "source": "/s/:state/og.png",
+      "destination": "/api/og?state=:state"
+    },
+    {
+      "source": "/s/:state",
+      "destination": "/api/share?state=:state"
+    },
+    {
+      "source": "/s",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/new",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/charts",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/series",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/brand",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/edit/:id",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pie-chart-maker",
+      "destination": "/pie-chart-maker/index.html"
+    },
+    {
+      "source": "/bar-graph-maker",
+      "destination": "/bar-graph-maker/index.html"
+    },
+    {
+      "source": "/convert-excel-to-chart",
+      "destination": "/convert-excel-to-chart/index.html"
+    }
   ],
+  "functions": {
+    "api/og.ts": {
+      "includeFiles": "api/_fonts/**"
+    },
+    "api/share.ts": {
+      "includeFiles": "dist/index.html"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
@@ -15,6 +64,24 @@
         {
           "key": "X-Frame-Options",
           "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(fonts/.*|resvg.wasm)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     }

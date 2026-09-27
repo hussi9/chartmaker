@@ -28,3 +28,13 @@ dist-ssr
 .archive/
 # Local tool state
 .omx/
+.superpowers/
+test-results/
+playwright-report/
+dev-dist/
+
+# TanStack router scratch
+.tanstack/
+
+# Bundled Vercel functions (built by scripts/build-api.mjs)
+api/_lib/*.mjs

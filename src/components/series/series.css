@@ -1,0 +1,15 @@
+.cg-series { gap: var(--space-4); }
+.cg-series-list { display: flex; flex-direction: column; gap: 16px; }
+.cg-seriescard { flex-direction: row; }
+.cg-seriescard-due { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-tint); }
+.cg-seriescard-thumb { width: 300px; flex: none; position: relative; border-right: 1px solid var(--line-2); background: #fff; }
+.cg-seriescard-ghost { position: absolute; right: 12px; bottom: 8px; color: var(--ink-4); background: rgba(255, 255, 255, 0.85); padding: 2px 6px; border-radius: 4px; }
+.cg-seriescard-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+.cg-seriescard-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cg-seriescard-name { font-size: 14px; font-weight: 600; }
+.cg-seriescard-paste { min-height: 64px; font: 500 13px/1.5 var(--font-mono); }
+.cg-seriescard-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; align-items: center; }
+.cg-seriescard-row { flex-direction: row; align-items: center; padding: 12px 16px; gap: 14px; }
+.cg-field { display: flex; flex-direction: column; gap: 6px; }
+.cg-shell-narrow .cg-seriescard { flex-direction: column; }
+.cg-shell-narrow .cg-seriescard-thumb { width: 100%; border-right: 0; border-bottom: 1px solid var(--line-2); }
