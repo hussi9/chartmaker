@@ -13,7 +13,7 @@ Decisions taken on the owner's behalf (they delegated on 2026-09-27, weighing us
 | Decision | Choice | Reason |
 |---|---|---|
 | Design identity | The design's own tokens (Bricolage Grotesque, Geist, Geist Mono, warm paper, slate ink, teal accent). Not Modernist. | It is what the ChartGenie screens specify. |
-| Chart engine | Own pure-function SVG renderer on d3-scale / d3-shape / d3-array. Recharts and the `div` charts are retired. | One render path for preview, PNG, SVG, zip and link card; layout is inspectable for checks; the design's looks are not library shapes. |
+| Chart engine | Apache ECharts (SVG renderer, tree-shaken) draws the plot; our own thin frame (title, subtitle, badge, footer, callouts) wraps it. One `ChartSpec → EChartsOption` builder per type. Recharts and the `div` charts are retired. | Verified 2026-09-27: ECharts 6.1 renders SVG strings in Node with zero dependencies (`init(null,null,{renderer:'svg',ssr:true})` + `renderToSVGString()`) and accepts our text measurer via `setPlatformAPI`, so preview, export and the link card share one path. Native funnel, gauge, pie, radar, heatmap, scatter, stacked bars/lines, label collision avoidance, markLine/markPoint/graphic for callouts, and dozens more types (sankey, treemap, sunburst, calendar, boxplot) for later. Replaces ~3,000 lines of bespoke mark code with ~600 lines of option builders. Cost: ~220 KB gzip chart chunk, lazy-loaded. Alternatives measured: Vega+Vega-Lite 252 KB gz (grammar awkward for funnel/KPI), Observable Plot 67 KB gz (no arcs, DOM-only server render), RAWGraphs app (Apache 2.0, DOM/d3, designer mapping paradigm, no looks/sizes/share — a fork would keep none of the UI). |
 | Server | Stateless Vercel Edge functions only: `/s/<state>` link card (OG image) and later a Google-Sheets CSV proxy. Nothing stored, no logs of content, no accounts. | Rich link previews are the engagement lever; storage would break the local promise. |
 | Intelligence | On-device only. Chrome built-in Prompt API when available, deterministic templates otherwise. Insights and suggestions are plain statistics. | No data leaves the device; templates keep every claim true when no model exists. WebLLM deferred (download UX). |
 | Storage | Dexie (IndexedDB) with versioned schema; one-time import of the two localStorage keys. | Thumbnails and brand logos need blobs; migrations are explicit. Yjs deferred. |
@@ -114,13 +114,13 @@ ChartSpec {
 }
 ```
 
-Pipeline: `layout(spec, measure) → Layout` (frame, margins, scales, every mark's box, every text's box) → `marks(layout)` (React SVG elements) → `<Chart spec/>` and `svgString(spec)` (renderToStaticMarkup, fonts embedded as `@font-face` data URIs) → `checks(layout)`.
+Pipeline: `frame(spec, measure) → Frame` (title, subtitle, badge, footer, remix line, plot box) → `plotOption(spec, frame) → EChartsOption` (one builder per type, SVG renderer, `animation:false`) → ECharts renders the plot box to an SVG string (browser: `echarts.init(el,…)` for the live artboard; export and server: `init(null,null,{renderer:'svg',ssr:true,width,height})` + `renderToSVGString()`) → `compose(frame, plotSvg, callouts)` → one SVG string (fonts embedded as `@font-face` data URIs for export) → `checks(frame, plotSvg)` parses the plot's `<text>` nodes for positions and fills.
 
-`measure` is `canvas.measureText` in the browser and a shipped metrics table (advance widths per glyph for the three fonts) on the edge, so layouts agree.
+`measure` is `canvas.measureText` in the browser and a shipped metrics table (advance widths per glyph for the three fonts) on the server, installed into ECharts with `setPlatformAPI({ measureText })`, so layouts agree.
 
 Types (19): pie, donut, bar, horizontalBar, stackedBar, stackedColumn, stackedHorizontal, line, stackedLine, area, stackedArea, radar, scatter, heatmap, threshold, gauge, funnel, **kpi**, **matrix**. Stacked types use `group`. Matrix uses `x`/`y` fields on rows (added to Row as optional numbers) with quadrant labels in options.
 
-Shared primitives built first: frame + title block + handle badge + footer; linear/band/ordinal scales; axis; gridlines; value labels with collision avoidance; legend; callout annotation; ghost layer; depth (3D) filters.
+Built by us: frame + title block + handle badge + footer + remix line; callout annotations (positioned from ECharts' rendered label boxes via `chart.convertToPixel` in the browser and parsed SVG on the server); ghost layer (a second series at 35% opacity); depth as `itemStyle` gradient + `shadowBlur`; KPI headline (ECharts `graphic` text elements) and 2×2 matrix (scatter + `markLine` quadrants + `graphic` quadrant labels). Everything else (scales, axes, gridlines, legend, label collision `labelLayout:{hideOverlap:true}`, funnel, gauge, pie/donut label lines, radar, heatmap with `visualMap`) is ECharts configuration.
 
 Looks are token sets: background, ink, muted, grid, radius, title size, label size, bar gap. `newsletter` is white with a 1 px border and serifless heavy title; `bold` is larger type and full-bleed bars; `dark` is slate ink inverted.
 
@@ -140,7 +140,7 @@ Autosave: debounced 400 ms into `charts`; the top bar dot reflects pending/saved
 
 ## 5. Server (`api/`)
 
-`api/s/[state].ts` (Vercel Edge): decode → validate spec (zod, size caps) → `svgString` → resvg-wasm → PNG, `Cache-Control: public, max-age=31536000, immutable` keyed by the state. Returns the HTML shell with meta tags for HTML requests and the image for `/og.png`. No logging of the decoded content. Later: `api/sheet.ts` restricted to `docs.google.com/spreadsheets/*` export URLs, 200 KB cap, 10 s timeout.
+Two Vercel serverless functions (Node runtime, chosen over Edge for ease of development: `@resvg/resvg-js` ships native binaries and `react-dom/server` runs unchanged): `api/share.ts` serves `/s/:state` by injecting `og:image`, `twitter:image`, title and description into the built `index.html`; `api/og.ts` serves `/s/:state/og.png`: decode → validate spec (zod, size caps) → `svgString` → resvg → PNG, `Cache-Control: public, max-age=31536000, immutable` keyed by the state. No logging of the decoded content. Later: `api/sheet.ts` restricted to `docs.google.com/spreadsheets/*` export URLs, 200 KB cap, 10 s timeout.
 
 ## 6. Analytics
 
@@ -156,7 +156,7 @@ User-facing copy must stay inside `src/test/release-claims.test.ts`, extended to
 - Component: each screen with Testing Library (contract: every control listed in §2 present and operable).
 - Browser (Playwright): the five flows at 1440 and 390: paste → export set; template → edit → share → remix; series update; brand apply; legacy link opens. Screenshot assertions per screen at both widths.
 - Golden PNGs for 6 representative specs through the worker export.
-- `scripts/check.sh`: tsc, oxlint, vitest, build, bundle budget (main chunk ≤ 250 KB gzip, chart engine ≤ 60 KB gzip), Playwright.
+- `scripts/check.sh`: tsc, oxlint, vitest, build, bundle budget (entry chunk ≤ 150 KB gzip; ECharts chunk ≤ 240 KB gzip, loaded only on routes that draw a chart), Playwright.
 
 ## 9. Delivery
 
