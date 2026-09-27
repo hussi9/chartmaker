@@ -2,10 +2,10 @@
 // Nothing is stored and the decoded spec is never logged.
 import { join } from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
-import { decodeState } from '../../src/codec/state';
-import { svgString } from '../../src/chart/render/svgString';
-import { metricsMeasurer } from '../../src/chart/measure';
-import type { ChartSpec } from '../../src/chart/types';
+import { decodeState } from '../src/codec/state';
+import { svgString } from '../src/chart/render/svgString';
+import { metricsMeasurer } from '../src/chart/measure';
+import type { ChartSpec } from '../src/chart/types';
 
 const FONT_DIR = join(process.cwd(), 'api', '_fonts');
 const FONT_FILES = ['BricolageGrotesque.ttf', 'Geist.ttf', 'GeistMono.ttf'].map((f) => join(FONT_DIR, f));

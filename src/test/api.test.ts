@@ -25,7 +25,7 @@ function mockRes() {
 
 describe('api/og', () => {
   it('returns an immutable PNG for a valid state', async () => {
-    const { default: handler } = await import('../../api/og');
+    const { default: handler } = await import('../../server/og');
     const res = mockRes();
     await handler({ query: { state: encodeState(defaultSpec()) }, headers: {} } as never, res as never);
     const { headers, body, status } = res.get();
@@ -38,7 +38,7 @@ describe('api/og', () => {
   }, 30_000);
 
   it('404s an invalid state without echoing it', async () => {
-    const { default: handler } = await import('../../api/og');
+    const { default: handler } = await import('../../server/og');
     const res = mockRes();
     await handler({ query: { state: 'zzz-not-a-state' }, headers: {} } as never, res as never);
     expect(res.get().status).toBe(404);
@@ -48,7 +48,7 @@ describe('api/og', () => {
 
 describe('api/share', () => {
   it('injects og tags pointing at the card for a valid state', async () => {
-    const { default: handler } = await import('../../api/share');
+    const { default: handler } = await import('../../server/share');
     const res = mockRes();
     const state = encodeState(defaultSpec({ text: { title: 'Countries' } }));
     await handler({ query: { state }, headers: { host: 'chartgenie.xyz' } } as never, res as never);
@@ -64,7 +64,7 @@ describe('api/share', () => {
   });
 
   it('serves the plain shell for an invalid state', async () => {
-    const { default: handler } = await import('../../api/share');
+    const { default: handler } = await import('../../server/share');
     const res = mockRes();
     await handler({ query: { state: 'nope' }, headers: { host: 'chartgenie.xyz' } } as never, res as never);
     expect(res.get().status).toBe(200);

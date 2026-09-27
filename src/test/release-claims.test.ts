@@ -15,7 +15,7 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 describe('published claims', () => {
-  const files = ['index.html', 'public/llms.txt', 'public/manifest.webmanifest', 'README.md', ...walk('src'), ...walk('api')];
+  const files = ['index.html', 'public/llms.txt', 'public/manifest.webmanifest', 'README.md', ...walk('src'), ...walk('api'), ...walk('server')];
   for (const path of files) {
     it(`${path} omits unsupported claims`, () => {
       const source = readFileSync(path, 'utf8');

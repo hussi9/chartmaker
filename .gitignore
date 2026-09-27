@@ -35,3 +35,6 @@ dev-dist/
 
 # TanStack router scratch
 .tanstack/
+
+# Bundled Vercel functions (built by scripts/build-api.mjs)
+api/_lib/*.mjs
