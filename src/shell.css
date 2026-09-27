@@ -102,3 +102,5 @@
 .cg-dialog-status { color: var(--ink-3); min-height: 16px; }
 .cg-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
+
+.cg-linkbtn { display: inline-flex; align-items: center; background: none; border: 0; padding: 0; color: var(--teal); font: inherit; text-decoration: underline; cursor: pointer; min-height: var(--tap); }

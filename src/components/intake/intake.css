@@ -20,7 +20,7 @@
 .cg-pastebox-foot { margin-top: auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
 .cg-pastebox-units { display: flex; align-items: center; gap: 10px; }
 .cg-pastebox-units .cg-seg { flex: 1; max-width: 280px; }
-.cg-linkbtn { background: none; border: 0; padding: 0; color: var(--teal); font: inherit; text-decoration: underline; cursor: pointer; min-height: var(--tap); }
+
 .cg-warn { color: var(--amber-deep); }
 
 .cg-suggestions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
