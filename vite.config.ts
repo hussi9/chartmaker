@@ -5,8 +5,8 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import type { ViteDevServer } from 'vite'
-import { isPublishedRoute, routeMetadata } from './src/lib/routeMetadata.ts'
+import type { PreviewServer, ViteDevServer } from 'vite'
+import { isAppPath, isPublishedRoute, routeMetadata } from './src/lib/routeMetadata.ts'
 
 function routeHtml(html: string, path: keyof typeof routeMetadata) {
   const meta = routeMetadata[path]
@@ -22,6 +22,18 @@ function routeHtml(html: string, path: keyof typeof routeMetadata) {
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`)
 }
 
+
+// Paths outside the app's routes get a real 404 (dev and preview); Vercel does the same via its rewrites.
+function rejectUnknownPages(req: { url?: string; headers: { accept?: string } }, res: { statusCode: number; setHeader(name: string, value: string): void; end(body: string): void }, next: () => void) {
+  const path = new URL(req.url || '/', 'http://localhost').pathname
+  if (!path.startsWith('/@') && !path.startsWith('/__vite') && !path.includes('.') && !isAppPath(path)) {
+    res.statusCode = 404
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+    res.end('<!doctype html><html><head><title>Page not found — ChartGenie</title><meta name="robots" content="noindex"></head><body><h1>Page not found</h1><a href="/">Go to ChartGenie</a></body></html>')
+    return
+  }
+  next()
+}
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -66,8 +78,11 @@ export default defineConfig({
           } catch (error) { next(error) }
           return
         }
-        next()
+        rejectUnknownPages(req, res, next)
       })
+    },
+    configurePreviewServer(server: PreviewServer) {
+      server.middlewares.use(rejectUnknownPages)
     },
     closeBundle() {
       const rootHtml = readFileSync(join('dist', 'index.html'), 'utf8')

@@ -19,10 +19,33 @@ function text(b: TextBox): string {
 
 const r = (n: number): string => (Math.round(n * 100) / 100).toString();
 
-export function compose(spec: ChartSpec, f: Frame, plot: string, callouts: CalloutPlacement[], opts: { embedFonts?: boolean } = {}): string {
+function calloutMarkup(callouts: CalloutPlacement[]): string {
+  const parts: string[] = [];
+  for (const c of callouts) {
+    const { box } = c;
+    const tri = 6;
+    const px = c.flipped ? box.x + box.w : box.x;
+    const py = box.y + box.h / 2;
+    const pointer = c.flipped
+      ? `M${r(px)} ${r(py - tri)} L${r(px + tri)} ${r(py)} L${r(px)} ${r(py + tri)} Z`
+      : `M${r(px)} ${r(py - tri)} L${r(px - tri)} ${r(py)} L${r(px)} ${r(py + tri)} Z`;
+    parts.push(`<g id="callout-${esc(c.id)}"><rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="6" fill="#1e293b"/><path d="${pointer}" fill="#1e293b"/>`);
+    parts.push(`<text x="${r(box.x + box.w / 2)}" y="${r(box.y + box.h / 2 + c.size * 0.36)}" font-family="${FONT_FAMILY.ui}" font-size="${c.size}" font-weight="600" fill="#ffffff" text-anchor="middle">${esc(c.text)}</text></g>`);
+  }
+  return parts.join('');
+}
+
+export interface ComposeOptions { embedFonts?: boolean; only?: 'callouts' }
+
+export function compose(spec: ChartSpec, f: Frame, plot: string, callouts: CalloutPlacement[], opts: ComposeOptions = {}): string {
   const look = LOOKS[spec.look];
   const parts: string[] = [];
   parts.push(`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${f.w}" height="${f.h}" viewBox="0 0 ${f.w} ${f.h}">`);
+  if (opts.only === 'callouts') {
+    parts.push(calloutMarkup(callouts));
+    parts.push('</svg>');
+    return parts.join('');
+  }
   if (opts.embedFonts) {
     const css = fontFaceCss();
     if (css) parts.push(`<style>${css}</style>`);
@@ -40,17 +63,7 @@ export function compose(spec: ChartSpec, f: Frame, plot: string, callouts: Callo
   }
   if (f.logo) parts.push(`<image x="${r(f.logo.x)}" y="${r(f.logo.y)}" width="${r(f.logo.w)}" height="${r(f.logo.h)}" href="${esc(f.logo.href)}" preserveAspectRatio="xMidYMid meet"/>`);
   parts.push(`<g transform="translate(${r(f.plot.x)} ${r(f.plot.y)})">${plot}</g>`);
-  for (const c of callouts) {
-    const { box } = c;
-    const tri = 6;
-    const px = c.flipped ? box.x + box.w : box.x;
-    const py = box.y + box.h / 2;
-    const pointer = c.flipped
-      ? `M${r(px)} ${r(py - tri)} L${r(px + tri)} ${r(py)} L${r(px)} ${r(py + tri)} Z`
-      : `M${r(px)} ${r(py - tri)} L${r(px - tri)} ${r(py)} L${r(px)} ${r(py + tri)} Z`;
-    parts.push(`<g id="callout-${esc(c.id)}"><rect x="${r(box.x)}" y="${r(box.y)}" width="${r(box.w)}" height="${r(box.h)}" rx="6" fill="#1e293b"/><path d="${pointer}" fill="#1e293b"/>`);
-    parts.push(`<text x="${r(box.x + box.w / 2)}" y="${r(box.y + box.h / 2 + c.size * 0.36)}" font-family="${FONT_FAMILY.ui}" font-size="${c.size}" font-weight="600" fill="#ffffff" text-anchor="middle">${esc(c.text)}</text></g>`);
-  }
+  parts.push(calloutMarkup(callouts));
   if (f.remix) parts.push(text(f.remix));
   if (f.source) parts.push(text(f.source));
   parts.push(text(f.site));

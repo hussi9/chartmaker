@@ -91,3 +91,12 @@
 .cg-editor-narrow .cg-toggle[data-on='true'] .cg-toggle-knob { left: 20px; }
 .cg-editor-narrow .cg-palette { padding: 8px; }
 .cg-editor-narrow .cg-artboard-well { min-height: 0; padding: 16px; }
+
+/* Insights + caption */
+.cg-insights { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.cg-insight { width: 100%; display: flex; justify-content: space-between; gap: 10px; align-items: center; text-align: left; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--r-3); background: #fff; font: 500 12px var(--font-ui); color: #374151; cursor: pointer; min-height: var(--tap); }
+.cg-insight[data-on='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.cg-insight-state { color: var(--teal); white-space: nowrap; }
+.cg-insight[data-on='true'] .cg-insight-state { color: rgba(255, 255, 255, 0.75); }
+.cg-caption-box { min-height: 96px; font: 400 13px/1.5 var(--font-ui); }
+.cg-caption-actions { display: flex; align-items: center; gap: 10px; }

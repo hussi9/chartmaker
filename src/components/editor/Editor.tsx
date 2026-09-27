@@ -11,6 +11,8 @@ import { Artboard } from './Artboard';
 import { SizeBar } from './SizeBar';
 import { LookStrip } from './LookStrip';
 import { StylePanel } from './StylePanel';
+import { InsightsPanel } from './InsightsPanel';
+import { CaptionPanel } from './CaptionPanel';
 import { Button } from '../common/Button';
 import { checks } from '../../chart/checks';
 import { insights } from '../../insights';
@@ -114,8 +116,9 @@ export function Editor(): React.JSX.Element {
             </button>
           ))}
         </div>
+        {ui.rightTab === 'insights' && <InsightsPanel />}
+        {ui.rightTab === 'caption' && <CaptionPanel />}
         {ui.rightTab === 'style' && <StylePanel />}
-        {ui.rightTab !== 'style' && <div className="cg-cell cg-hint">Coming next: this panel is built in the following task.</div>}
       </aside>
     </div>
   );

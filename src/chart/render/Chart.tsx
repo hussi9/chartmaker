@@ -43,11 +43,15 @@ export function Chart({ spec, className, onReady, static: isStatic }: ChartProps
 
   useEffect(() => () => { inst.current?.dispose(); inst.current = null; }, []);
 
-  // The frame (and callouts) are drawn from the same code path as export.
-  const overlay = useMemo(() => {
+  // The frame (and callouts) are drawn from the same code path as export. Live mode
+  // draws the frame below the ECharts instance and the callouts above it.
+  const { overlay, above } = useMemo(() => {
     const plot = isStatic ? plotSvg(spec, f, measure) : '';
     const callouts = spec.callouts.length ? placeCallouts(spec, f, textBoxes(isStatic ? plot : plotSvg(spec, f, measure), f.plot, measure), measure) : [];
-    return compose(spec, f, plot, callouts);
+    return {
+      overlay: compose(spec, f, plot, isStatic ? callouts : []),
+      above: !isStatic && callouts.length ? compose(spec, f, '', callouts, { only: 'callouts' }) : '',
+    };
   }, [spec, f, measure, isStatic]);
 
   const look = LOOKS[spec.look];
@@ -63,6 +67,13 @@ export function Chart({ spec, className, onReady, static: isStatic }: ChartProps
           ref={host}
           className="cg-plot"
           style={{ position: 'absolute', left: f.plot.x * scale, top: f.plot.y * scale, width: f.plot.w, height: f.plot.h, transform: `scale(${scale})`, transformOrigin: '0 0' }}
+        />
+      )}
+      {above && (
+        <div
+          className="cg-callouts-host"
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+          dangerouslySetInnerHTML={{ __html: above.replace('<svg ', '<svg class="cg-callouts" style="width:100%;height:100%;display:block" ') }}
         />
       )}
     </div>
