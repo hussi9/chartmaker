@@ -9,8 +9,8 @@ step "tsc";        npx tsc -b
 step "oxlint";     npx oxlint src api scripts
 step "vitest";     npx vitest run
 step "build";      npm run build
-# BUDGET_SOFT defaults to 1 until Task 26 archives the legacy app; then flip to 0.
-step "budget";     BUDGET_SOFT="${BUDGET_SOFT:-1}" node scripts/bundle-budget.mjs
+# BUDGET_SOFT=1 only for a local experiment; the gate is hard.
+step "budget";     BUDGET_SOFT="${BUDGET_SOFT:-0}" node scripts/bundle-budget.mjs
 if [ "${SKIP_E2E:-0}" != "1" ]; then
   step "playwright"; npx playwright test
 fi

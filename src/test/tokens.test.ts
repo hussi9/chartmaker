@@ -31,3 +31,16 @@ describe('design tokens', () => {
     }
   });
 });
+
+describe('base stylesheet', () => {
+  const base = readFileSync('src/index.css', 'utf8');
+  it('carries no legacy app rules', () => {
+    expect(base).not.toMatch(/single-screen-app|control-panel-card|theme-circle-swatch|Plus Jakarta Sans/);
+  });
+  it('turns motion off under prefers-reduced-motion', () => {
+    expect(base.replace(/\s/g, '')).toMatch(/@media\(prefers-reduced-motion:reduce\)\{[^}]*\*[^}]*transition-duration:0\.01ms!important/);
+  });
+  it('shows a visible focus ring', () => {
+    expect(base).toMatch(/:focus-visible\s*\{[^}]*outline:\s*2px solid/);
+  });
+});

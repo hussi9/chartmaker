@@ -32,3 +32,6 @@ dist-ssr
 test-results/
 playwright-report/
 dev-dist/
+
+# TanStack router scratch
+.tanstack/
