@@ -659,3 +659,7 @@ Share button (top bar): `shareUrls(spec, origin)`; copies `path` when present el
 ## Production
 
 - 2026-09-27:  → chartgenie.xyz, chartmaker-aimasterz.vercel.app, chartmaker-theta.vercel.app (aliases moved by the deploy). Playwright suite (9 tests, desktop + phone) passed against https://chartgenie.xyz; every route, the card routes and a legacy #state= link verified; browser pass at 1024 and 375.
+
+## Follow-up fix (post-ship, user report)
+
+- 2026-09-27: Production regression — clicking the Templates nav link with a saved chart redirected to /new instead of showing the gallery. Root cause: TanStack Router's query-string parser coerces `?templates=1` to the JS number 1, not the string '1'; validateSearch only matched the string, so the bypass never fired and the router stripped the query entirely. Fixed in a709396; swept for the same class and found /new's `text`/`url` params had the identical flaw (fixed in 803842f, extracted src/lib/searchParams.ts). Deployed to production, verified live in a fresh tab (no stale service worker) for both routes; the fix was initially masked in one manual test by a stale precached PWA service worker from an earlier visit in the same tab — unregistering it showed the real, correct behavior. New visitors and updated PWA installs get the fix on next load.
