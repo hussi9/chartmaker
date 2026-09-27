@@ -1284,3 +1284,10 @@ Start the dev server (`chartgenie-dev` launch config), open `/new`:
 git add public/llms.txt README.md index.html src/test/release-claims.test.ts
 git commit -m "docs: honest claims for the picture-intake feature; full gate green"
 ```
+
+## Shipped
+
+Merged to `main` and deployed to production as v3.1.0 (2026-09-27), after a
+fresh whole-branch review found 4 Critical and 7 Important findings — all
+fixed with their own tests; see `.archive/sdd-plans/2026-09-27-picture-intake/progress.md`
+for the full ledger of fixes and rulings. Live at https://chartgenie.xyz/new.
