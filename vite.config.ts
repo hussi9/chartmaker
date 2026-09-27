@@ -44,6 +44,9 @@ export default defineConfig({
         manualChunks(id: string) {
           if (/node_modules[\\/](echarts|zrender)[\\/]/.test(id)) return 'echarts'
           if (/node_modules[\\/](react|react-dom|scheduler|@tanstack|zustand|zundo|immer)[\\/]/.test(id)) return 'vendor'
+          // The OCR runtime (~10-15 MB with ORT's wasm/model assets) must never
+          // land in the app's precache — only fetched when a picture is used.
+          if (/node_modules[\\/](ppu-paddle-ocr|onnxruntime-web|tesseract\.js|tesseract\.js-core)[\\/]/.test(id)) return 'ocr'
           return undefined
         },
       },
@@ -59,7 +62,7 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
-      injectManifest: { globPatterns: ['**/*.{js,css,html,woff2,svg,png}'], globIgnores: ['**/resvg.wasm', '**/fonts/*.ttf'], maximumFileSizeToCacheInBytes: 4_000_000 },
+      injectManifest: { globPatterns: ['**/*.{js,css,html,woff2,svg,png}'], globIgnores: ['**/resvg.wasm', '**/fonts/*.ttf', '**/ocr-*.js'], maximumFileSizeToCacheInBytes: 4_000_000 },
     }),
     {
     name: 'published-pages',

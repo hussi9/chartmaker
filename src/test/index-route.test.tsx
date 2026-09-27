@@ -14,6 +14,11 @@ import { defaultSpec } from '@/chart/types';
 // that parser is where this regression lived (it hands validateSearch a NUMBER for
 // `?templates=1`, not the string '1', so the templates bypass never matched and a
 // returning visitor was bounced straight to /new).
+// Real OCR (ppu-paddle-ocr/web, tesseract.js) fetches multi-MB models over
+// the network — never let a unit test reach it, even indirectly through the
+// shareInbox hydration path below.
+vi.mock('@/insights/detectImage', () => ({ detectImage: vi.fn().mockResolvedValue({ kind: 'image', rows: [], warnings: [] }) }));
+
 vi.mock('@/chart/echarts', async (orig) => {
   const real = await orig<typeof import('@/chart/echarts')>();
   const init = (el: unknown, ...rest: unknown[]) =>
@@ -68,13 +73,15 @@ describe('the real "/new" route with a real query string (same bug class)', () =
 });
 
 describe('a shared picture is picked up from shareInbox (review item: share with no file)', () => {
-  it('reads and clears the pending blob when /new?shared=1 loads', async () => {
+  it('reads and clears the pending blob when /new?shared=1 loads, handing it to the (mocked) recognizer as a File', async () => {
     const { db } = await import('@/db');
+    const { detectImage } = await import('@/insights/detectImage');
     const blob = new Blob(['x'], { type: 'image/png' });
     await db.shareInbox.put({ id: 'pending', blob, at: Date.now() });
     mount('/new?shared=1');
     await screen.findByLabelText('Paste your numbers');
     await waitFor(async () => expect(await db.shareInbox.get('pending')).toBeUndefined());
+    await waitFor(() => expect(detectImage).toHaveBeenCalledWith(expect.any(File)));
   });
 
   it('is a silent no-op when nothing is pending', async () => {
