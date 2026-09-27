@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { X, Download, Copy, Code, Check, Sparkles, Share2, FileSpreadsheet, FileJson, MessageSquare, Send, Table } from 'lucide-react';
+import { X, Download, Copy, Check, Sparkles, Share2, FileSpreadsheet, FileJson, MessageSquare, Send, Table } from 'lucide-react';
 import { toPng, toSvg } from 'html-to-image';
 import confetti from 'canvas-confetti';
 import { trackEvent, trackExportChart } from '../lib/gtag';
 import { triggerHaptic } from '../lib/haptics';
 import type { DataItem } from '../lib/chartPresets';
 import Papa from 'papaparse';
+import { includeInChartExport } from '../lib/chartExport';
 
 interface ExportModalProps {
   isOpen: boolean;
@@ -30,13 +31,13 @@ export const ExportModal: React.FC<ExportModalProps> = ({
   data,
   onNotify
 }) => {
-  const [copiedCode, setCopiedCode] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
   const [copiedSvg, setCopiedSvg] = useState(false);
   const [copiedReddit, setCopiedReddit] = useState(false);
   const [copiedTwitter, setCopiedTwitter] = useState(false);
   const [copiedLinkedIn, setCopiedLinkedIn] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -54,7 +55,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     triggerHaptic('light');
 
     try {
-      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: '#090d16' });
+      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: '#090d16', filter: includeInChartExport });
       const blob = await (await fetch(dataUrl)).blob();
       const file = new File([blob], `${sanitizeFilename(chartTitle)}.png`, { type: 'image/png' });
 
@@ -173,12 +174,16 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
   // Export PNG
   const handleDownloadPng = async (pixelRatio: number) => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      setExportError('Chart preview is not ready. Wait a moment and try again.');
+      return;
+    }
+    setExportError(null);
     setIsExporting(true);
     triggerHaptic('light');
 
     try {
-      const dataUrl = await toPng(canvasRef.current, { pixelRatio, backgroundColor: '#090d16' });
+      const dataUrl = await toPng(canvasRef.current, { pixelRatio, backgroundColor: '#090d16', filter: includeInChartExport });
       const link = document.createElement('a');
       link.download = `${sanitizeFilename(chartTitle)}-${pixelRatio}x.png`;
       link.href = dataUrl;
@@ -188,9 +193,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       trackExportChart('png', pixelRatio);
       triggerHaptic('success');
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
-      onNotify?.(`Downloaded ${pixelRatio === 4 ? '4K Ultra' : 'Retina 2x'} PNG!`, 'success');
-    } catch (err) {
-      console.error('PNG export failed', err);
+      onNotify?.(`Downloaded ${pixelRatio}x PNG!`, 'success');
+    } catch {
+      setExportError('PNG export failed. Try again or download SVG instead. Your chart is unchanged.');
     } finally {
       setIsExporting(false);
     }
@@ -198,12 +203,16 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
   // Export SVG
   const handleDownloadSvg = async () => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      setExportError('Chart preview is not ready. Wait a moment and try again.');
+      return;
+    }
+    setExportError(null);
     setIsExporting(true);
     triggerHaptic('light');
 
     try {
-      const dataUrl = await toSvg(canvasRef.current, { backgroundColor: '#090d16' });
+      const dataUrl = await toSvg(canvasRef.current, { backgroundColor: '#090d16', filter: includeInChartExport });
       const link = document.createElement('a');
       link.download = `${sanitizeFilename(chartTitle)}.svg`;
       link.href = dataUrl;
@@ -214,8 +223,8 @@ export const ExportModal: React.FC<ExportModalProps> = ({
       triggerHaptic('success');
       confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
       onNotify?.('Downloaded Vector SVG!', 'success');
-    } catch (err) {
-      console.error('SVG export failed', err);
+    } catch {
+      setExportError('SVG export failed. Try again or download PNG instead. Your chart is unchanged.');
     } finally {
       setIsExporting(false);
     }
@@ -228,7 +237,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     triggerHaptic('light');
 
     try {
-      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: '#090d16' });
+      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: '#090d16', filter: includeInChartExport });
       const blob = await (await fetch(dataUrl)).blob();
       await navigator.clipboard.write([
         new ClipboardItem({ [blob.type]: blob })
@@ -255,7 +264,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     triggerHaptic('light');
 
     try {
-      const dataUrl = await toSvg(canvasRef.current, { backgroundColor: '#090d16' });
+      const dataUrl = await toSvg(canvasRef.current, { backgroundColor: '#090d16', filter: includeInChartExport });
       const svgCode = decodeURIComponent(dataUrl.replace(/^data:image\/svg\+xml;charset=utf-8,/, ''));
       await navigator.clipboard.writeText(svgCode);
       setCopiedSvg(true);
@@ -270,18 +279,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
     } finally {
       setIsExporting(false);
     }
-  };
-
-  // Copy Embed iFrame
-  const embedSnippet = `<iframe src="https://chartgenie.xyz/embed/${sanitizeFilename(chartTitle)}" width="100%" height="450" frameborder="0" loading="lazy"></iframe>`;
-
-  const handleCopyEmbed = () => {
-    triggerHaptic('light');
-    navigator.clipboard.writeText(embedSnippet);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
-    trackEvent('copy_embed_code', 'export', chartTitle);
-    onNotify?.('Embed iframe snippet copied!', 'success');
   };
 
   // Download CSV
@@ -351,6 +348,12 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           <Sparkles size={22} color="#38bdf8" />
           <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0 }}>Export & Viral Share</h3>
         </div>
+
+        {exportError && (
+          <div role="alert" style={{ marginBottom: '16px', padding: '10px 12px', borderRadius: '8px', background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontSize: '0.84rem', fontWeight: 600 }}>
+            {exportError}
+          </div>
+        )}
 
         {/* Viral Share Actions */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
@@ -448,9 +451,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             style={{ width: '100%', justifyContent: 'space-between', padding: '12px 18px' }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Download size={18} /> Ultra 4K PNG (300 DPI)
+              <Download size={18} /> High-resolution 4x PNG
             </span>
-            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>Print / Whitepaper</span>
+            <span style={{ fontSize: '0.75rem', opacity: 0.8 }}>4x pixel scale</span>
           </button>
 
           {/* Download CSV */}
@@ -542,28 +545,6 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           </div>
         </div>
 
-        {/* Embed Code Snippet */}
-        <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px solid var(--border-glass)' }}>
-          <label style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.05em' }}>
-            Interactive iFrame Web Embed
-          </label>
-          <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
-            <input
-              type="text"
-              readOnly
-              value={embedSnippet}
-              className="input-glass"
-              style={{ fontSize: '0.78rem', fontFamily: 'var(--font-mono)' }}
-            />
-            <button
-              onClick={handleCopyEmbed}
-              className="btn-secondary"
-              style={{ whiteSpace: 'nowrap' }}
-            >
-              {copiedCode ? <Check size={16} color="#10b981" /> : <Code size={16} />} Copy
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

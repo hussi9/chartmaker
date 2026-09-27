@@ -251,6 +251,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
   };
 
   const bgConfig = getBgStyle();
+  const legendFormatter = (value: string) => <span style={{ color: bgConfig.text }}>{value}</span>;
 
   // Dynamic framing and dimensions based on chosen aspect ratio
   const getAspectDimensions = () => {
@@ -499,7 +500,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
               ? `${bgConfig.glow}, 0 20px 40px rgba(0,0,0,0.12)`
               : '0 10px 30px rgba(0, 0, 0, 0.07)',
             fontFamily: fontFamily,
-            transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+            // Export reads this live canvas: geometry and theme changes must be immediate.
             position: 'relative',
             display: 'flex',
             flexDirection: 'column',
@@ -563,13 +564,13 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                 borderRadius: '20px',
                 fontSize: '0.78rem',
                 fontWeight: 700,
-                color: colors[0] || '#38bdf8',
+                color: bgConfig.text,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
                 boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
               }}>
-                <Sparkles size={12} /> {calloutMetric}
+                <Sparkles size={12} color={colors[0] || '#38bdf8'} /> {calloutMetric}
               </span>
             </div>
           )}
@@ -605,7 +606,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                       ? '0 10px 28px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.45)'
                       : '0 4px 20px rgba(0,0,0,0.4)',
                     border: `1px solid ${bgConfig.border}`,
-                    transition: 'all 0.3s ease'
+                    transition: 'none'
                   }}>
                     {data.map((item, idx) => {
                       const pct = (item.value / safeTotal) * 100;
@@ -629,7 +630,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             fontWeight: 800,
                             fontSize: pct > 8 ? '0.78rem' : '0.64rem',
                             textShadow: '0 1px 3px rgba(0,0,0,0.7)',
-                            transition: 'all 0.3s ease'
+                            transition: 'none'
                           }}
                           title={`${item.name}: ${item.value} (${pct.toFixed(1)}%)`}
                         >
@@ -716,7 +717,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               ? '0 6px 14px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -2px 0 rgba(0,0,0,0.25)'
                               : (ratio > 0.7 ? `0 4px 16px ${primaryColor}33` : 'none'),
                             transform: is3d ? 'translateY(-2px)' : 'none',
-                            transition: 'all 0.25s ease'
+                            transition: 'none'
                           }}
                         >
                           <span style={{ fontSize: '0.8rem', fontWeight: 600, color: ratio > 0.5 && bgMode !== 'light' ? '#ffffff' : bgConfig.text, marginBottom: '6px' }}>
@@ -766,12 +767,13 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                     height: '180px',
                     position: 'relative',
                     filter: is3d ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.35))' : 'none',
-                    transition: 'filter 0.3s ease'
+                    transition: 'none'
                   }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <RePieChart>
                         <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                         <Pie
+                          isAnimationActive={false}
                           data={gaugeData}
                           cx="50%"
                           cy="90%"
@@ -849,7 +851,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             ? '0 8px 20px rgba(0,0,0,0.28), inset 0 1px 2px rgba(255,255,255,0.6), inset 0 -2px 3px rgba(0,0,0,0.35)'
                             : '0 3px 12px rgba(0,0,0,0.18)',
                           transform: is3d ? 'translateY(-1px)' : 'none',
-                          transition: 'all 0.3s ease'
+                          transition: 'none'
                         }}>
                           <span style={{ textShadow: '0 1px 2px rgba(0,0,0,0.6)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {item.name}
@@ -879,12 +881,13 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                         <RePieChart style={{
                           transform: is3d ? 'perspective(700px) rotateX(18deg) scale(0.96)' : 'none',
                           filter: is3d ? 'drop-shadow(0 16px 24px rgba(0,0,0,0.32))' : 'none',
-                          transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease'
+                          transition: 'none'
                         }}>
                           <Svg3dDefs data={data} colors={colors} is3d={is3d} bgMode={bgMode} />
                           <Tooltip content={<CustomTooltip />} />
-                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {showLegend && <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />}
                           <Pie
+                            isAnimationActive={false}
                             data={data}
                             cx="50%"
                             cy="50%"
@@ -893,7 +896,11 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             paddingAngle={chartType === 'donut' ? 4 : (is3d ? 3 : 2)}
                             dataKey="value"
                             filter={is3d ? "url(#solid3dFloat)" : undefined}
-                            label={showValues ? ({ name, percent }: { name?: string; percent?: number }) => `${name}: ${((percent ?? 0) * 100).toFixed(1)}%` : false}
+                            label={showValues ? ({ name, percent, x, y, textAnchor }) => (
+                              <text x={x} y={y} textAnchor={textAnchor} fill={bgConfig.text} fontSize={12}>
+                                {name}: {((percent ?? 0) * 100).toFixed(1)}%
+                              </text>
+                            ) : false}
                             labelLine={showValues}
                           >
                             {data.map((entry, index) => (
@@ -923,7 +930,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
-                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {showLegend && <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />}
                           {shouldShowRefLine && (
                             <ReferenceLine
                               y={avgValue}
@@ -932,7 +939,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               strokeDasharray="5 5"
                               label={{
                                 value: `Benchmark Avg: ${avgValue.toLocaleString()}`,
-                                fill: '#f59e0b',
+                                fill: bgConfig.text,
                                 fontSize: 11,
                                 fontWeight: 700,
                                 position: 'top'
@@ -940,6 +947,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             />
                           )}
                           <Bar
+                            isAnimationActive={false}
                             dataKey="value"
                             radius={is3d ? [8, 8, 0, 0] : [6, 6, 0, 0]}
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
@@ -980,7 +988,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
                           <Tooltip content={<CustomTooltip />} />
-                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {showLegend && <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />}
                           {shouldShowRefLine && (
                             <ReferenceLine
                               x={avgValue}
@@ -989,7 +997,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               strokeDasharray="5 5"
                               label={{
                                 value: `Avg: ${avgValue.toLocaleString()}`,
-                                fill: '#f59e0b',
+                                fill: bgConfig.text,
                                 fontSize: 11,
                                 fontWeight: 700,
                                 position: 'top'
@@ -997,6 +1005,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             />
                           )}
                           <Bar
+                            isAnimationActive={false}
                             dataKey="value"
                             radius={is3d ? [0, 8, 8, 0] : [0, 6, 6, 0]}
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
@@ -1026,8 +1035,9 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Legend verticalAlign="bottom" height={36} />
+                          <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />
                           <Bar
+                            isAnimationActive={false}
                             dataKey="baseVal"
                             name="Primary Base"
                             stackId="stackA"
@@ -1035,6 +1045,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
                           />
                           <Bar
+                            isAnimationActive={false}
                             dataKey="expVal"
                             name="Growth Delta"
                             stackId="stackA"
@@ -1059,8 +1070,9 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis type="number" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis dataKey="name" type="category" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} width={90} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Legend verticalAlign="bottom" height={36} />
+                          <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />
                           <Bar
+                            isAnimationActive={false}
                             dataKey="baseVal"
                             name="Primary"
                             stackId="stackA"
@@ -1068,6 +1080,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
                           />
                           <Bar
+                            isAnimationActive={false}
                             dataKey="expVal"
                             name="Expansion"
                             stackId="stackA"
@@ -1093,7 +1106,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
-                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {showLegend && <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />}
                           {shouldShowRefLine && (
                             <ReferenceLine
                               y={avgValue}
@@ -1102,7 +1115,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                               strokeDasharray="5 5"
                               label={{
                                 value: `Avg: ${avgValue.toLocaleString()}`,
-                                fill: '#f59e0b',
+                                fill: bgConfig.text,
                                 fontSize: 11,
                                 fontWeight: 700,
                                 position: 'top'
@@ -1118,7 +1131,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             activeDot={{ r: 8 }}
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
                             isAnimationActive={false}
-                            label={showValues ? { position: 'top', fill: '#64748b', fontSize: 13, fontWeight: 600, offset: 10 } : false}
+                            label={showValues ? { position: 'top', fill: bgConfig.text, fontSize: 13, fontWeight: 600, offset: 10 } : false}
                           />
                         </ReLineChart>
                       );
@@ -1135,8 +1148,9 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 12, fontWeight: 500 }} axisLine={{ stroke: axisStroke }} tickLine={false} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.subtext, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Legend verticalAlign="bottom" height={36} />
+                          <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />
                           <Line
+                            isAnimationActive={false}
                             type="monotone"
                             dataKey="value"
                             name="Actual Series"
@@ -1147,6 +1161,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
                           />
                           <Line
+                            isAnimationActive={false}
                             type="stepAfter"
                             dataKey="benchmark"
                             name="Target Baseline"
@@ -1166,7 +1181,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
-                          {showLegend && <Legend verticalAlign="bottom" height={36} />}
+                          {showLegend && <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />}
                           {shouldShowRefLine && (
                             <ReferenceLine
                               y={avgValue}
@@ -1183,6 +1198,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             />
                           )}
                           <Area
+                            isAnimationActive={false}
                             type="monotone"
                             dataKey="value"
                             stroke={colors[0]}
@@ -1207,8 +1223,9 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <XAxis dataKey="name" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <YAxis stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Legend verticalAlign="bottom" height={36} />
+                          <Legend verticalAlign="bottom" height={36} formatter={legendFormatter} />
                           <Area
+                            isAnimationActive={false}
                             type="monotone"
                             dataKey="tierA"
                             name="Segment 1"
@@ -1219,6 +1236,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
                           />
                           <Area
+                            isAnimationActive={false}
                             type="monotone"
                             dataKey="tierB"
                             name="Segment 2"
@@ -1240,6 +1258,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <PolarAngleAxis dataKey="name" tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <PolarRadiusAxis stroke="#64748b" />
                           <Radar
+                            isAnimationActive={false}
                             name="Value"
                             dataKey="value"
                             stroke={colors[0]}
@@ -1260,6 +1279,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
                           <YAxis dataKey="value" stroke={bgConfig.subtext} tick={{ fill: bgConfig.text, fontSize: 11 }} />
                           <Tooltip content={<CustomTooltip />} />
                           <Scatter
+                            isAnimationActive={false}
                             data={data}
                             fill={colors[0]}
                             filter={is3d ? "url(#solid3dShadow)" : undefined}
@@ -1305,7 +1325,7 @@ export const ChartCanvas: React.FC<ChartCanvasProps> = ({
             )}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div data-chart-export-exclude="" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {onGetShareLink && (
               <button
                 type="button"

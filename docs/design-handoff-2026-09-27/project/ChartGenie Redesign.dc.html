@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<style>
+body{margin:0;background:#e9e5de;font-family:Geist,system-ui,sans-serif;color:#1e293b}
+a{color:#0e9384}a:hover{color:#0b6f65}
+.cg{width:1440px;height:900px;background:#f6f3ee;display:grid;grid-template-columns:72px minmax(0,1fr);overflow:hidden;border:1px solid #d6d0c6;box-shadow:0 20px 60px rgba(30,41,59,.12)}
+.cg-rail{background:#1e293b;color:#f6f3ee;display:flex;flex-direction:column;align-items:center;padding:14px 0}
+.cg-rb{width:56px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;color:rgba(246,243,238,.6);border-radius:8px}
+.cg-rb[data-on="true"]{background:rgba(255,255,255,.08);color:#fff;box-shadow:inset 3px 0 0 #2dd4bf}
+.cg-top{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid #e3ded6;background:#fbf9f6}
+.cg-h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1;margin:0}
+.cg-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #d6d0c6;background:#fff;color:#1e293b}
+.cg-btn.p{background:#0e9384;border-color:#0e9384;color:#fff}
+.cg-btn.g{border-color:transparent;background:transparent;color:#4b5563}
+.cg-chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid #d6d0c6;background:#fff;color:#374151}
+.cg-chip[data-on="true"]{background:#1e293b;color:#fff;border-color:#1e293b}
+.cg-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;font-weight:600}
+.cg-card{background:#fff;border:1px solid #e3ded6;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.cg-cell{padding:14px 16px;border-bottom:1px solid #e3ded6;display:flex;flex-direction:column;gap:8px}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px}
+.cg-input{height:34px;border:1px solid #d6d0c6;border-radius:6px;background:#fff;padding:0 10px;font-size:13px;display:flex;align-items:center;color:#1e293b}
+.cg-row{display:grid;grid-template-columns:14px minmax(0,1fr) 64px;gap:8px;align-items:center;height:34px;border-bottom:1px solid #efeae2;font-size:13px}
+.cg-row[data-on="true"]{background:#eef9f7;box-shadow:inset 0 0 0 1px #0e9384;border-radius:4px}
+.dv-hd{display:flex;align-items:baseline;gap:12px;padding:36px 40px 16px;font-size:13px;color:#4b5563}
+.dv-hd b{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;color:#1e293b}
+.dv-id{font:600 10px ui-monospace,monospace;padding:3px 7px;background:#1e293b;color:#fff;border-radius:4px}
+</style>
+</helmet>
+
+<div style="padding:0 0 60px;display:flex;flex-direction:column;gap:8px">
+<div style="padding:40px 40px 0;max-width:900px">
+  <span class="cg-lbl" style="color:#0e9384">ChartGenie · redesign direction</span>
+  <h1 class="cg-h1" style="font-size:44px;margin:8px 0 12px">Pick a look, drop in numbers, post.</h1>
+  <p style="margin:0;font-size:15px;line-height:1.55;color:#4b5563;text-wrap:pretty">Three screens, one shell. The template gallery is the front door, the editor keeps the chart at true post size in the centre with data on the left and style on the right, and My Charts turns saved work into a shelf you come back to. Fresh identity: Bricolage Grotesque display type, Geist for UI, slate ink on warm paper, one teal accent. Everything else is quiet so the chart is the loudest thing on screen.</p>
+</div>
+
+<div class="dv-hd"><span class="dv-id">1</span><b>Templates — the entry point</b><span>Finished looks with sample data already inside. One click opens the editor with those numbers to overwrite.</span></div>
+<div class="cg" style="margin:0 40px" data-screen-label="Templates">
+  <nav class="cg-rail">
+    <div style="width:36px;height:36px;border-radius:10px;background:#2dd4bf;display:grid;place-items:center;margin-bottom:18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+    <div class="cg-rb" data-on="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Templates</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Editor</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"></path></svg>My charts</div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px;color:#1e293b">H</div><span style="font-size:9px;color:rgba(246,243,238,.6)">@Hussain</span></div>
+  </nav>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="cg-top">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">Templates</span>
+      <div class="cg-input" style="margin-left:24px;width:320px;color:#9ca3af;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Search looks: funnel, growth, before/after…</div>
+      <div style="margin-left:auto;display:flex;gap:8px"><span class="cg-btn g">Paste numbers</span><span class="cg-btn p"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"></path></svg>Blank chart</span></div>
+    </header>
+    <div style="padding:28px 32px 0;display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+      <div><h1 class="cg-h1" style="font-size:40px">Pick a look.<br>Swap in your numbers.</h1></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:640px"><span class="cg-chip" data-on="true">Popular</span><span class="cg-chip">Bars</span><span class="cg-chip">Trends</span><span class="cg-chip">Compare</span><span class="cg-chip">KPIs</span><span class="cg-chip">Funnels</span><span class="cg-chip">Matrix</span><span class="cg-chip">All · 17</span></div>
+    </div>
+    <div style="padding:24px 32px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+      <div class="cg-card" style="border-color:#0e9384;box-shadow:0 0 0 3px #d9f2ee">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Conversion funnel</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><rect x="10" y="4" width="220" height="16" rx="3" fill="#0e9384"></rect><rect x="50" y="26" width="140" height="16" rx="3" fill="#1e293b"></rect><rect x="75" y="48" width="90" height="16" rx="3" fill="#e0a33a"></rect><rect x="92" y="70" width="56" height="16" rx="3" fill="#e26d5a"></rect></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Conversion Funnel</div><div class="mono" style="color:#6b7280">stage drop-off · 4 rows</div></div><span class="cg-btn p" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#1e293b;padding:18px;display:flex;flex-direction:column;justify-content:space-between;color:#fff"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Growth line</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><polyline points="10,80 50,70 90,72 130,50 170,38 210,14 230,10" fill="none" stroke="#2dd4bf" stroke-width="3"></polyline><circle cx="230" cy="10" r="4" fill="#2dd4bf"></circle><text x="180" y="30" fill="#fff" font-size="12" font-weight="700">+184%</text></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Growth Line · Dark</div><div class="mono" style="color:#6b7280">time series · 7 rows</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Ranked bars</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><rect x="0" y="4" width="200" height="14" rx="3" fill="#1e293b"></rect><rect x="0" y="24" width="160" height="14" rx="3" fill="#1e293b" opacity=".8"></rect><rect x="0" y="44" width="120" height="14" rx="3" fill="#1e293b" opacity=".6"></rect><rect x="0" y="64" width="70" height="14" rx="3" fill="#0e9384"></rect></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Ranked Bars</div><div class="mono" style="color:#6b7280">top-N · up to 10 rows</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Big number</span>
+          <div style="display:flex;align-items:baseline;gap:10px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;letter-spacing:-.04em">87%</span><span style="color:#0e9384;font-weight:600;font-size:13px">▲ 12 pts</span></div></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">KPI Headline</div><div class="mono" style="color:#6b7280">single stat + delta</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Before / after</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><rect x="40" y="40" width="60" height="50" fill="#d6d0c6"></rect><rect x="140" y="6" width="60" height="84" fill="#0e9384"></rect><text x="52" y="32" font-size="11" fill="#6b7280">2023</text><text x="152" y="0" font-size="11" fill="#1e293b" dy="-2"></text></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Before / After</div><div class="mono" style="color:#6b7280">two-point compare</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Share of total</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><circle cx="45" cy="45" r="38" fill="none" stroke="#e3ded6" stroke-width="14"></circle><circle cx="45" cy="45" r="38" fill="none" stroke="#0e9384" stroke-width="14" stroke-dasharray="150 240" transform="rotate(-90 45 45)"></circle><text x="100" y="40" font-size="12" fill="#1e293b" font-weight="700">62% mobile</text><text x="100" y="60" font-size="11" fill="#6b7280">38% desktop</text></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Donut Share</div><div class="mono" style="color:#6b7280">parts of a whole</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card">
+        <div style="aspect-ratio:16/9;background:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">2×2 matrix</span>
+          <svg viewBox="0 0 240 90" style="width:100%"><path d="M120 0v90M0 45h240" stroke="#e3ded6"></path><circle cx="60" cy="25" r="7" fill="#e26d5a"></circle><circle cx="170" cy="20" r="9" fill="#0e9384"></circle><circle cx="80" cy="65" r="6" fill="#d6d0c6"></circle><circle cx="190" cy="70" r="7" fill="#e0a33a"></circle></svg></div>
+        <div style="padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #e3ded6"><div><div style="font-size:13px;font-weight:600">Priority Matrix</div><div class="mono" style="color:#6b7280">effort × impact</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use this</span></div>
+      </div>
+      <div class="cg-card" style="border-style:dashed;background:transparent;align-items:flex-start;justify-content:center;padding:20px;gap:8px">
+        <span class="cg-lbl">Nothing fits?</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;line-height:1.15">Start blank with sample data</span><span style="font-size:12px;color:#6b7280">Four rows are pre-filled so the chart is never empty.</span><span class="cg-btn" style="margin-top:6px">Open editor</span>
+      </div>
+    </div>
+    <div style="margin-top:auto;padding:20px 32px 24px;border-top:1px solid #e3ded6;background:#fbf9f6;display:flex;align-items:center;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:2px;min-width:140px"><span class="cg-lbl">Recent</span><span style="font-size:13px;font-weight:600">Pick up where you left</span></div>
+      <div style="display:flex;gap:12px;flex:1">
+        <div class="cg-card" style="flex-direction:row;align-items:center;gap:12px;padding:8px 12px 8px 8px"><div style="width:72px;aspect-ratio:16/9;background:#fff;border:1px solid #e3ded6;border-radius:4px;display:flex;align-items:flex-end;gap:3px;padding:6px"><span style="flex:1;height:70%;background:#0e9384"></span><span style="flex:1;height:30%;background:#1e293b"></span><span style="flex:1;height:20%;background:#e0a33a"></span><span style="flex:1;height:22%;background:#e26d5a"></span></div><div><div style="font-size:13px;font-weight:600">Countries</div><div class="mono" style="color:#6b7280">16:9 · edited 2 min ago</div></div></div>
+        <div class="cg-card" style="flex-direction:row;align-items:center;gap:12px;padding:8px 12px 8px 8px"><div style="width:72px;aspect-ratio:16/9;background:#1e293b;border-radius:4px;padding:6px"><svg viewBox="0 0 60 30" style="width:100%;height:100%"><polyline points="2,26 14,22 26,18 38,12 50,8 58,3" fill="none" stroke="#2dd4bf" stroke-width="2"></polyline></svg></div><div><div style="font-size:13px;font-weight:600">MRR Q1–Q3</div><div class="mono" style="color:#6b7280">1:1 · yesterday</div></div></div>
+        <div class="cg-card" style="flex-direction:row;align-items:center;gap:12px;padding:8px 12px 8px 8px"><div style="width:72px;aspect-ratio:16/9;background:#fff;border:1px solid #e3ded6;border-radius:4px;display:grid;place-items:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">87%</div><div><div style="font-size:13px;font-weight:600">Retention</div><div class="mono" style="color:#6b7280">9:16 · 3 days ago</div></div></div>
+      </div>
+      <span class="cg-btn g">All my charts →</span>
+    </div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">2</span><b>Editor — chart at true post size</b><span>Data on the left, the post in the middle, style on the right. Export lives in one place, top right, and never moves.</span></div>
+<div class="cg" style="margin:0 40px" data-screen-label="Editor">
+  <nav class="cg-rail">
+    <div style="width:36px;height:36px;border-radius:10px;background:#2dd4bf;display:grid;place-items:center;margin-bottom:18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Templates</div>
+    <div class="cg-rb" data-on="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Editor</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"></path></svg>My charts</div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px;color:#1e293b">H</div><span style="font-size:9px;color:rgba(246,243,238,.6)">@Hussain</span></div>
+  </nav>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="cg-top">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">Countries</span><span class="mono" style="color:#6b7280;margin-left:4px">Conversion Funnel · saved</span>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center"><span class="mono" style="color:#0e9384;margin-right:8px">● Autosaved</span><span class="cg-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"></path></svg>Share link</span><span class="cg-btn p"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Export PNG ▾</span></div>
+    </header>
+    <div style="display:grid;grid-template-columns:300px minmax(0,1fr) 280px;flex:1;min-height:0">
+      <aside style="border-right:1px solid #e3ded6;background:#fbf9f6;display:flex;flex-direction:column;min-height:0">
+        <div class="cg-cell" style="flex-direction:row;align-items:center;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Data</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Import ▾</span></div>
+        <div class="cg-cell" style="gap:4px">
+          <div style="display:grid;grid-template-columns:14px minmax(0,1fr) 64px;gap:8px;padding-bottom:6px" class="cg-lbl"><span></span><span>Label</span><span style="text-align:right">Value</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#0e9384"></span><span>USA</span><span class="mono" style="text-align:right;font-size:13px">87</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#1e293b"></span><span>Italy</span><span class="mono" style="text-align:right;font-size:13px">20</span></div>
+          <div class="cg-row" data-on="true" style="padding:0 6px;margin:0 -6px"><span style="width:10px;height:10px;border-radius:50%;background:#e0a33a"></span><span>UK</span><span class="mono" style="text-align:right;font-size:13px;color:#0e9384">12<span style="display:inline-block;width:1px;height:14px;background:#0e9384;margin-left:1px;vertical-align:-2px"></span></span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#e26d5a"></span><span>Ireland</span><span class="mono" style="text-align:right;font-size:13px">15</span></div>
+          <div class="cg-row" style="border-bottom:0;color:#9ca3af"><span style="width:10px;height:10px;border-radius:50%;border:1px dashed #9ca3af"></span><span>Type a label…</span><span></span></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px" class="mono"><span style="color:#6b7280">Total 134 · avg 33.5</span><span style="color:#6b7280">⇥ next · ⏎ new row</span></div>
+        </div>
+        <div class="cg-cell" style="flex-direction:row;gap:6px;flex-wrap:wrap"><span class="cg-chip">Paste text</span><span class="cg-chip">CSV</span><span class="cg-chip">Sort ↓</span><span class="cg-chip">Sample data</span></div>
+        <div class="cg-cell" style="border-bottom:0"><span class="cg-lbl">Text on chart</span><div class="cg-input">Countries</div><div class="cg-input" style="color:#9ca3af">Subtitle (optional)</div><div class="cg-input" style="color:#9ca3af">Source, e.g. Statista</div></div>
+      </aside>
+      <section style="display:flex;flex-direction:column;min-width:0;background:#efebe4">
+        <div style="display:flex;align-items:center;gap:6px;padding:12px 20px;border-bottom:1px solid #e3ded6;background:#f6f3ee"><span class="cg-lbl" style="margin-right:6px">Post size</span><span class="cg-chip" data-on="true">16:9 · X / Web</span><span class="cg-chip">1:1 · LinkedIn</span><span class="cg-chip">9:16 · Story</span><span class="cg-chip">4:3 · Deck</span><span class="mono" style="margin-left:auto;color:#6b7280">1600 × 900 px · shown at 50%</span></div>
+        <div style="flex:1;display:grid;place-items:center;padding:24px">
+          <div style="width:720px;aspect-ratio:16/9;background:#fff;border-radius:12px;box-shadow:0 24px 60px rgba(30,41,59,.18),0 0 0 1px #e3ded6;position:relative;padding:36px 44px;display:flex;flex-direction:column">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;letter-spacing:-.03em">Countries</div><div style="font-size:13px;color:#6b7280;margin-top:2px">Stage-by-stage drop-off</div></div><span class="mono" style="background:#f6f3ee;border:1px solid #e3ded6;border-radius:999px;padding:4px 10px;color:#1e293b">@Hussain</span></div>
+            <svg viewBox="0 0 640 220" style="width:100%;flex:1;margin-top:18px">
+              <rect x="0" y="0" width="640" height="42" rx="6" fill="#0e9384"></rect><text x="16" y="27" fill="#fff" font-size="15" font-weight="600" font-family="Geist, sans-serif">USA</text><text x="624" y="27" fill="#fff" font-size="15" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">87 · 100%</text>
+              <rect x="123" y="54" width="394" height="42" rx="6" fill="#1e293b"></rect><text x="139" y="81" fill="#fff" font-size="15" font-weight="600" font-family="Geist, sans-serif">Italy</text><text x="501" y="81" fill="#fff" font-size="15" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">20 · 23%</text>
+              <rect x="176" y="108" width="288" height="42" rx="6" fill="#e0a33a"></rect><text x="192" y="135" fill="#1e293b" font-size="15" font-weight="600" font-family="Geist, sans-serif">UK</text><text x="448" y="135" fill="#1e293b" font-size="15" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">12 · 14%</text>
+              <rect x="160" y="162" width="320" height="42" rx="6" fill="#e26d5a"></rect><text x="176" y="189" fill="#fff" font-size="15" font-weight="600" font-family="Geist, sans-serif">Ireland</text><text x="464" y="189" fill="#fff" font-size="15" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">15 · 17%</text>
+            </svg>
+            <div style="display:flex;justify-content:space-between;margin-top:12px" class="mono"><span style="color:#9ca3af">Source: internal</span><span style="color:#9ca3af">chartgenie.xyz</span></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-top:1px solid #e3ded6;background:#f6f3ee"><span class="cg-lbl" style="margin-right:6px">Look</span><span class="cg-btn" style="height:32px">Conversion Funnel ▾</span><span style="width:1px;height:20px;background:#d6d0c6;margin:0 4px"></span><span class="cg-lbl" style="margin-right:6px">Post-ready</span><span class="cg-chip" data-on="true">Clean</span><span class="cg-chip">Bold</span><span class="cg-chip">Dark</span><span class="cg-chip">Newsletter</span><span class="cg-btn g" style="margin-left:auto;height:32px">Copy PNG</span></div>
+      </section>
+      <aside style="border-left:1px solid #e3ded6;background:#fbf9f6;display:flex;flex-direction:column">
+        <div class="cg-cell"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Style</span></div>
+        <div class="cg-cell"><span class="cg-lbl">Palette</span><div style="display:flex;gap:6px"><span style="display:flex;gap:2px;padding:3px;border:2px solid #0e9384;border-radius:6px"><span style="width:14px;height:22px;background:#0e9384;border-radius:2px"></span><span style="width:14px;height:22px;background:#1e293b;border-radius:2px"></span><span style="width:14px;height:22px;background:#e0a33a;border-radius:2px"></span><span style="width:14px;height:22px;background:#e26d5a;border-radius:2px"></span></span><span style="display:flex;gap:2px;padding:3px;border:2px solid transparent;border-radius:6px"><span style="width:14px;height:22px;background:#1e293b;border-radius:2px"></span><span style="width:14px;height:22px;background:#475569;border-radius:2px"></span><span style="width:14px;height:22px;background:#94a3b8;border-radius:2px"></span><span style="width:14px;height:22px;background:#cbd5e1;border-radius:2px"></span></span><span style="display:flex;gap:2px;padding:3px;border:2px solid transparent;border-radius:6px"><span style="width:14px;height:22px;background:#4f9dd9;border-radius:2px"></span><span style="width:14px;height:22px;background:#7c3aed;border-radius:2px"></span><span style="width:14px;height:22px;background:#ec4899;border-radius:2px"></span><span style="width:14px;height:22px;background:#f59e0b;border-radius:2px"></span></span></div></div>
+        <div class="cg-cell"><span class="cg-lbl">Values</span><div style="display:flex;border:1px solid #d6d0c6;border-radius:6px;overflow:hidden;font-size:12px"><span style="flex:1;padding:7px 0;text-align:center;background:#1e293b;color:#fff">Number + %</span><span style="flex:1;padding:7px 0;text-align:center">Number</span><span style="flex:1;padding:7px 0;text-align:center">None</span></div></div>
+        <div class="cg-cell" style="flex-direction:row;justify-content:space-between;align-items:center"><span style="font-size:13px">Depth (3D)</span><span style="width:36px;height:20px;border-radius:999px;background:#d6d0c6;position:relative"><span style="position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span></div>
+        <div class="cg-cell" style="flex-direction:row;justify-content:space-between;align-items:center"><span style="font-size:13px">Show my handle</span><span style="width:36px;height:20px;border-radius:999px;background:#0e9384;position:relative"><span style="position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff"></span></span></div>
+        <div class="cg-cell"><span class="cg-lbl">Handle</span><div class="cg-input">@Hussain</div><span style="font-size:11px;color:#6b7280">Shown bottom-right on every export.</span></div>
+        <div class="cg-cell" style="border-bottom:0;margin-top:auto;border-top:1px solid #e3ded6"><span class="cg-lbl">Also export as</span><div style="display:flex;gap:6px"><span class="cg-chip">SVG</span><span class="cg-chip">Table</span><span class="cg-chip">Copy link</span></div></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">3</span><b>My charts — a shelf, not a list</b><span>Thumbnails at their real aspect, last edit, shared status. Duplicate to re-post the same look with next month's numbers.</span></div>
+<div class="cg" style="margin:0 40px" data-screen-label="My charts">
+  <nav class="cg-rail">
+    <div style="width:36px;height:36px;border-radius:10px;background:#2dd4bf;display:grid;place-items:center;margin-bottom:18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Templates</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Editor</div>
+    <div class="cg-rb" data-on="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"></path></svg>My charts</div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px;color:#1e293b">H</div><span style="font-size:9px;color:rgba(246,243,238,.6)">@Hussain</span></div>
+  </nav>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="cg-top">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">My charts</span>
+      <div style="margin-left:auto;display:flex;gap:8px"><span class="cg-chip" data-on="true">All · 6</span><span class="cg-chip">Shared · 2</span><span class="cg-chip">16:9</span><span class="cg-chip">1:1</span><span class="cg-chip">9:16</span><span class="cg-btn p" style="margin-left:8px">New chart</span></div>
+    </header>
+    <div style="padding:28px 32px 0;display:flex;align-items:flex-end;justify-content:space-between"><h1 class="cg-h1" style="font-size:40px">My charts</h1><span style="font-size:13px;color:#6b7280">Saved in this browser · <a href="#">export a backup</a></span></div>
+    <div style="padding:20px 32px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+      <div class="cg-card"><div style="aspect-ratio:16/9;background:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px">Countries</span><svg viewBox="0 0 240 80" style="width:100%"><rect x="0" y="0" width="240" height="15" rx="3" fill="#0e9384"></rect><rect x="46" y="21" width="148" height="15" rx="3" fill="#1e293b"></rect><rect x="66" y="42" width="108" height="15" rx="3" fill="#e0a33a"></rect><rect x="60" y="63" width="120" height="15" rx="3" fill="#e26d5a"></rect></svg></div>
+        <div style="padding:12px 14px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Countries</div><div class="mono" style="color:#6b7280">16:9 · edited 2 min ago · <span style="color:#0e9384">shared</span></div></div><div style="display:flex;gap:4px"><span class="cg-btn g" style="height:30px;padding:0 8px;font-size:12px">Duplicate</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Open</span></div></div></div>
+      <div class="cg-card"><div style="aspect-ratio:16/9;background:#1e293b;padding:20px;display:flex;flex-direction:column;justify-content:space-between;color:#fff"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px">MRR Q1–Q3</span><svg viewBox="0 0 240 80" style="width:100%"><polyline points="0,70 40,62 80,58 120,40 160,30 200,14 240,6" fill="none" stroke="#2dd4bf" stroke-width="3"></polyline></svg></div>
+        <div style="padding:12px 14px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">MRR Q1–Q3</div><div class="mono" style="color:#6b7280">1:1 · yesterday</div></div><div style="display:flex;gap:4px"><span class="cg-btn g" style="height:30px;padding:0 8px;font-size:12px">Duplicate</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Open</span></div></div></div>
+      <div class="cg-card"><div style="aspect-ratio:16/9;background:#fff;padding:20px;display:flex;align-items:center;justify-content:center;gap:24px"><div style="width:120px;aspect-ratio:9/16;background:#f6f3ee;border:1px solid #e3ded6;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.04em">87%</span><span style="font-size:10px;color:#0e9384;font-weight:600">▲ 12 pts</span></div></div>
+        <div style="padding:12px 14px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Retention</div><div class="mono" style="color:#6b7280">9:16 · 3 days ago · <span style="color:#0e9384">shared</span></div></div><div style="display:flex;gap:4px"><span class="cg-btn g" style="height:30px;padding:0 8px;font-size:12px">Duplicate</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Open</span></div></div></div>
+      <div class="cg-card"><div style="aspect-ratio:16/9;background:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px">Channel mix</span><svg viewBox="0 0 240 80" style="width:100%"><circle cx="40" cy="40" r="32" fill="none" stroke="#e3ded6" stroke-width="12"></circle><circle cx="40" cy="40" r="32" fill="none" stroke="#0e9384" stroke-width="12" stroke-dasharray="125 200" transform="rotate(-90 40 40)"></circle><text x="90" y="36" font-size="12" font-weight="700" fill="#1e293b">62% mobile</text><text x="90" y="54" font-size="11" fill="#6b7280">38% desktop</text></svg></div>
+        <div style="padding:12px 14px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Channel mix</div><div class="mono" style="color:#6b7280">16:9 · last week</div></div><div style="display:flex;gap:4px"><span class="cg-btn g" style="height:30px;padding:0 8px;font-size:12px">Duplicate</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Open</span></div></div></div>
+      <div class="cg-card"><div style="aspect-ratio:16/9;background:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:17px">Hiring plan</span><svg viewBox="0 0 240 80" style="width:100%"><rect x="0" y="0" width="200" height="13" rx="3" fill="#1e293b"></rect><rect x="0" y="18" width="150" height="13" rx="3" fill="#1e293b" opacity=".8"></rect><rect x="0" y="36" width="110" height="13" rx="3" fill="#1e293b" opacity=".6"></rect><rect x="0" y="54" width="60" height="13" rx="3" fill="#0e9384"></rect></svg></div>
+        <div style="padding:12px 14px;border-top:1px solid #e3ded6;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Hiring plan</div><div class="mono" style="color:#6b7280">4:3 · 2 weeks ago</div></div><div style="display:flex;gap:4px"><span class="cg-btn g" style="height:30px;padding:0 8px;font-size:12px">Duplicate</span><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Open</span></div></div></div>
+      <div class="cg-card" style="border-style:dashed;background:transparent;align-items:flex-start;justify-content:center;padding:20px;gap:8px"><span class="cg-lbl">Monthly habit</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;line-height:1.15">Duplicate last month's chart, paste new numbers</span><span style="font-size:12px;color:#6b7280">Same look, same size, same handle. Two minutes to post.</span><span class="cg-btn" style="margin-top:6px">Duplicate “Countries”</span></div>
+    </div>
+    <div style="margin-top:auto;padding:16px 32px 24px;border-top:1px solid #e3ded6;background:#fbf9f6">
+      <span class="cg-lbl">Shared links</span>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 120px 100px 90px;gap:12px;margin-top:10px;font-size:13px;align-items:center"><span class="mono" style="color:#1e293b">chartgenie.xyz/s/countries-3f9a</span><span style="color:#6b7280">Countries</span><span style="color:#6b7280">14 views</span><span class="cg-btn g" style="height:28px;padding:0 8px;font-size:12px;justify-self:end">Copy</span>
+        <span class="mono" style="color:#1e293b">chartgenie.xyz/s/retention-b21c</span><span style="color:#6b7280">Retention</span><span style="color:#6b7280">3 views</span><span class="cg-btn g" style="height:28px;padding:0 8px;font-size:12px;justify-self:end">Copy</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="padding:32px 40px 0;max-width:900px;font-size:14px;line-height:1.6;color:#4b5563">
+  <span class="cg-lbl">What changed and why</span>
+  <ul style="margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+    <li><strong style="color:#1e293b">Templates are the front door.</strong> Today the chart-type chooser is a two-row toolbar above the canvas; here it is a gallery of finished posts with sample numbers already inside, so the first thing a visitor sees is a result.</li>
+    <li><strong style="color:#1e293b">One export, one place.</strong> Export, Share and autosave live top-right on every screen. The seven header buttons collapse to two; Templates and My Charts move to the rail.</li>
+    <li><strong style="color:#1e293b">Chart at true post size.</strong> Format is a chip row directly above the artboard with the real pixel size shown; the canvas is the only thing with a shadow, so it reads as the product.</li>
+    <li><strong style="color:#1e293b">Keyboard-fast data.</strong> The Content/Style/Settings tabs become one always-visible data grid: Tab moves, Enter adds a row, a trailing empty row invites typing. Import methods are one menu.</li>
+    <li><strong style="color:#1e293b">Post-ready presets and handle.</strong> A "Look" strip under the artboard gives one-click Clean/Bold/Dark/Newsletter; the handle badge is on by default so every export markets the creator.</li>
+    <li><strong style="color:#1e293b">Return loop.</strong> The Recent shelf on Templates and the "Duplicate last month" card on My Charts make the second visit faster than the first.</li>
+  </ul>
+</div>
+</div>
+</x-dc>
+</body>
+</html>

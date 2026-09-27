@@ -1,6 +1,8 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/pie-chart-maker", "destination": "/pie-chart-maker/index.html" },
+    { "source": "/bar-graph-maker", "destination": "/bar-graph-maker/index.html" },
+    { "source": "/convert-excel-to-chart", "destination": "/convert-excel-to-chart/index.html" }
   ],
   "headers": [
     {
@@ -12,7 +14,7 @@
         },
         {
           "key": "X-Frame-Options",
-          "value": "ALLOWALL"
+          "value": "SAMEORIGIN"
         }
       ]
     }

@@ -14,7 +14,9 @@ import { COLOR_SCHEMES } from './lib/chartPresets';
 import { decodeChartState, encodeChartState } from './lib/urlState';
 import { getSavedCharts, saveChartToLibrary, deleteChartFromLibrary, saveAutosave, loadAutosave } from './lib/storage';
 import { decorateItemWithEmoji } from './lib/emojiDecorator';
+import { isPublishedRoute, routeMetadata } from './lib/routeMetadata';
 import { triggerHaptic } from './lib/haptics';
+import { includeInChartExport } from './lib/chartExport';
 import { toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
 import type { DataItem, ChartType, ColorScheme, AspectRatio, FontFamily, CanvasThemeMode } from './lib/chartPresets';
@@ -23,7 +25,7 @@ import {
   initGoogleAnalytics,
   trackChartCreate,
   trackCopyChart,
-  trackAiPromptGenerate,
+  trackSmartParserApply,
   trackThemeSelection,
   trackAspectRatioSelection
 } from './lib/gtag';
@@ -91,8 +93,8 @@ export function App() {
             { id: '3', name: 'Edge', value: 10 },
             { id: '4', name: 'Others', value: 5 }
           ],
-          title: 'Browser Market Share',
-          subtitle: 'Global Desktop Usage 2026',
+          title: 'Example Category Share',
+          subtitle: 'Illustrative sample — replace with your own data',
           chartType: 'pie' as ChartType,
           activeScheme: COLOR_SCHEMES.find(s => s.id === 'apple') || COLOR_SCHEMES[0],
           aspectRatio: '16:9' as AspectRatio,
@@ -116,8 +118,8 @@ export function App() {
             { id: '3', name: 'Q3 Sales', value: 410 },
             { id: '4', name: 'Q4 Target', value: 680 }
           ],
-          title: 'Quarterly Revenue Performance',
-          subtitle: 'USD Millions (2026)',
+          title: 'Example Quarterly Values',
+          subtitle: 'Illustrative sample — replace with your own data',
           chartType: 'bar' as ChartType,
           activeScheme: COLOR_SCHEMES.find(s => s.id === 'linear') || COLOR_SCHEMES[0],
           aspectRatio: '16:9' as AspectRatio,
@@ -192,8 +194,8 @@ export function App() {
             { id: '3', name: 'Sales & BD', value: 310 },
             { id: '4', name: 'Operations', value: 160 }
           ],
-          title: 'Spreadsheet Budget Breakdown',
-          subtitle: 'Converted from Excel / CSV',
+          title: 'Example Spreadsheet Rows',
+          subtitle: 'Illustrative sample — paste your own rows',
           chartType: 'horizontalBar' as ChartType,
           activeScheme: COLOR_SCHEMES.find(s => s.id === 'cyberpunk') || COLOR_SCHEMES[0],
           aspectRatio: '16:9' as AspectRatio,
@@ -290,6 +292,34 @@ export function App() {
   };
 
   const canvasRef = useRef<HTMLDivElement | null>(null);
+  const editorRef = useRef<HTMLDivElement | null>(null);
+  const previewRef = useRef<HTMLDivElement | null>(null);
+  const chartTypesRef = useRef<HTMLDivElement | null>(null);
+  const [focusDataEditor, setFocusDataEditor] = useState(false);
+
+  useEffect(() => {
+    if (!focusDataEditor || activeControlTab !== 'content') return;
+    editorRef.current?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
+    editorRef.current?.querySelector<HTMLInputElement>('.data-input-name')?.focus({ preventScroll: true });
+    setFocusDataEditor(false);
+  }, [activeControlTab, focusDataEditor]);
+
+  const handleEditData = () => {
+    setActiveControlTab('content');
+    setFocusDataEditor(true);
+  };
+
+  const handleViewPreview = () => {
+    previewRef.current?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
+    previewRef.current?.focus({ preventScroll: true });
+  };
+
+  const handleChooseChartType = () => {
+    chartTypesRef.current?.scrollIntoView?.({ behavior: 'auto', block: 'start' });
+    const activeChart = chartTypesRef.current?.querySelector<HTMLElement>('.chart-type-card.active');
+    activeChart?.focus({ preventScroll: true });
+    activeChart?.scrollIntoView?.({ behavior: 'auto', block: 'nearest', inline: 'center' });
+  };
 
   // Toast notification helper
   const addToast = useCallback((text: string, type: 'success' | 'info' | 'viral' = 'success') => {
@@ -331,7 +361,8 @@ export function App() {
 
   // Save current chart to local library
   const handleQuickSave = useCallback(() => {
-    const saved = saveChartToLibrary({
+    try {
+      const saved = saveChartToLibrary({
       title: title || 'Untitled Chart',
       subtitle,
       calloutMetric,
@@ -347,11 +378,14 @@ export function App() {
       is3d,
       creatorHandle,
       data
-    });
-    setSavedCharts(getSavedCharts());
-    triggerHaptic('success');
-    confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
-    addToast(`"${saved.title}" saved to My Charts!`, 'success');
+      });
+      setSavedCharts(getSavedCharts());
+      triggerHaptic('success');
+      confetti({ particleCount: 35, spread: 50, origin: { y: 0.6 } });
+      addToast(`"${saved.title}" saved to My Charts!`, 'success');
+    } catch {
+      addToast('Could not save to this browser. Check available storage and export a backup.', 'info');
+    }
   }, [title, subtitle, calloutMetric, dataSource, showAverageLine, chartType, activeScheme, aspectRatio, fontFamily, bgMode, showLegend, showValues, is3d, creatorHandle, data, addToast]);
 
   // Keyboard shortcuts (Cmd+S / Ctrl+S to save, Cmd+E / Ctrl+E to export)
@@ -421,7 +455,7 @@ export function App() {
   const handleDirectCopyImage = async () => {
     if (!canvasRef.current) return;
     try {
-      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: bgMode === 'light' ? '#ffffff' : '#090d16' });
+      const dataUrl = await toPng(canvasRef.current, { pixelRatio: 2, backgroundColor: bgMode === 'light' ? '#ffffff' : '#090d16', filter: includeInChartExport });
       const blob = await (await fetch(dataUrl)).blob();
       await navigator.clipboard.write([
         new ClipboardItem({ [blob.type]: blob })
@@ -479,9 +513,9 @@ export function App() {
     if (res.title) setTitle(res.title);
     if (res.subtitle) setSubtitle(res.subtitle);
     if (res.chartType) setChartType(res.chartType);
-    trackAiPromptGenerate(res.title || 'AI Chart', true);
+    trackSmartParserApply(res.data.length);
     confetti({ particleCount: 35, spread: 60, origin: { y: 0.5 } });
-    addToast('✨ Chart generated with AI!', 'viral');
+    addToast(`Smart Parser applied ${res.data.length} reviewed rows`, 'success');
   };
 
   return (
@@ -534,7 +568,7 @@ export function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: '#1e293b' }}>
             <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>✨</span>
             <span>
-              <strong>Welcome!</strong> No signups, 100% free. Edit any number on the left or tap <strong>AI Prompt</strong> to create publication-ready charts in seconds.
+              <strong>Start with the sample.</strong> Edit its values or paste data with <strong>Smart Parser</strong>. No signup.
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -557,7 +591,7 @@ export function App() {
                 gap: '5px'
               }}
             >
-              <span>🪄 Try AI Prompt</span>
+              <span>🪄 Try Smart Parser</span>
             </button>
             <button
               onClick={dismissWelcome}
@@ -580,9 +614,15 @@ export function App() {
       )}
 
       {/* Single Screen Dashboard Layout */}
+      {typeof window !== 'undefined' && isPublishedRoute(window.location.pathname) && window.location.pathname !== '/' && (
+        <div className="route-intro"><h2>{routeMetadata[window.location.pathname].heading}</h2><p>Start with the illustrative chart below, then replace the values with your own.</p></div>
+      )}
       <main className="single-screen-main">
         {/* Left Column: Control Panel Card */}
         <ControlPanel
+          editorRef={editorRef}
+          onViewPreview={handleViewPreview}
+          onChooseChartType={handleChooseChartType}
           activeTab={activeControlTab}
           onChangeTab={setActiveControlTab}
           title={title}
@@ -628,12 +668,17 @@ export function App() {
         <section className="chart-stage-container">
           {/* Top Chart Type Selector Cards */}
           <ChartTypeBar
+            containerRef={chartTypesRef}
             activeType={chartType}
             onSelectType={handleSelectChartType}
           />
 
           {/* Main Chart Card */}
-          <div className="main-chart-display-card">
+          <div className="main-chart-display-card" ref={previewRef} role="region" aria-label="Chart preview" tabIndex={-1}>
+            <div className="mobile-preview-actions">
+              <span>Preview your chart</span>
+              <button type="button" onClick={handleEditData}>Edit data</button>
+            </div>
             <ChartCanvas
               data={data}
               chartType={chartType}

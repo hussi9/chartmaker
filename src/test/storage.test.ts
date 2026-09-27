@@ -1,10 +1,11 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   getSavedCharts,
   saveChartToLibrary,
   deleteChartFromLibrary,
   saveAutosave,
-  loadAutosave
+  loadAutosave,
+  importBackupJson
 } from '../lib/storage';
 import type { SavedChart } from '../lib/storage';
 
@@ -134,5 +135,32 @@ describe('Storage Library & Autosave (storage)', () => {
 
     localStorage.setItem('chartgenie_autosave_v1', 'corrupted_state');
     expect(loadAutosave()).toBeNull();
+  });
+
+  it('does not report a save when storage rejects the write', () => {
+    const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('quota'); });
+    try {
+      expect(() => saveChartToLibrary({ title: 'Unsaved', subtitle: '', chartType: 'bar', schemeId: 'apple', aspectRatio: '1:1', fontFamily: 'Inter', bgMode: 'light', showLegend: false, showValues: true, is3d: false, data: [] })).toThrow(/save|quota|storage/i);
+    } finally { setItem.mockRestore(); }
+  });
+
+  it('does not report a save when read-back differs', () => {
+    const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {});
+    try {
+      expect(() => saveChartToLibrary({ title: 'Unsaved', subtitle: '', chartType: 'bar', schemeId: 'apple', aspectRatio: '1:1', fontFamily: 'Inter', bgMode: 'light', showLegend: false, showValues: true, is3d: false, data: [] })).toThrow(/verify|save|storage/i);
+    } finally { setItem.mockRestore(); }
+  });
+
+  it('rejects malformed backup charts without replacing existing charts', () => {
+    localStorage.setItem('chartgenie_saved_charts_v1', JSON.stringify([{ id: 'keep', title: 'Keep me' }]));
+    expect(importBackupJson(JSON.stringify({ version: 1, charts: [{ title: 'Missing required fields' }] }))).toEqual({ success: false, count: 0 });
+    expect(JSON.parse(localStorage.getItem('chartgenie_saved_charts_v1') || '[]')[0].id).toBe('keep');
+  });
+
+  it('merges a valid backup without silently deleting the local library', () => {
+    const chart = { id: 'backup', updatedAt: 1, title: 'Backup', subtitle: '', chartType: 'bar', schemeId: 'apple', aspectRatio: '1:1', fontFamily: 'Inter', bgMode: 'light', showLegend: false, showValues: true, is3d: false, data: [{ id: 'row', name: 'A', value: 2 }] };
+    localStorage.setItem('chartgenie_saved_charts_v1', JSON.stringify([{ ...chart, id: 'local' }]));
+    expect(importBackupJson(JSON.stringify({ version: 1, charts: [chart] }))).toEqual({ success: true, count: 1 });
+    expect(getSavedCharts().map(item => item.id)).toEqual(['backup', 'local']);
   });
 });

@@ -101,8 +101,8 @@ describe('UI Component Test Suite', () => {
       expect(screen.getByText('ChartGenie')).toBeInTheDocument();
       expect(screen.getByText('.xyz')).toBeInTheDocument();
 
-      // AI Prompt button
-      const aiBtn = screen.getByRole('button', { name: /ai prompt/i });
+      // Smart Parser button
+      const aiBtn = screen.getByRole('button', { name: /smart parser/i });
       expect(aiBtn).toBeInTheDocument();
       fireEvent.click(aiBtn);
       expect(handleOpenAi).toHaveBeenCalled();

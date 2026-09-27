@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="../_ds/modernist-d72ea4e2-3167-4e12-aa96-1a77206dd85e/styles.css"><style>body{margin:0}</style></helmet>
+<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh;display:grid;grid-template-columns:72px 1fr 300px">
+  <nav style="border-right:2px solid var(--color-divider);display:flex;flex-direction:column;align-items:stretch">
+    <div style="height:56px;display:grid;place-items:center;border-bottom:2px solid var(--color-divider)"><span style="width:28px;height:28px;background:var(--color-accent);color:var(--color-bg);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:15px">S</span></div>
+    <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:12px 0 4px;text-align:center">Create</span>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;box-shadow:inset 3px 0 0 var(--color-accent);background:var(--color-surface);font-size:11px">Draw</a>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">Type</a>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">Scan</a>
+    <div class="hr" style="margin:8px 12px"></div>
+    <span style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:4px 0;text-align:center">Use</span>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">Download</a>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">Stamp</a>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">Animate</a>
+    <a href="#" style="height:56px;display:grid;place-items:center;color:inherit;text-decoration:none;font-size:11px;opacity:.7">PDF</a>
+  </nav>
+  <main style="display:flex;flex-direction:column;min-width:0">
+    <header style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:2px solid var(--color-divider);font-size:13px"><span><span style="opacity:.55">Create /</span> <strong style="font-family:var(--font-heading)">Draw</strong></span><span style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:56px;height:22px;background:repeating-conic-gradient(#dad6d6 0 25%,#f3f2f2 0 50%) 0 0/12px 12px"></span>Drawn signature</span></header>
+    <div style="flex:1;position:relative;background:#201e1d;background-image:radial-gradient(rgba(243,242,242,.18) 1px,transparent 1px);background-size:24px 24px">
+      <svg viewBox="0 0 1200 500" style="width:100%;height:100%;display:block;position:absolute;inset:0"><line x1="120" y1="360" x2="1080" y2="360" stroke="#f3f2f2" stroke-width="1.5" opacity=".45"></line><path d="M170 350 C210 180 250 150 260 260 C270 360 220 390 280 340 C350 280 380 190 420 230 C460 270 420 360 490 310 C560 260 580 190 640 240 C690 280 660 360 740 320 C810 280 850 230 900 260 C940 290 920 350 980 330 C1030 315 1040 300 1060 305" fill="none" stroke="#f3f2f2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <div style="position:absolute;left:20px;bottom:16px;display:flex;gap:24px;color:#f3f2f2;font-size:11px;letter-spacing:.08em;text-transform:uppercase"><span>Strokes <strong style="font-size:18px;letter-spacing:0;display:block;font-family:var(--font-heading)">03</strong></span><span>Pen <strong style="font-size:18px;letter-spacing:0;display:block;font-family:var(--font-heading)">4.0</strong></span><span>Ink <strong style="font-size:18px;letter-spacing:0;display:block;font-family:var(--font-heading)">#201E1D</strong></span></div>
+      <div style="position:absolute;top:12px;right:12px;display:flex;gap:2px;background:var(--color-bg);border:1px solid var(--color-divider);padding:2px"><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">↶</button><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">↷</button><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">✕</button></div>
+    </div>
+  </main>
+  <aside style="border-left:2px solid var(--color-divider);display:flex;flex-direction:column">
+    <div style="height:56px;display:flex;align-items:center;padding:0 16px;border-bottom:2px solid var(--color-divider);font-family:var(--font-heading);font-weight:800">Controls</div>
+    <div style="padding:14px 16px;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Ink</span><div style="display:flex;gap:8px"><span style="width:32px;height:32px;background:#201e1d;outline:2px solid var(--color-accent);outline-offset:2px"></span><span style="width:32px;height:32px;background:#1d3557"></span><span style="width:32px;height:32px;background:#2457c5"></span><span style="width:32px;height:32px;background:#ec3013"></span><span style="width:32px;height:32px;background:#1f6b3a"></span></div></div>
+    <div style="padding:14px 16px;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Pen</span><div class="seg"><span class="seg-opt">Fine</span><span class="seg-opt" style="background:var(--color-accent);color:var(--color-bg)">Medium</span><span class="seg-opt">Bold</span></div></div>
+    <div style="padding:14px 16px;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Transparent preview</span><div style="height:64px;background:repeating-conic-gradient(#dad6d6 0 25%,#f3f2f2 0 50%) 0 0/14px 14px;border:1px solid var(--color-divider)"></div></div>
+    <div style="padding:14px 16px;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:8px"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.6">Download</span><div style="display:flex;gap:6px"><span class="tag tag-outline">PNG</span><span class="tag tag-outline">SVG</span><span class="tag tag-outline">Copy</span></div></div>
+    <div style="margin-top:auto;padding:16px;border-top:2px solid var(--color-divider)"><button type="button" class="btn btn-primary btn-block" style="margin:0">Use this signature →</button></div>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:800}}"></script>
+</body>
+</html>

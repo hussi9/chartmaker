@@ -1,7 +1,7 @@
 {
   "short_name": "ChartGenie",
-  "name": "ChartGenie - Instant AI Chart & Viral Infographic Maker",
-  "description": "Create publication-ready viral pie charts, bar graphs, and line graphs with instant AI ingestion, vector SVG and 4K Retina PNG export.",
+  "name": "ChartGenie - Chart Maker",
+  "description": "Create charts from your own numbers and export PNG or SVG.",
   "start_url": "/",
   "id": "/",
   "display": "standalone",

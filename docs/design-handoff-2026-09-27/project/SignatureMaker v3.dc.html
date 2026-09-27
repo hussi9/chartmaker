@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-d72ea4e2-3167-4e12-aa96-1a77206dd85e/styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Alex+Brush&family=Pinyon+Script&family=Tangerine:wght@700&family=Parisienne&family=Sacramento&family=Kaushan+Script&family=Satisfy&family=Homemade+Apple&family=Reenie+Beanie&family=Caveat:wght@600&display=swap">
+<style>
+body{margin:0}
+.sm-app{min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:15px;line-height:1.5}
+.sm-app[data-theme="dark"]{--color-bg:#1b1918;--color-surface:#282524;--color-text:#f3f2f2;--color-divider:color-mix(in srgb,#f3f2f2 32%,transparent);--color-neutral-100:#332f2e;--color-neutral-800:#eae7e7;--color-accent-100:#4d170e;--color-accent-800:#ffc4b8;--shadow-sm:0 1px 2px rgba(0,0,0,.5);--shadow-md:0 3px 10px rgba(0,0,0,.5);--shadow-lg:0 12px 32px rgba(0,0,0,.6)}
+.sm-root{display:flex;flex-direction:column;min-height:100vh}
+.sm-app[data-vp="mobile"] .sm-root{max-width:390px;margin:0 auto;border-inline:2px solid var(--color-divider)}
+.sm-groups{display:flex;gap:var(--space-6);padding:var(--space-2) var(--space-4);border-bottom:2px solid var(--color-divider);flex-wrap:wrap;align-items:center}
+.sm-group{display:flex;align-items:center;gap:var(--space-3)}
+.sm-glabel{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;min-width:44px}
+.seg-opt{background:transparent;border:0;font:inherit;font-size:13px;color:inherit;min-height:36px}
+.seg-opt[aria-pressed="true"]{background:var(--color-accent);color:var(--color-bg)}
+.sm-work{display:grid;grid-template-columns:minmax(0,1fr) 340px;flex:1;min-height:0}
+.sm-stage{padding:var(--space-4);border-right:2px solid var(--color-divider);display:flex;flex-direction:column;gap:var(--space-3);min-width:0}
+.sm-panel{padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-4)}
+.sm-actions{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-top:auto;padding-top:var(--space-4);border-top:2px solid var(--color-divider)}
+.sm-h{font-family:var(--font-heading);font-weight:800;font-size:20px;line-height:1.15;margin:0;letter-spacing:-.015em}
+.sm-lbl{display:block;font-size:12px;margin-bottom:5px;color:color-mix(in srgb,var(--color-text) 70%,transparent)}
+.sm-checker{background-color:#f3f2f2;background-image:linear-gradient(45deg,#dad6d6 25%,transparent 25%,transparent 75%,#dad6d6 75%),linear-gradient(45deg,#dad6d6 25%,transparent 25%,transparent 75%,#dad6d6 75%);background-size:16px 16px;background-position:0 0,8px 8px}
+.sm-fontbtn > span:first-child{background:#f3f2f2;padding:2px 6px;margin:-4px -6px 0}
+.sm-swatch{width:32px;height:32px;border:1px solid var(--color-divider);cursor:pointer;padding:0}
+.sm-swatch[aria-pressed="true"]{outline:2px solid var(--color-accent);outline-offset:2px}
+.sm-fontgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)}
+.sm-fontbtn{border:1px solid var(--color-divider);background:var(--color-surface);color:inherit;min-height:64px;padding:var(--space-2) var(--space-3);cursor:pointer;text-align:left;display:flex;flex-direction:column;justify-content:space-between;gap:4px;overflow:hidden;position:relative}
+.sm-fontbtn:hover{border-color:var(--color-text)}
+.sm-fontbtn[aria-pressed="true"]{border-color:var(--color-accent);box-shadow:inset 0 0 0 1px var(--color-accent)}
+.sm-posgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:132px}
+.sm-pos{height:36px;border:1px solid var(--color-divider);background:var(--color-surface);cursor:pointer;color:inherit;font-size:11px}
+.sm-pos[aria-pressed="true"]{background:var(--color-accent);color:var(--color-bg);border-color:var(--color-accent)}
+.sm-pos:disabled{opacity:0;pointer-events:none}
+.sm-range{width:100%;accent-color:var(--color-accent);margin:0;height:28px}
+.sm-drop{border:2px dashed var(--color-divider);padding:var(--space-8) var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start;cursor:pointer;background:var(--color-surface)}
+.sm-drop:hover{border-color:var(--color-accent)}
+.sm-drop input{position:absolute;opacity:0;width:0;height:0}
+.sm-note{font-size:12px;color:color-mix(in srgb,var(--color-text) 62%,transparent);margin:0;max-width:52ch;text-wrap:pretty}
+.sm-alert{border-left:0;border:1px solid var(--color-accent);padding:var(--space-3);font-size:13px;display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start}
+.sm-ok{border:1px solid var(--color-divider);background:var(--color-surface);padding:var(--space-3);font-size:13px;display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start}
+.sm-tabbar{display:none}
+.sm-footer{display:flex;gap:var(--space-4) var(--space-6);flex-wrap:wrap;padding:var(--space-4);border-top:2px solid var(--color-divider);font-size:13px;align-items:baseline}
+.sm-footer a{color:inherit;text-decoration:none}
+.sm-footer a:hover{color:var(--color-accent)}
+.sm-chip{display:flex;align-items:center;gap:var(--space-2);border:1px solid var(--color-divider);padding:3px 10px 3px 3px;font-size:12px;background:transparent;color:inherit;cursor:pointer;font-family:inherit}
+.sm-chip:hover{border-color:var(--color-accent)}
+.sm-bar{height:6px;background:var(--color-surface);border:1px solid var(--color-divider);width:100%}
+.sm-bar > div{height:100%;background:var(--color-accent);transition:width .1s linear}
+.sm-page{padding:var(--space-8) var(--space-4);max-width:720px;display:flex;flex-direction:column;gap:var(--space-4)}
+.sm-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--color-text);color:var(--color-bg);padding:var(--space-2) var(--space-4);font-size:13px;box-shadow:var(--shadow-lg);z-index:20;max-width:90vw}
+input[type="checkbox"]{accent-color:var(--color-accent);width:16px;height:16px}
+@keyframes smReveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes smSpin{to{transform:rotate(360deg)}}
+@media (max-width:760px){
+.sm-app:not([data-vp="desktop"]) .sm-chiptext{display:none}
+.sm-app:not([data-vp="desktop"]) .sm-group[data-active="false"]{display:none}
+.sm-app:not([data-vp="desktop"]) .sm-glabel{display:none}
+.sm-app:not([data-vp="desktop"]) .sm-group,.sm-app:not([data-vp="desktop"]) .sm-group .seg{width:100%}
+.sm-app:not([data-vp="desktop"]) .seg-opt{flex:1;justify-content:center;min-height:44px}
+.sm-app:not([data-vp="desktop"]) .sm-work{grid-template-columns:minmax(0,1fr)}
+.sm-app:not([data-vp="desktop"]) .sm-stage{border-right:0;border-bottom:2px solid var(--color-divider)}
+.sm-app:not([data-vp="desktop"]) .sm-tabbar{display:flex;position:sticky;bottom:0;background:var(--color-bg);border-top:2px solid var(--color-divider);z-index:5}
+.sm-app:not([data-vp="desktop"]) .sm-fontgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sm-app:not([data-vp="desktop"]) .sm-nav{padding:var(--space-2) var(--space-3)}
+.sm-app:not([data-vp="desktop"]) .sm-scan2{grid-template-columns:1fr}
+}
+.sm-app[data-vp="mobile"] .sm-chiptext{display:none}
+.sm-app[data-vp="mobile"] .sm-group[data-active="false"]{display:none}
+.sm-app[data-vp="mobile"] .sm-glabel{display:none}
+.sm-app[data-vp="mobile"] .sm-group,.sm-app[data-vp="mobile"] .sm-group .seg{width:100%}
+.sm-app[data-vp="mobile"] .seg-opt{flex:1;justify-content:center;min-height:44px}
+.sm-app[data-vp="mobile"] .sm-work{grid-template-columns:minmax(0,1fr)}
+.sm-app[data-vp="mobile"] .sm-stage{border-right:0;border-bottom:2px solid var(--color-divider)}
+.sm-app[data-vp="mobile"] .sm-tabbar{display:flex;position:sticky;bottom:0;background:var(--color-bg);border-top:2px solid var(--color-divider);z-index:5}
+.sm-app[data-vp="mobile"] .sm-fontgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.sm-app[data-vp="mobile"] .sm-nav{padding:var(--space-2) var(--space-3)}
+.sm-app[data-vp="mobile"] .sm-scan2{grid-template-columns:1fr}
+.sm-menu{position:absolute;right:0;top:calc(100% + 4px);min-width:250px;background:var(--color-bg);border:1px solid var(--color-divider);box-shadow:var(--shadow-lg);z-index:10;display:flex;flex-direction:column}
+.sm-mi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;background:transparent;border:0;border-bottom:1px solid var(--color-divider);color:inherit;font:inherit;font-size:13px;text-align:left;cursor:pointer;min-height:44px;width:100%}
+.sm-mi:last-child{border-bottom:0}
+.sm-mi:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.sm-mi small{font-size:11px;opacity:.65}
+.sm-cvtools{position:absolute;top:8px;right:8px;display:flex;gap:2px;background:var(--color-bg);border:1px solid var(--color-divider);padding:2px}
+.sm-cvtools .btn{border-color:transparent}
+.sm-drop[data-over="true"]{border-color:var(--color-accent);background:var(--color-accent-100)}
+.sm-arrow{opacity:.45;display:flex;align-items:center}
+@media (max-width:760px){.sm-app:not([data-vp="desktop"]) .sm-actions{position:sticky;bottom:62px;background:var(--color-bg);padding-bottom:var(--space-3);z-index:4}.sm-app:not([data-vp="desktop"]) .sm-arrow{display:none}}
+.sm-app[data-vp="mobile"] .sm-actions{position:sticky;bottom:62px;background:var(--color-bg);padding-bottom:var(--space-3);z-index:4}
+.sm-app[data-vp="mobile"] .sm-arrow{display:none}
+.sm-root{display:grid;grid-template-columns:72px minmax(0,1fr);min-height:100vh}
+.sm-main{display:flex;flex-direction:column;min-height:100vh;min-width:0}
+.sm-rail{border-right:2px solid var(--color-divider);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;background:var(--color-bg)}
+.sm-railbrand{height:56px;display:grid;place-items:center;border-bottom:2px solid var(--color-divider)}
+.sm-raillbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;opacity:.55;padding:12px 0 4px;text-align:center}
+.sm-railbtn{height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:transparent;border:0;color:inherit;font:inherit;font-size:10px;cursor:pointer;opacity:.75}
+.sm-railbtn:hover{opacity:1;background:color-mix(in srgb,var(--color-text) 6%,transparent)}
+.sm-railbtn[aria-pressed="true"]{opacity:1;background:var(--color-surface);box-shadow:inset 3px 0 0 var(--color-accent);font-weight:800;font-family:var(--font-heading)}
+.sm-top{height:56px;display:flex;align-items:center;gap:var(--space-3);padding:0 var(--space-4);border-bottom:2px solid var(--color-divider);font-size:13px}
+.sm-crumb{margin-right:auto;display:flex;gap:6px;align-items:baseline;min-width:0}
+.sm-crumb b{font-family:var(--font-heading);font-weight:800;font-size:15px}
+.sm-groups{display:none}
+.sm-stage{background:var(--color-surface);align-items:center;padding:var(--space-8) var(--space-6)}
+.sm-stage > *{width:100%;max-width:820px}
+.sm-sheet{background:#fff;box-shadow:var(--shadow-lg);color:#201e1d}
+.sm-panel{padding:0;gap:0}
+.sm-panel > *{padding:14px 16px;border-bottom:1px solid var(--color-divider);margin:0}
+.sm-panel > .sm-actions{margin-top:auto;border-bottom:0;border-top:2px solid var(--color-divider);padding:16px}
+.sm-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.sm-h{font-size:24px}
+.sm-fontbtn,.sm-drop{background:var(--color-bg)}
+@media (max-width:760px){.sm-app:not([data-vp="desktop"]) .sm-rail{display:none}.sm-app:not([data-vp="desktop"]) .sm-root{grid-template-columns:minmax(0,1fr)}.sm-app:not([data-vp="desktop"]) .sm-groups{display:flex}.sm-app:not([data-vp="desktop"]) .sm-stage{padding:var(--space-4)}}
+@media (max-width:760px){.sm-app:not([data-vp="desktop"]) .sm-menu{left:0;right:auto}}
+.sm-app[data-vp="mobile"] .sm-menu{left:0;right:auto}
+.sm-app[data-vp="mobile"] .sm-rail{display:none}
+.sm-app[data-vp="mobile"] .sm-root{grid-template-columns:minmax(0,1fr)}
+.sm-app[data-vp="mobile"] .sm-groups{display:flex}
+.sm-app[data-vp="mobile"] .sm-stage{padding:var(--space-4)}
+.sm-tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0 8px;background:transparent;border:0;color:inherit;font:inherit;font-size:12px;cursor:pointer;min-height:44px}
+.sm-tabbtn[aria-pressed="true"]{color:var(--color-accent);box-shadow:inset 0 2px 0 var(--color-accent)}
+</style>
+</helmet>
+<div class="sm-app" data-vp="{{ vp }}" data-theme="{{ theme }}">
+<div class="sm-root">
+<nav class="sm-rail" aria-label="Stages">
+  <div class="sm-railbrand" title="SignatureMaker"><span style="width:28px;height:28px;background:var(--color-accent);color:var(--color-bg);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:15px">S</span></div>
+  <span class="sm-raillbl">Create</span>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ mDraw }}" onClick="{{ onAct }}" data-act="create" data-val="draw"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Draw</button>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ mType }}" onClick="{{ onAct }}" data-act="create" data-val="type"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg>Type</button>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ mScan }}" onClick="{{ onAct }}" data-act="create" data-val="scan"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"></path></svg>Scan</button>
+  <div class="hr" style="margin:8px 12px"></div>
+  <span class="sm-raillbl" style="padding-top:4px">Use</span>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ oDownload }}" onClick="{{ onAct }}" data-act="use" data-val="download"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download</button>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ oStamp }}" onClick="{{ onAct }}" data-act="use" data-val="stamp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L5 21"></path></svg>Stamp</button>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ oAnimate }}" onClick="{{ onAct }}" data-act="use" data-val="animate"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16"></rect><path d="M2 9h20M7 4v16M17 4v16"></path></svg>Animate</button>
+  <button type="button" class="sm-railbtn" aria-pressed="{{ oPdf }}" onClick="{{ onAct }}" data-act="use" data-val="pdf"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M8 15h8M8 11h3"></path></svg>PDF</button>
+</nav>
+<div class="sm-main">
+<header class="sm-top">
+  <span class="sm-crumb"><span style="opacity:.55">{{ crumbStage }} /</span><b>{{ crumbScreen }}</b></span>
+  <button type="button" class="sm-chip" onClick="{{ onAct }}" data-act="chip" title="Current signature">
+    <span class="sm-checker" style="width:56px;height:24px;display:flex;align-items:center;justify-content:center;overflow:hidden">{{ chipSig }}</span>
+    <span class="sm-chiptext">{{ chipText }}</span>
+  </button>
+  <button type="button" class="btn btn-secondary btn-icon" onClick="{{ onAct }}" data-act="theme" aria-label="Toggle light and dark theme">
+    <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path></svg></sc-if>
+    <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></sc-if>
+  </button>
+</header>
+<div class="sm-groups">
+  <div class="sm-group" data-active="{{ createActive }}">
+    <span class="sm-glabel">Create</span>
+    <div class="seg" role="group" aria-label="Signature input method">
+      <button type="button" class="seg-opt" aria-pressed="{{ mDraw }}" onClick="{{ onAct }}" data-act="create" data-val="draw"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Draw</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ mType }}" onClick="{{ onAct }}" data-act="create" data-val="type"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"></path></svg>Type</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ mScan }}" onClick="{{ onAct }}" data-act="create" data-val="scan"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 12h10"></path></svg>Scan</button>
+    </div>
+  </div>
+  <span class="sm-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+  <div class="sm-group" data-active="{{ useActive }}">
+    <span class="sm-glabel">Use</span>
+    <div class="seg" role="group" aria-label="Signature output">
+      <button type="button" class="seg-opt" aria-pressed="{{ oDownload }}" onClick="{{ onAct }}" data-act="use" data-val="download">Download</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ oStamp }}" onClick="{{ onAct }}" data-act="use" data-val="stamp">Stamp</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ oAnimate }}" onClick="{{ onAct }}" data-act="use" data-val="animate">Animate</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ oPdf }}" onClick="{{ onAct }}" data-act="use" data-val="pdf">PDF</button>
+    </div>
+  </div>
+</div>
+<main style="flex:1;display:flex;flex-direction:column">
+
+<sc-if value="{{ isDraw }}" hint-placeholder-val="{{ true }}">
+<section class="sm-work" data-screen-label="Create · Draw">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap"><div style="display:flex;flex-direction:column"><h2 class="sm-h">Draw your signature</h2><span class="sm-note">{{ drawStatus }}</span></div>
+      <div style="position:relative"><button type="button" class="btn btn-secondary" disabled="{{ draftEmpty }}" aria-haspopup="menu" aria-expanded="{{ menuOpen }}" onClick="{{ onAct }}" data-act="menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><div class="sm-menu" role="menu">
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="png">Transparent PNG<small>Best for documents and graphics</small></button>
+          <sc-if value="{{ svgOkDraft }}" hint-placeholder-val="{{ true }}"><button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="svg">{{ svgLabelDraft }}<small>{{ svgHintDraft }}</small></button></sc-if>
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="copy">Copy PNG<small>Paste straight into any app</small></button>
+        </div></sc-if></div></div>
+    <div class="sm-sheet" style="position:relative;aspect-ratio:2/1;touch-action:none;user-select:none">
+      <div class="sm-cvtools">
+        <button type="button" class="btn btn-secondary btn-icon" aria-label="Undo (⌘Z)" title="Undo · ⌘Z" disabled="{{ noUndo }}" onClick="{{ onAct }}" data-act="undo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"></path><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"></path></svg></button>
+        <button type="button" class="btn btn-secondary btn-icon" aria-label="Redo (⇧⌘Z)" title="Redo · ⇧⌘Z" disabled="{{ noRedo }}" onClick="{{ onAct }}" data-act="redo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14 5-5-5-5"></path><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"></path></svg></button>
+        <button type="button" class="btn btn-secondary btn-icon" aria-label="Clear canvas" title="Clear" disabled="{{ noUndo }}" onClick="{{ onAct }}" data-act="clear"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg></button>
+      </div>
+      <svg ref="{{ svgRef }}" viewBox="0 0 800 400" preserveAspectRatio="none" style="width:100%;height:100%;display:block;cursor:crosshair" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerCancel="{{ onUp }}">
+        <line x1="60" y1="300" x2="740" y2="300" stroke="#201e1d" stroke-opacity="0.7" stroke-width="1.5"></line><text x="60" y="326" font-size="11" fill="#201e1d" opacity="0.5" font-family="Archivo, system-ui, sans-serif" letter-spacing="1.5">SIGNATURE</text>
+        <sc-for list="{{ drawPaths }}" as="p" hint-placeholder-count="0"><path d="{{ p.d }}" stroke="{{ p.color }}" stroke-width="{{ p.w }}" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></sc-for>
+      </svg>
+      <sc-if value="{{ drawEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:0 0 40% 0;display:flex;flex-direction:column;justify-content:center;padding:var(--space-6) 7.5%;pointer-events:none;gap:4px;color:#201e1d">
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:17px">Sign on the line</span>
+          <span class="sm-note" style="color:rgba(32,30,29,.62)">Use your mouse, finger or stylus (pressure changes the line weight). Lift to finish a stroke; sign again to add more.</span>
+        </div>
+      </sc-if>
+    </div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-3);align-items:end">
+      <div>
+        <span class="sm-lbl">Transparent preview</span>
+        <div class="sm-checker" style="height:96px;border:1px solid var(--color-divider);padding:8px">{{ drawPreview }}</div>
+      </div>
+    </div>
+  </div>
+  <aside class="sm-panel" aria-label="Drawing controls">
+    <div><span class="sm-lbl">Ink colour</span>
+      <div style="display:flex;gap:var(--space-2)"><sc-for list="{{ drawInks }}" as="k" hint-placeholder-count="5"><button type="button" class="sm-swatch" style="{{ k.style }}" aria-pressed="{{ k.on }}" aria-label="{{ k.n }}" title="{{ k.n }}" onClick="{{ onAct }}" data-act="ink" data-val="{{ k.v }}"></button></sc-for></div>
+    </div>
+    <div><span class="sm-lbl">Pen thickness</span>
+      <div class="seg" role="group" aria-label="Pen thickness">
+        <button type="button" class="seg-opt" aria-pressed="{{ penFine }}" onClick="{{ onAct }}" data-act="pen" data-val="2">Fine</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ penMed }}" onClick="{{ onAct }}" data-act="pen" data-val="4">Medium</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ penBold }}" onClick="{{ onAct }}" data-act="pen" data-val="7">Bold</button>
+      </div>
+    </div>
+    <p class="sm-note">Undo, redo and clear sit on the canvas. ⌘Z / ⇧⌘Z work too.</p>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ drawEmpty }}" onClick="{{ onAct }}" data-act="continue">{{ continueLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+      <p class="sm-note" style="flex-basis:100%">{{ continueHint }}</p>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isType }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Create · Type">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap"><div style="display:flex;flex-direction:column"><h2 class="sm-h">Type your signature</h2><span class="sm-note">{{ typeStatus }}</span></div>
+      <div style="position:relative"><button type="button" class="btn btn-secondary" disabled="{{ draftEmpty }}" aria-haspopup="menu" aria-expanded="{{ menuOpen }}" onClick="{{ onAct }}" data-act="menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><div class="sm-menu" role="menu">
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="png">Transparent PNG<small>Best for documents and graphics</small></button>
+          <sc-if value="{{ svgOkDraft }}" hint-placeholder-val="{{ true }}"><button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="svg">{{ svgLabelDraft }}<small>{{ svgHintDraft }}</small></button></sc-if>
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="copy">Copy PNG<small>Paste straight into any app</small></button>
+        </div></sc-if></div></div>
+    <div class="sm-sheet" style="aspect-ratio:3/1;min-height:180px;display:flex;align-items:center;justify-content:center;padding:var(--space-4);overflow:hidden;position:relative">{{ typePreview }}<span style="position:absolute;left:16px;bottom:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.5">Transparent PNG · shown on paper</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap">
+      <div class="seg" role="group" aria-label="Font category" style="flex-wrap:wrap"><sc-for list="{{ fontCats }}" as="c" hint-placeholder-count="5"><button type="button" class="seg-opt" aria-pressed="{{ c.on }}" onClick="{{ onAct }}" data-act="fontCat" data-val="{{ c.id }}">{{ c.id }}</button></sc-for></div>
+      <span class="sm-note" style="font-size:11px">{{ fontCatBlurb }}</span>
+    </div>
+    <div class="sm-fontgrid">
+      <sc-for list="{{ fontList }}" as="f" hint-placeholder-count="12">
+        <button type="button" class="sm-fontbtn" aria-pressed="{{ f.on }}" onClick="{{ onAct }}" data-act="font" data-val="{{ f.i }}">
+          <span style="{{ f.style }}">{{ f.sample }}</span>
+          <span style="display:flex;justify-content:space-between;font-size:11px;opacity:.7"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.name }}</span><span style="color:var(--color-accent);opacity:1">{{ f.onText }}</span></span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  <aside class="sm-panel" aria-label="Typing controls">
+    <div class="field"><label for="sm-name">Name or initials</label><input class="input" id="sm-name" placeholder="e.g. Maya Okafor" value="{{ typeText }}" onInput="{{ onField }}" data-field="type.text" autocomplete="off"></div>
+    <div><span class="sm-lbl">Ink colour</span>
+      <div style="display:flex;gap:var(--space-2)"><sc-for list="{{ typeInks }}" as="k" hint-placeholder-count="5"><button type="button" class="sm-swatch" style="{{ k.style }}" aria-pressed="{{ k.on }}" aria-label="{{ k.n }}" title="{{ k.n }}" onClick="{{ onAct }}" data-act="ink" data-val="{{ k.v }}"></button></sc-for></div>
+    </div>
+    <div><label class="sm-lbl" for="sm-size">Font size · {{ typeSize }} px</label><input class="sm-range" id="sm-size" type="range" min="36" max="140" value="{{ typeSize }}" onInput="{{ onField }}" data-field="type.size"></div>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ typeEmpty }}" onClick="{{ onAct }}" data-act="continue">{{ continueLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+      <p class="sm-note" style="flex-basis:100%">{{ continueHint }}</p>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isScan }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Create · Scan">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap"><div style="display:flex;flex-direction:column"><h2 class="sm-h">Scan a handwritten signature</h2><span class="sm-note">{{ scanStatus }}</span></div>
+      <div style="position:relative"><button type="button" class="btn btn-secondary" disabled="{{ draftEmpty }}" aria-haspopup="menu" aria-expanded="{{ menuOpen }}" onClick="{{ onAct }}" data-act="menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg></button>
+        <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}"><div class="sm-menu" role="menu">
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="png">Transparent PNG<small>Scans download as PNG only</small></button>
+          <button type="button" class="sm-mi" role="menuitem" onClick="{{ onAct }}" data-act="qdl" data-val="copy">Copy PNG<small>Paste straight into any app</small></button>
+        </div></sc-if></div></div>
+    <sc-if value="{{ scanEmpty }}" hint-placeholder-val="{{ true }}">
+      <label class="sm-drop" data-over="{{ dragOver }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDropScan }}" style="position:relative;min-height:220px;justify-content:center">
+        <input type="file" accept="image/png,image/jpeg" onChange="{{ onScanFile }}">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:17px">Choose a photo of your signature</span>
+        <span class="sm-note">Drop a PNG or JPEG here, or choose one. Sign on white paper in dark ink, photograph it in even light, and we'll remove the paper so only the ink is left.</span>
+        <span class="btn btn-secondary" style="margin-top:var(--space-2)">Choose photo</span>
+      </label>
+    </sc-if>
+    <sc-if value="{{ scanHas }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-scan2" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)">
+        <div><span class="sm-lbl">Original</span><div style="border:1px solid var(--color-divider);background:var(--color-surface);aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;overflow:hidden">{{ scanOriginal }}</div></div>
+        <div><span class="sm-lbl">Cleaned · transparent PNG</span><div class="sm-checker" style="border:1px solid var(--color-divider);aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:12px">{{ scanPreview }}</div></div>
+      </div>
+      <p class="sm-note">This is image clean-up: light paper becomes transparent and the ink stays as it was photographed. It doesn't trace or redraw your signature.</p>
+    </sc-if>
+    <sc-if value="{{ scanError }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-alert" role="alert"><strong>{{ scanErrorTitle }}</strong><span>{{ scanErrorText }}</span>
+        <label class="btn btn-secondary" style="position:relative;cursor:pointer"><input type="file" accept="image/png,image/jpeg" onChange="{{ onScanFile }}" style="position:absolute;opacity:0;width:0;height:0">Choose another file</label></div>
+    </sc-if>
+  </div>
+  <aside class="sm-panel" aria-label="Scan controls">
+    <div><span class="sm-lbl">Photo</span><div style="font-size:13px;display:flex;justify-content:space-between;gap:var(--space-2);align-items:center"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ scanName }}</span>
+      <sc-if value="{{ scanHas }}" hint-placeholder-val="{{ false }}"><label class="btn btn-ghost" style="position:relative;cursor:pointer;flex:none"><input type="file" accept="image/png,image/jpeg" onChange="{{ onScanFile }}" style="position:absolute;opacity:0;width:0;height:0">Replace photo</label></sc-if></div></div>
+    <div><label class="sm-lbl" for="sm-thr">Paper removal · {{ scanThreshold }}</label><input class="sm-range" id="sm-thr" type="range" min="10" max="95" value="{{ scanThreshold }}" disabled="{{ scanEmpty }}" onInput="{{ onField }}" data-field="scan.threshold"><p class="sm-note">Raise it if paper texture or shadows remain; lower it if thin strokes disappear.</p></div>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ scanNotReady }}" onClick="{{ onAct }}" data-act="continue">{{ continueLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+      <p class="sm-note" style="flex-basis:100%">{{ continueHint }}</p>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isMissing }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Use · Missing signature">
+  <div class="sm-stage" style="justify-content:center">
+    <div class="sm-checker" style="border:1px solid var(--color-divider);height:160px;display:flex;align-items:center;justify-content:center"><span class="sm-note" style="font-size:14px">No signature yet</span></div>
+  </div>
+  <aside class="sm-panel">
+    <div><h2 class="sm-h">{{ outputLabel }} needs a signature first</h2><p class="sm-note" style="margin-top:var(--space-2)">Make one in a minute, then we'll bring you straight back here. Anything you set up on this screen is kept.</p></div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start">
+      <button type="button" class="btn btn-primary" onClick="{{ onAct }}" data-act="createFor" data-val="type">Type it — fastest</button>
+      <button type="button" class="btn btn-secondary" onClick="{{ onAct }}" data-act="createFor" data-val="draw">Draw it</button>
+      <button type="button" class="btn btn-secondary" onClick="{{ onAct }}" data-act="createFor" data-val="scan">Scan a photo of it</button>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isDownload }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Use · Download">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3);flex-wrap:wrap"><h2 class="sm-h">Download</h2><span class="sm-note">{{ curDesc }}</span></div>
+    <div class="sm-checker" style="border:1px solid var(--color-divider);flex:1;min-height:260px;display:flex;align-items:center;justify-content:center;padding:var(--space-6)"><div style="width:100%;max-width:640px;height:220px">{{ bigSig }}</div></div>
+  </div>
+  <aside class="sm-panel">
+    <div><span class="sm-lbl">Format</span>
+      <div style="display:flex;flex-direction:column;gap:var(--space-2);align-items:flex-start">
+        <button type="button" class="btn btn-primary" disabled="{{ dlBusy }}" onClick="{{ onAct }}" data-act="dl" data-val="png"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Transparent PNG</button>
+        <sc-if value="{{ svgOk }}" hint-placeholder-val="{{ true }}"><button type="button" class="btn btn-secondary" disabled="{{ dlBusy }}" onClick="{{ onAct }}" data-act="dl" data-val="svg">{{ svgLabel }}</button></sc-if>
+        <button type="button" class="btn btn-secondary" disabled="{{ dlBusy }}" onClick="{{ onAct }}" data-act="dl" data-val="copy">Copy PNG to clipboard</button>
+      </div>
+      <p class="sm-note" style="margin-top:var(--space-2)">{{ svgNote }}</p>
+    </div>
+    <sc-if value="{{ dlBusy }}" hint-placeholder-val="{{ false }}"><div class="sm-ok"><span style="display:flex;gap:8px;align-items:center"><span style="width:12px;height:12px;border:2px solid var(--color-accent);border-right-color:transparent;border-radius:50%;animation:smSpin .8s linear infinite"></span>Preparing {{ dlFile }}…</span></div></sc-if>
+    <sc-if value="{{ dlDone }}" hint-placeholder-val="{{ false }}"><div class="sm-ok" role="status"><strong>Saved {{ dlFile }}</strong><span>Check your downloads folder. The background is transparent, so it sits cleanly on any colour.</span></div></sc-if>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-secondary" onClick="{{ onAct }}" data-act="edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Edit signature</button>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isStamp }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Use · Stamp a graphic">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3);flex-wrap:wrap"><h2 class="sm-h">Stamp a graphic</h2><span class="sm-note">{{ curDesc }}</span></div>
+    <sc-if value="{{ stampEmpty }}" hint-placeholder-val="{{ true }}">
+      <label class="sm-drop" data-over="{{ dragOver }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDropStamp }}" style="position:relative;min-height:240px;justify-content:center">
+        <input type="file" accept="image/png,image/jpeg,image/webp" onChange="{{ onStampFile }}">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:17px">Choose a graphic to sign</span>
+        <span class="sm-note">A poster, a photo, a thumbnail — any PNG, JPEG or WebP. Your signature is placed on top and you download the result.</span>
+        <span style="display:flex;gap:var(--space-2);margin-top:var(--space-2)"><span class="btn btn-secondary">Choose graphic</span></span>
+      </label>
+      <button type="button" class="btn btn-ghost" style="align-self:flex-start" onClick="{{ onAct }}" data-act="stampSample">Or try it on a sample photo</button>
+    </sc-if>
+    <sc-if value="{{ stampHas }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;border:1px solid var(--color-divider);background:var(--color-surface);overflow:hidden;line-height:0;align-self:flex-start;max-width:100%">
+        {{ stampImage }}
+        <div style="{{ stampSigStyle }}">
+          <div style="{{ stampPlateStyle }}"><div style="width:100%;height:100%">{{ stampSig }}</div></div>
+          <sc-if value="{{ stampBadge }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ badgeStyle }}"><span style="{{ badgeInitialStyle }}">{{ badgeInitial }}</span><span style="display:flex;flex-direction:column;line-height:1.25"><span style="font-weight:800;font-family:var(--font-heading)">{{ badgeName }}</span><span style="opacity:.75">{{ badgeHandle }}</span></span></div>
+          </sc-if>
+        </div>
+      </div>
+      <p class="sm-note">{{ stampImgName }} · live preview at screen size; the download uses the graphic's full resolution.</p>
+    </sc-if>
+  </div>
+  <aside class="sm-panel">
+    <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--space-4)">
+      <div><span class="sm-lbl">Position</span>
+        <div class="sm-posgrid" role="group" aria-label="Signature position">
+          <button type="button" class="sm-pos" aria-pressed="{{ posTl }}" onClick="{{ onAct }}" data-act="stampPos" data-val="tl" aria-label="Top left">TL</button><button type="button" class="sm-pos" disabled="true" tabindex="-1" aria-hidden="true"></button><button type="button" class="sm-pos" aria-pressed="{{ posTr }}" onClick="{{ onAct }}" data-act="stampPos" data-val="tr" aria-label="Top right">TR</button>
+          <button type="button" class="sm-pos" disabled="true" tabindex="-1" aria-hidden="true"></button><button type="button" class="sm-pos" aria-pressed="{{ posC }}" onClick="{{ onAct }}" data-act="stampPos" data-val="c" aria-label="Centre">C</button><button type="button" class="sm-pos" disabled="true" tabindex="-1" aria-hidden="true"></button>
+          <button type="button" class="sm-pos" aria-pressed="{{ posBl }}" onClick="{{ onAct }}" data-act="stampPos" data-val="bl" aria-label="Bottom left">BL</button><button type="button" class="sm-pos" disabled="true" tabindex="-1" aria-hidden="true"></button><button type="button" class="sm-pos" aria-pressed="{{ posBr }}" onClick="{{ onAct }}" data-act="stampPos" data-val="br" aria-label="Bottom right">BR</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+        <div><label class="sm-lbl" for="sm-sscale">Scale · {{ stampScale }}%</label><input class="sm-range" id="sm-sscale" type="range" min="10" max="70" value="{{ stampScale }}" onInput="{{ onField }}" data-field="stamp.scale"></div>
+        <div><label class="sm-lbl" for="sm-sop">Opacity · {{ stampOpacity }}%</label><input class="sm-range" id="sm-sop" type="range" min="20" max="100" value="{{ stampOpacity }}" onInput="{{ onField }}" data-field="stamp.opacity"></div>
+      </div>
+    </div>
+    <div><span class="sm-lbl">Contrast</span>
+      <div class="seg" role="group" aria-label="Contrast treatment">
+        <button type="button" class="seg-opt" aria-pressed="{{ conAuto }}" onClick="{{ onAct }}" data-act="stampContrast" data-val="auto">Auto</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ conNone }}" onClick="{{ onAct }}" data-act="stampContrast" data-val="none">None</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ conLight }}" onClick="{{ onAct }}" data-act="stampContrast" data-val="light">Light plate</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ conDark }}" onClick="{{ onAct }}" data-act="stampContrast" data-val="dark">Dark plate</button>
+      </div>
+      <p class="sm-note" style="margin-top:6px">{{ contrastNote }}</p>
+    </div>
+    <div>
+      <label style="display:flex;gap:8px;align-items:center;font-size:14px;cursor:pointer;min-height:32px"><input type="checkbox" checked="{{ stampBadge }}" onChange="{{ onField }}" data-field="stamp.badge">Add a creator badge</label>
+      <sc-if value="{{ stampBadge }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);margin-top:var(--space-2)">
+          <div class="field"><label for="sm-bname">Name</label><input class="input" id="sm-bname" placeholder="Maya Okafor" value="{{ badgeNameRaw }}" onInput="{{ onField }}" data-field="stamp.badgeName"></div>
+          <div class="field"><label for="sm-bhandle">Handle</label><input class="input" id="sm-bhandle" placeholder="@maya.makes" value="{{ badgeHandleRaw }}" onInput="{{ onField }}" data-field="stamp.badgeHandle"></div>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ stampMsg }}" hint-placeholder-val="{{ false }}"><div class="sm-ok" role="status">{{ stampMsg }}</div></sc-if>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ stampEmpty }}" onClick="{{ onAct }}" data-act="stampDownload"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download PNG</button>
+      <button type="button" class="btn btn-secondary" disabled="{{ stampEmpty }}" onClick="{{ onAct }}" data-act="stampCopy">Copy image</button>
+      <sc-if value="{{ stampHas }}" hint-placeholder-val="{{ false }}"><label class="btn btn-ghost" style="position:relative;cursor:pointer"><input type="file" accept="image/png,image/jpeg,image/webp" onChange="{{ onStampFile }}" style="position:absolute;opacity:0;width:0;height:0">Replace graphic</label></sc-if>
+      <button type="button" class="btn btn-ghost" onClick="{{ onAct }}" data-act="edit">Edit signature</button>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isAnimate }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Use · Animate">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3);flex-wrap:wrap"><h2 class="sm-h">Animate</h2><span class="sm-note">{{ curDesc }}</span></div>
+    <div style="display:flex;justify-content:center;background:var(--color-surface);border:1px solid var(--color-divider);padding:var(--space-3)">
+      <div class="{{ animFrameClass }}" style="{{ animFrameStyle }}">{{ animSig }}</div>
+    </div>
+    <div style="display:flex;gap:var(--space-2);align-items:center;flex-wrap:wrap">
+      <button type="button" class="btn btn-secondary btn-icon" aria-label="{{ playLabel }}" title="{{ playLabel }}" onClick="{{ onAct }}" data-act="animPlay">
+        <sc-if value="{{ animPlaying }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></sc-if>
+        <sc-if value="{{ animPaused }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"></path></svg></sc-if>
+      </button>
+      <button type="button" class="btn btn-secondary btn-icon" aria-label="Replay" title="Replay" onClick="{{ onAct }}" data-act="animReplay"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg></button>
+      <span class="sm-note">{{ animDesc }}</span>
+    </div>
+    <p class="sm-note">A left-to-right reveal of your signature image. It doesn't replay your pen strokes.</p>
+  </div>
+  <aside class="sm-panel">
+    <div><span class="sm-lbl">Style</span><div class="seg" role="group" aria-label="Style">
+      <button type="button" class="seg-opt" aria-pressed="{{ stClassic }}" onClick="{{ onAct }}" data-act="animStyle" data-val="classic">Classic</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ stGold }}" onClick="{{ onAct }}" data-act="animStyle" data-val="gold">Gold</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ stNeon }}" onClick="{{ onAct }}" data-act="animStyle" data-val="neon">Neon</button></div></div>
+    <div><span class="sm-lbl">Format</span><div class="seg" role="group" aria-label="Format">
+      <button type="button" class="seg-opt" aria-pressed="{{ rLand }}" onClick="{{ onAct }}" data-act="animRatio" data-val="16:9">16:9</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ rPort }}" onClick="{{ onAct }}" data-act="animRatio" data-val="9:16">9:16</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ rSq }}" onClick="{{ onAct }}" data-act="animRatio" data-val="1:1">1:1</button></div></div>
+    <div><span class="sm-lbl">Background</span><div class="seg" role="group" aria-label="Background">
+      <button type="button" class="seg-opt" aria-pressed="{{ bgDark }}" onClick="{{ onAct }}" data-act="animBg" data-val="dark">Dark</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ bgTrans }}" onClick="{{ onAct }}" data-act="animBg" data-val="transparent">Transparent</button>
+      <button type="button" class="seg-opt" aria-pressed="{{ bgGreen }}" onClick="{{ onAct }}" data-act="animBg" data-val="green">Green screen</button></div></div>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-4);align-items:end">
+      <div><label class="sm-lbl" for="sm-dur">Duration · {{ animDuration }} s</label><input class="sm-range" id="sm-dur" type="range" min="1" max="6" step="0.5" value="{{ animDuration }}" onInput="{{ onField }}" data-field="animate.duration"></div>
+      <div><span class="sm-lbl">Frame rate</span><div class="seg" role="group" aria-label="Frame rate">
+        <button type="button" class="seg-opt" aria-pressed="{{ fps30 }}" onClick="{{ onAct }}" data-act="animFps" data-val="30">30</button>
+        <button type="button" class="seg-opt" aria-pressed="{{ fps60 }}" onClick="{{ onAct }}" data-act="animFps" data-val="60">60</button></div></div>
+    </div>
+    <sc-if value="{{ animBusy }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-ok" role="status" style="width:100%"><span style="display:flex;justify-content:space-between;width:100%"><span>Recording frame {{ animFrame }} of {{ animFrames }}</span><span>{{ animPct }}%</span></span><div class="sm-bar"><div style="{{ animBarStyle }}"></div></div>
+        <button type="button" class="btn btn-secondary" onClick="{{ onAct }}" data-act="animCancel">Cancel</button></div>
+    </sc-if>
+    <sc-if value="{{ animFailed }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-alert" role="alert"><strong>Recording stopped at frame {{ animFrame }}</strong><span>The browser ran out of memory for this frame size. Nothing was saved. Try again, or use 30 fps or a shorter clip.</span>
+        <span style="display:flex;gap:var(--space-2)"><button type="button" class="btn btn-secondary" onClick="{{ onAct }}" data-act="animExport">Try again</button><button type="button" class="btn btn-ghost" onClick="{{ onAct }}" data-act="animDismiss">Dismiss</button></span></div>
+    </sc-if>
+    <sc-if value="{{ animDone }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-ok" role="status"><strong>Saved {{ animFile }}</strong><span>WebM plays in browsers and most editors. Some video tools (notably older versions of iMovie and Premiere) may need it converted first.</span></div>
+    </sc-if>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ animBusy }}" onClick="{{ onAct }}" data-act="animExport"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Export WebM</button>
+      <button type="button" class="btn btn-ghost" onClick="{{ onAct }}" data-act="edit">Edit signature</button>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isPdf }}" hint-placeholder-val="{{ false }}">
+<section class="sm-work" data-screen-label="Use · Add to PDF">
+  <div class="sm-stage">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-3);flex-wrap:wrap"><h2 class="sm-h">Add to a PDF</h2><span class="sm-note">{{ curDesc }}</span></div>
+    <sc-if value="{{ pdfEmpty }}" hint-placeholder-val="{{ true }}">
+      <label class="sm-drop" data-over="{{ dragOver }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDropPdf }}" style="position:relative;min-height:240px;justify-content:center">
+        <input type="file" accept="application/pdf,.pdf" onChange="{{ onPdfFile }}">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:17px">Choose a PDF</span>
+        <span class="sm-note">Your signature image is placed on the first page and you download a new copy. The file never leaves your browser.</span>
+        <span class="btn btn-secondary" style="margin-top:var(--space-2)">Choose PDF</span>
+      </label>
+    </sc-if>
+    <sc-if value="{{ pdfError }}" hint-placeholder-val="{{ false }}">
+      <div class="sm-alert" role="alert"><strong>{{ pdfErrorTitle }}</strong><span>{{ pdfErrorText }}</span>
+        <label class="btn btn-secondary" style="position:relative;cursor:pointer"><input type="file" accept="application/pdf,.pdf" onChange="{{ onPdfFile }}" style="position:absolute;opacity:0;width:0;height:0">Choose another PDF</label></div>
+    </sc-if>
+    <sc-if value="{{ pdfHas }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--color-divider)">
+        <div style="padding:var(--space-2) var(--space-3);border-right:1px solid var(--color-divider);min-width:0"><span class="sm-lbl">File</span><span style="font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ pdfName }}</span></div>
+        <div style="padding:var(--space-2) var(--space-3);border-right:1px solid var(--color-divider)"><span class="sm-lbl">Pages</span><span style="font-size:13px">{{ pdfPages }}</span></div>
+        <div style="padding:var(--space-2) var(--space-3)"><span class="sm-lbl">First page</span><span style="font-size:13px">{{ pdfDims }}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+        <div style="{{ pdfPageStyle }}">
+          <div style="position:absolute;inset:14% 12% auto 12%;display:flex;flex-direction:column;gap:6%"><span style="height:3px;width:40%;background:var(--color-divider)"></span><span style="height:3px;width:85%;background:var(--color-divider);opacity:.5"></span><span style="height:3px;width:78%;background:var(--color-divider);opacity:.5"></span><span style="height:3px;width:82%;background:var(--color-divider);opacity:.5"></span></div>
+          <div style="{{ pdfSigStyle }}">{{ pdfSig }}</div>
+        </div>
+        <span class="tag tag-neutral">Position illustration · not a preview of your PDF</span>
+      </div>
+    </sc-if>
+  </div>
+  <aside class="sm-panel">
+    <div><span class="sm-lbl">Placement on page 1</span>
+      <div style="display:flex;flex-wrap:wrap;gap:var(--space-2)">
+        <button type="button" class="btn btn-secondary" aria-pressed="{{ prTr }}" style="{{ prTrStyle }}" onClick="{{ onAct }}" data-act="pdfPreset" data-val="tr">Top right</button>
+        <button type="button" class="btn btn-secondary" aria-pressed="{{ prBr }}" style="{{ prBrStyle }}" onClick="{{ onAct }}" data-act="pdfPreset" data-val="br">Bottom right</button>
+        <button type="button" class="btn btn-secondary" aria-pressed="{{ prBl }}" style="{{ prBlStyle }}" onClick="{{ onAct }}" data-act="pdfPreset" data-val="bl">Bottom left</button>
+        <button type="button" class="btn btn-secondary" aria-pressed="{{ prC }}" style="{{ prCStyle }}" onClick="{{ onAct }}" data-act="pdfPreset" data-val="c">Centre</button>
+      </div>
+    </div>
+    <div><label class="sm-lbl" for="sm-psize">Signature width · {{ pdfSize }}% of page</label><input class="sm-range" id="sm-psize" type="range" min="12" max="60" value="{{ pdfSize }}" onInput="{{ onField }}" data-field="pdf.size"></div>
+    <p class="sm-note">This places a picture of your signature on the page. It isn't an e-signature service: there's no identity check, audit trail or multi-party signing.</p>
+    <sc-if value="{{ pdfBusy }}" hint-placeholder-val="{{ false }}"><div class="sm-ok" role="status"><span style="display:flex;gap:8px;align-items:center"><span style="width:12px;height:12px;border:2px solid var(--color-accent);border-right-color:transparent;border-radius:50%;animation:smSpin .8s linear infinite"></span>Writing {{ pdfOutName }}…</span></div></sc-if>
+    <sc-if value="{{ pdfDone }}" hint-placeholder-val="{{ false }}"><div class="sm-ok" role="status"><strong>Saved {{ pdfOutName }}</strong><span>Your original file is untouched.</span></div></sc-if>
+    <div class="sm-actions">
+      <button type="button" class="btn btn-primary" disabled="{{ pdfNotReady }}" onClick="{{ onAct }}" data-act="pdfDownload"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Download signed PDF</button>
+      <sc-if value="{{ pdfHas }}" hint-placeholder-val="{{ false }}"><label class="btn btn-ghost" style="position:relative;cursor:pointer"><input type="file" accept="application/pdf,.pdf" onChange="{{ onPdfFile }}" style="position:absolute;opacity:0;width:0;height:0">Replace PDF</label></sc-if>
+      <button type="button" class="btn btn-ghost" onClick="{{ onAct }}" data-act="edit">Edit signature</button>
+    </div>
+  </aside>
+</section>
+</sc-if>
+
+<sc-if value="{{ isPage }}" hint-placeholder-val="{{ false }}">
+<article class="sm-page" data-screen-label="Supporting page">
+  <span class="card-kicker">{{ pageKicker }}</span>
+  <h1 style="font-size:34px;margin:0">{{ pageTitle }}</h1>
+  <p style="font-size:17px;margin:0;max-width:60ch;text-wrap:pretty">{{ pageIntro }}</p>
+  <div class="hr" style="margin:var(--space-2) 0"></div>
+  <sc-for list="{{ pageSections }}" as="s" hint-placeholder-count="3">
+    <section style="display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:var(--space-4);padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider)">
+      <h3 style="font-size:16px;margin:0">{{ s.h }}</h3><p style="margin:0;font-size:14px;text-wrap:pretty">{{ s.p }}</p>
+    </section>
+  </sc-for>
+  <sc-if value="{{ pageCta }}" hint-placeholder-val="{{ true }}"><button type="button" class="btn btn-primary" style="align-self:flex-start;margin-top:var(--space-2)" onClick="{{ onAct }}" data-act="{{ pageCtaAct }}" data-val="{{ pageCtaVal }}">{{ pageCta }}</button></sc-if>
+</article>
+</sc-if>
+
+</main>
+<footer class="sm-footer">
+  <span class="sm-note" style="margin-right:auto">Free, no account. Signatures, photos and PDFs stay in your browser.</span>
+  <a href="#draw-online" onClick="{{ onAct }}" data-act="page" data-val="draw-online">Draw Signature Online</a>
+  <a href="#transparent-png" onClick="{{ onAct }}" data-act="page" data-val="transparent-png">Transparent Signature PNG</a>
+  <a href="#pdf-signature" onClick="{{ onAct }}" data-act="page" data-val="pdf-signature">Add a Signature to a PDF</a>
+  <a href="#help" onClick="{{ onAct }}" data-act="page" data-val="help">Help</a>
+  <a href="#privacy" onClick="{{ onAct }}" data-act="page" data-val="privacy">Privacy</a>
+  <a href="#terms" onClick="{{ onAct }}" data-act="page" data-val="terms">Terms</a>
+</footer>
+<nav class="sm-tabbar" aria-label="Stage">
+  <button type="button" class="sm-tabbtn" aria-pressed="{{ createActive }}" onClick="{{ onAct }}" data-act="stage" data-val="create"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.4 3.6a2 2 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Create</button>
+  <button type="button" class="sm-tabbtn" aria-pressed="{{ useActive }}" onClick="{{ onAct }}" data-act="stage" data-val="use"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>Use</button>
+</nav>
+</div>
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}"><div class="sm-toast" role="status">{{ toast }}</div></sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;viewport&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;auto&quot;,&quot;desktop&quot;,&quot;mobile&quot;],&quot;default&quot;:&quot;auto&quot;,&quot;tsType&quot;:&quot;'auto'|'desktop'|'mobile'&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;simulateErrors&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const FONTS=[['Allura','Executive'],['Great Vibes','Executive'],['Alex Brush','Executive'],['Pinyon Script','Calligraphy'],['Tangerine','Calligraphy'],['Parisienne','Calligraphy'],['Sacramento','Modern'],['Kaushan Script','Modern'],['Satisfy','Modern'],['Homemade Apple','Artistic'],['Reenie Beanie','Artistic'],['Caveat','Artistic']].map(([name,cat],i)=>({i,name,cat}));
+const CATS={Executive:'Restrained, formal',Calligraphy:'Flourished, ornate',Modern:'Casual, brush-like',Artistic:'Loose, handwritten'};
+const INKS=[{n:'Ink',v:'#201e1d'},{n:'Navy',v:'#1d3557'},{n:'Blue',v:'#2457c5'},{n:'Red',v:'#ec3013'},{n:'Green',v:'#1f6b3a'}];
+const OUT={download:'Download',stamp:'Stamp',animate:'Animate',pdf:'PDF'};
+const KIND={draw:'Drawn',type:'Typed',scan:'Scanned'};
+const PAGES={
+'draw-online':{kicker:'Guide',title:'Draw a signature online',intro:'Sign with your mouse, finger or stylus and get a transparent PNG or SVG in under a minute. No account, nothing uploaded.',sections:[{h:'How it works',p:'Open Draw, sign on the line, pick an ink colour and pen weight, then continue to Download. Undo and redo cover slips; Clear starts over.'},{h:'Best results',p:'Sign larger than you would on paper and use a stylus or finger on a touch screen if you have one. Bold pens survive shrinking better.'},{h:'What you get',p:'A transparent PNG for documents and graphics, plus a vector SVG that scales to any size without blur.'}],cta:'Start drawing',act:'create',val:'draw'},
+'transparent-png':{kicker:'Guide',title:'Transparent signature PNG',intro:'Every signature you make here downloads as a PNG with a transparent background, so it sits cleanly on white paper, a dark poster or a video frame.',sections:[{h:'From a photo',p:'Scan turns a photo of a paper signature into a transparent PNG by removing the light paper. Adjust Paper removal until only ink remains.'},{h:'From typing or drawing',p:'Typed and drawn signatures are transparent by default. Choose the ink colour before you download.'},{h:'Where to use it',p:'Drop it into a contract, a slide, an email footer or use Stamp to place it on a graphic straight away.'}],cta:'Make a transparent PNG',act:'create',val:'scan'},
+'pdf-signature':{kicker:'Guide',title:'Add a signature image to a PDF',intro:'Place a picture of your signature on the first page of a PDF and download a new copy. The file is processed in your browser.',sections:[{h:'Steps',p:'Create or pick a signature, open PDF, choose your file, pick a corner or the centre, set the size and download.'},{h:'What it is not',p:'This adds an image. It does not verify identity, keep an audit trail or collect signatures from several people. For legally binding e-signatures use a dedicated service.'},{h:'Protected files',p:'Password-protected or encrypted PDFs can\u2019t be modified. Remove the protection in your PDF app first, then try again.'}],cta:'Open PDF',act:'use',val:'pdf'},
+'help':{kicker:'Support',title:'Help and support',intro:'Quick answers to the questions we hear most. Everything here is free and works without an account.',sections:[{h:'Where are my files?',p:'Nowhere but your device. Signatures, photos and PDFs are processed in the browser and are not uploaded. Closing the tab clears them.'},{h:'Why is my scan patchy?',p:'Uneven lighting or a grey paper background. Raise Paper removal, or re-photograph in daylight on white paper with dark ink.'},{h:'The video won\u2019t open in my editor',p:'Exports are WebM. Most browsers and editors accept it; some older tools need it converted. MP4 export isn\u2019t offered.'},{h:'Is the PDF signature legally binding?',p:'It places an image only. Whether that is sufficient depends on your jurisdiction and the other party. There is no verification or audit trail.'},{h:'Contact',p:'Email support at the address in the footer of the download page and include your browser and what you were trying to do.'}]},
+'privacy':{kicker:'Legal',title:'Privacy',intro:'The short version: your signature and files stay on your device. We may collect anonymous usage analytics.',sections:[{h:'Your content',p:'Signature drawings, typed names, photos and PDFs are processed locally in your browser and are not transmitted to or stored on our servers.'},{h:'Analytics',p:'We may collect aggregated usage events (for example which tool was opened) to understand how the product is used. These do not include your content.'},{h:'Accounts and storage',p:'There are no accounts and no cloud library. Nothing persists after you close the tab unless you download it.'},{h:'Changes',p:'If this policy changes, the date at the top of this page will be updated.'}]},
+'terms':{kicker:'Legal',title:'Terms of use',intro:'SignatureMaker is provided free of charge, as is, for making signature images.',sections:[{h:'Use',p:'You may use the images and videos you create for personal and commercial purposes. You are responsible for having the right to sign what you sign.'},{h:'No guarantees',p:'We don\u2019t guarantee availability, fitness for a particular purpose, or that an image placed on a PDF meets any legal standard for signatures.'},{h:'Fonts',p:'Cursive styles use openly licensed fonts. Text SVG downloads reference the font by name and may render differently where it isn\u2019t installed.'},{h:'Liability',p:'To the extent permitted by law, we are not liable for losses arising from use of the service.'}]}
+};
+const dl=(blob,name)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+const slug=s=>(s||'signature').trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'signature';
+
+class Component extends DCLogic {
+  state={theme:'light',stage:'create',method:'draw',output:'download',page:'help',current:null,intended:null,lastEdited:null,toast:null,menuOpen:false,dragOver:false,
+    draw:{strokes:[],redo:[],color:'#201e1d',w:4},
+    type:{text:'',font:0,color:'#201e1d',size:80,cat:'All'},
+    scan:{src:null,clean:null,name:'',threshold:60,error:null,busy:false},
+    download:{status:'idle',file:''},
+    stamp:{img:null,imgName:'',pos:'br',scale:36,opacity:100,badge:false,badgeName:'',badgeHandle:'',contrast:'auto',msg:''},
+    animate:{style:'classic',ratio:'16:9',bg:'dark',duration:3,fps:30,playing:true,key:0,status:'idle',frame:0,failedOnce:false,file:''},
+    pdf:{file:null,name:'',pages:0,dims:'',error:null,preset:'br',size:28,status:'idle',ratio:8.5/11}};
+  svgRef=React.createRef();
+  cur=null;
+  componentDidMount(){
+    document.addEventListener('pointerdown',this.onDocDown);document.addEventListener('keydown',this.onKey);
+    try{const raw=localStorage.getItem('signaturemaker.v3');if(raw){const v=JSON.parse(raw);const st={};
+      if(v.draw)st.draw={...this.state.draw,...v.draw,redo:[]};if(v.type)st.type={...this.state.type,...v.type};
+      if(v.scan)st.scan={...this.state.scan,...v.scan,busy:false,error:null};if(v.stamp)st.stamp={...this.state.stamp,...v.stamp,msg:''};
+      if(v.animate)st.animate={...this.state.animate,...v.animate,status:'idle',frame:0,playing:true};if(v.pdf)st.pdf={...this.state.pdf,...v.pdf,file:null,name:'',pages:0,dims:'',error:null,status:'idle'};
+      ['theme','method','output','current','lastEdited','intended'].forEach(k=>{if(v[k]!==undefined)st[k]=v[k]});if(v.stage==='create'||v.stage==='use')st.stage=v.stage;
+      this.setState(st,()=>{if(this.state.scan.clean){const im=new Image();im.src=this.state.scan.clean;this.scanImg=im}if(this.state.stamp.img)this.setStampImage(this.state.stamp.img,this.state.stamp.imgName)})}}catch(e){}
+    this.restored=true}
+  componentDidUpdate(){if(!this.restored)return;clearTimeout(this.saveTimer);this.saveTimer=setTimeout(()=>this.persist(),400)}
+  persist(withImages=true){const s=this.state;const v={theme:s.theme,stage:s.stage,method:s.method,output:s.output,current:s.current,lastEdited:s.lastEdited,intended:s.intended,
+    draw:{strokes:s.draw.strokes,color:s.draw.color,w:s.draw.w},type:s.type,scan:{src:withImages?s.scan.src:null,clean:withImages?s.scan.clean:null,name:s.scan.name,threshold:s.scan.threshold},
+    stamp:{...s.stamp,img:withImages&&s.stamp.img&&s.stamp.img.length<2.5e6?s.stamp.img:null},animate:{style:s.animate.style,ratio:s.animate.ratio,bg:s.animate.bg,duration:s.animate.duration,fps:s.animate.fps},pdf:{preset:s.pdf.preset,size:s.pdf.size}};
+    try{localStorage.setItem('signaturemaker.v3',JSON.stringify(v))}catch(e){if(withImages)this.persist(false)}}
+  onDocDown=e=>{if(this.state.menuOpen&&!e.target.closest('[data-act="menu"], .sm-menu'))this.setState({menuOpen:false})};
+  onKey=e=>{if(e.key==='Escape'&&this.state.menuOpen){this.setState({menuOpen:false});return}
+    const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea')return;
+    if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='z'&&this.state.stage==='create'&&this.state.method==='draw'){e.preventDefault();this.act(e.shiftKey?'redo':'undo')}};
+  onDragOver=e=>{e.preventDefault();if(!this.state.dragOver)this.setState({dragOver:true})};
+  onDragLeave=()=>{if(this.state.dragOver)this.setState({dragOver:false})};
+  dropped(e){e.preventDefault();this.setState({dragOver:false});return e.dataTransfer.files&&e.dataTransfer.files[0]}
+  onDropScan=e=>{const f=this.dropped(e);if(f)this.loadScan(f)};
+  onDropStamp=e=>{const f=this.dropped(e);if(f)this.loadStamp(f)};
+  onDropPdf=e=>{const f=this.dropped(e);if(f)this.loadPdf(f)};
+  componentWillUnmount(){clearInterval(this.animTimer);clearTimeout(this.toastTimer);clearTimeout(this.saveTimer);document.removeEventListener('pointerdown',this.onDocDown);document.removeEventListener('keydown',this.onKey)}
+
+  /* ---- navigation ---- */
+  hasSig(k){const s=this.state;if(k==='draw')return s.draw.strokes.length>0;if(k==='type')return s.type.text.trim().length>0;if(k==='scan')return !!s.scan.clean&&!s.scan.error;return false}
+  curKind(){const s=this.state;if(s.current&&this.hasSig(s.current))return s.current;if(s.lastEdited&&this.hasSig(s.lastEdited))return s.lastEdited;return null}
+  act(name,val){
+    const s=this.state,S=p=>this.setState(p);
+    const upd=(g,patch)=>S(st=>({[g]:{...st[g],...patch}}));
+    if(['create','createFor','use','stage','chip','page','continue','edit'].includes(name))S({menuOpen:false});
+    switch(name){
+      case 'create':S({stage:'create',method:val});break;
+      case 'createFor':S({stage:'create',method:val,intended:s.output});break;
+      case 'use':S({stage:'use',output:val,current:this.curKind()});break;
+      case 'stage':S({stage:val,current:val==='use'?this.curKind():s.current});break;
+      case 'chip':{const k=this.curKind();if(k)S({stage:'create',method:k});else S({stage:'create'});break}
+      case 'page':S({stage:'page',page:val});break;
+      case 'theme':S({theme:s.theme==='light'?'dark':'light'});break;
+      case 'continue':{const k=s.method;if(!this.hasSig(k))return;S({current:k,stage:'use',output:s.intended||s.output,intended:null});break}
+      case 'edit':{const k=this.curKind()||'type';S({stage:'create',method:k});break}
+      case 'ink':if(s.method==='draw')upd('draw',{color:val});else upd('type',{color:val});break;
+      case 'pen':upd('draw',{w:+val});break;
+      case 'undo':if(s.draw.strokes.length){const st=s.draw.strokes.slice();const last=st.pop();upd('draw',{strokes:st,redo:[...s.draw.redo,last]})}break;
+      case 'redo':if(s.draw.redo.length){const r=s.draw.redo.slice();const st=r.pop();upd('draw',{strokes:[...s.draw.strokes,st],redo:r})}break;
+      case 'clear':upd('draw',{strokes:[],redo:[...s.draw.redo,...s.draw.strokes.slice().reverse()]});break;
+      case 'font':upd('type',{font:+val});S({lastEdited:'type'});break;
+      case 'fontCat':upd('type',{cat:val});break;
+      case 'menu':S({menuOpen:!s.menuOpen});break;
+      case 'qdl':S({menuOpen:false});this.exportDownload(val,s.method,true);break;
+      case 'dl':this.exportDownload(val);break;
+      case 'stampPos':upd('stamp',{pos:val,msg:''});break;
+      case 'stampContrast':upd('stamp',{contrast:val,msg:''});break;
+      case 'stampSample':this.setStampImage('assets/sample-photo.jpg','sample-photo.jpg');break;
+      case 'stampDownload':this.stampExport('download');break;
+      case 'stampCopy':this.stampExport('copy');break;
+      case 'animStyle':upd('animate',{style:val,key:s.animate.key+1,playing:true,status:s.animate.status==='done'?'idle':s.animate.status});break;
+      case 'animRatio':upd('animate',{ratio:val,key:s.animate.key+1,playing:true});break;
+      case 'animBg':upd('animate',{bg:val,key:s.animate.key+1,playing:true});break;
+      case 'animFps':upd('animate',{fps:+val});break;
+      case 'animPlay':upd('animate',{playing:!s.animate.playing});break;
+      case 'animReplay':upd('animate',{key:s.animate.key+1,playing:true});break;
+      case 'animExport':this.animExport();break;
+      case 'animCancel':clearInterval(this.animTimer);upd('animate',{status:'idle',frame:0});this.toast('Recording cancelled. Nothing was saved.');break;
+      case 'animDismiss':upd('animate',{status:'idle'});break;
+      case 'pdfPreset':upd('pdf',{preset:val,status:s.pdf.status==='done'?'idle':s.pdf.status});break;
+      case 'pdfDownload':this.pdfExport();break;
+    }
+  }
+  onAct=e=>{const d=e.currentTarget.dataset;if(e.currentTarget.tagName==='A')e.preventDefault();this.act(d.act,d.val)};
+  onField=e=>{const el=e.currentTarget;const [g,k]=el.dataset.field.split('.');const v=el.type==='checkbox'?el.checked:el.type==='range'?+el.value:el.value;
+    this.setState(s=>{const patch={[g]:{...s[g],[k]:v}};if(g==='type')patch.lastEdited='type';if(g==='stamp')patch.stamp.msg='';if(g==='animate'){patch.animate.key=s.animate.key+1;patch.animate.playing=true}if(g==='pdf'&&s.pdf.status==='done')patch.pdf.status='idle';return patch});
+    if(g==='scan'&&k==='threshold'){clearTimeout(this.thrTimer);this.thrTimer=setTimeout(()=>this.recleanScan(),120)}};
+  toast(msg){clearTimeout(this.toastTimer);this.setState({toast:msg});this.toastTimer=setTimeout(()=>this.setState({toast:null}),2800)}
+
+  /* ---- drawing ---- */
+  pt(e){const r=this.svgRef.current.getBoundingClientRect();return [Math.round((e.clientX-r.left)/r.width*800*10)/10,Math.round((e.clientY-r.top)/r.height*400*10)/10]}
+  onDown=e=>{if(e.button!==undefined&&e.button!==0&&e.pointerType==='mouse')return;e.currentTarget.setPointerCapture(e.pointerId);const d=this.state.draw;this.cur={pts:[this.pt(e)],color:d.color,w:d.w,base:d.w,pen:e.pointerType==='pen',pmax:e.pressure||0};this.setState(s=>({draw:{...s.draw,strokes:[...s.draw.strokes,this.cur],redo:[]},lastEdited:'draw',menuOpen:false}))};
+  onMove=e=>{if(!this.cur)return;this.cur.pts.push(this.pt(e));if(this.cur.pen&&e.pressure>this.cur.pmax){this.cur.pmax=e.pressure;this.cur.w=Math.round(this.cur.base*(0.55+this.cur.pmax*0.9)*10)/10}this.forceUpdate()};
+  onUp=e=>{if(!this.cur)return;this.cur=null;this.forceUpdate()};
+  pathD(pts){if(pts.length===1)return `M${pts[0][0]} ${pts[0][1]} l0.1 0`;let d=`M${pts[0][0]} ${pts[0][1]}`;for(let i=1;i<pts.length-1;i++){const [x0,y0]=pts[i],[x1,y1]=pts[i+1];d+=` Q${x0} ${y0} ${(x0+x1)/2} ${(y0+y1)/2}`}const l=pts[pts.length-1];d+=` L${l[0]} ${l[1]}`;return d}
+  bbox(strokes){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,w=0;strokes.forEach(s=>{w=Math.max(w,s.w);s.pts.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)})});const p=w*2+8;return {x:x0-p,y:y0-p,w:Math.max(x1-x0+2*p,20),h:Math.max(y1-y0+2*p,20)}}
+  svgString(color){const st=this.state.draw.strokes,b=this.bbox(st);return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${b.x} ${b.y} ${b.w} ${b.h}" width="${Math.round(b.w)}" height="${Math.round(b.h)}">${st.map(s=>`<path d="${this.pathD(s.pts)}" fill="none" stroke="${color||s.color}" stroke-width="${s.w}" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</svg>`}
+
+  /* ---- signature rendering ---- */
+  sigEl(kind,o={}){
+    const h=React.createElement,s=this.state;
+    if(kind==='draw'){const st=s.draw.strokes;if(!st.length)return null;const b=this.bbox(st);
+      return h('svg',{viewBox:`${b.x} ${b.y} ${b.w} ${b.h}`,preserveAspectRatio:'xMidYMid meet',style:{width:'100%',height:'100%',display:'block',filter:o.filter}},st.map((k,i)=>h('path',{key:i,d:this.pathD(k.pts),fill:'none',stroke:o.color||k.color,strokeWidth:k.w,strokeLinecap:'round',strokeLinejoin:'round'})))}
+    if(kind==='type'){const t=s.type,txt=t.text.trim();if(!txt)return null;const f=FONTS[t.font];const len=Math.max(txt.length,3);
+      const fs=o.fit?`min(${Math.min(26,(o.fitW||170)/len)}cqw, ${o.fitH||70}cqh)`:t.size+'px';
+      return h('div',{style:{fontFamily:`'${f.name}', cursive`,color:o.color||t.color,fontSize:fs,lineHeight:1.15,whiteSpace:'nowrap',padding:'0 .1em',filter:o.filter,fontWeight:f.name==='Tangerine'?700:f.name==='Caveat'?600:400}},txt)}
+    if(kind==='scan'){if(!s.scan.clean)return null;return h('img',{src:s.scan.clean,alt:'',style:{maxWidth:'100%',maxHeight:'100%',objectFit:'contain',display:'block',filter:o.filter}})}
+    return null}
+  sigBox(kind,o={}){const el=this.sigEl(kind,{...o,fit:true});if(!el)return null;return React.createElement('div',{style:{containerType:'size',width:'100%',height:'100%',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}},el)}
+
+  /* ---- scan ---- */
+  onScanFile=e=>{const f=e.currentTarget.files[0];e.currentTarget.value='';if(f)this.loadScan(f)};
+  loadScan(f){
+    if(!/^image\/(png|jpeg)$/.test(f.type)){this.setState(s=>({scan:{...s.scan,error:{title:`“${f.name}” isn\u2019t a PNG or JPEG`,text:'Export the photo as PNG or JPEG (most phones do this automatically when you share it) and try again.'},src:null,clean:null,name:f.name}}));return}
+    const r=new FileReader();r.onload=()=>{this.setState(s=>({scan:{...s.scan,src:r.result,name:f.name,error:null,clean:null,busy:true},lastEdited:'scan'}),()=>this.recleanScan())};r.readAsDataURL(f)}
+  recleanScan(){const {src,threshold}=this.state.scan;if(!src)return;const img=new Image();img.onload=()=>{
+    const max=1200,sc=Math.min(1,max/Math.max(img.width,img.height)),W=Math.round(img.width*sc),H=Math.round(img.height*sc);const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');x.drawImage(img,0,0,W,H);const d=x.getImageData(0,0,W,H),p=d.data;const cut=256-threshold*1.9;let bx0=W,by0=H,bx1=0,by1=0;
+    for(let i=0,n=0;i<p.length;i+=4,n++){const l=0.299*p[i]+0.587*p[i+1]+0.114*p[i+2];let a=l>=cut?0:Math.min(255,(cut-l)*5);if(a<12)a=0;p[i+3]=a;if(a){p[i]*=.55;p[i+1]*=.55;p[i+2]*=.55;const px=n%W,py=(n-px)/W;if(px<bx0)bx0=px;if(px>bx1)bx1=px;if(py<by0)by0=py;if(py>by1)by1=py}}
+    if(bx1<=bx0){this.setState(s=>({scan:{...s.scan,clean:null,busy:false,error:{title:'No ink found',text:'Everything in the photo was treated as paper. Lower Paper removal, or choose a photo with darker ink on lighter paper.'}}}));return}
+    x.putImageData(d,0,0);const pad=12,cw=bx1-bx0+pad*2,ch=by1-by0+pad*2;const o=document.createElement('canvas');o.width=cw;o.height=ch;o.getContext('2d').drawImage(c,bx0-pad,by0-pad,cw,ch,0,0,cw,ch);const url=o.toDataURL('image/png');const im=new Image();im.src=url;this.scanImg=im;
+    this.setState(s=>({scan:{...s.scan,clean:url,busy:false,error:null}}))};img.src=src}
+
+  /* ---- canvas painting for exports ---- */
+  paintSig(ctx,kind,box,color){const s=this.state;
+    if(kind==='draw'){const b=this.bbox(s.draw.strokes),sc=Math.min(box.w/b.w,box.h/b.h),ox=box.x+(box.w-b.w*sc)/2,oy=box.y+(box.h-b.h*sc)/2;ctx.lineCap=ctx.lineJoin='round';s.draw.strokes.forEach(k=>{ctx.strokeStyle=color||k.color;ctx.lineWidth=k.w*sc;ctx.beginPath();k.pts.forEach(([x,y],i)=>{const X=ox+(x-b.x)*sc,Y=oy+(y-b.y)*sc;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y)});if(k.pts.length===1)ctx.lineTo(ox+(k.pts[0][0]-b.x)*sc+.1,oy+(k.pts[0][1]-b.y)*sc);ctx.stroke()})}
+    else if(kind==='type'){const f=FONTS[s.type.font];let fs=box.h*.8;const wt=f.name==='Tangerine'?700:f.name==='Caveat'?600:400;ctx.font=`${wt} ${fs}px '${f.name}'`;const w=ctx.measureText(s.type.text.trim()).width;if(w>box.w){fs*=box.w/w;ctx.font=`${wt} ${fs}px '${f.name}'`}ctx.fillStyle=color||s.type.color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s.type.text.trim(),box.x+box.w/2,box.y+box.h/2)}
+    else if(kind==='scan'&&this.scanImg){const im=this.scanImg,sc=Math.min(box.w/im.width,box.h/im.height),w=im.width*sc,h=im.height*sc;ctx.drawImage(im,box.x+(box.w-w)/2,box.y+(box.h-h)/2,w,h)}}
+  async ensureFont(){const f=FONTS[this.state.type.font];try{await document.fonts.load(`40px '${f.name}'`)}catch(e){}}
+
+  /* ---- download ---- */
+  async exportDownload(fmt,kind,quick){const k=kind||this.curKind();if(!k||!this.hasSig(k))return;const base=k==='type'?slug(this.state.type.text):'signature';const file=`${base}.${fmt==='copy'?'png':fmt}`;
+    if(!quick)this.setState(s=>({download:{status:'busy',file}}));await this.ensureFont();
+    if(fmt==='copy'){const c=document.createElement('canvas');c.width=1600;c.height=600;this.paintSig(c.getContext('2d'),k,{x:40,y:40,w:1520,h:520});
+      c.toBlob(async b=>{try{await navigator.clipboard.write([new ClipboardItem({'image/png':b})]);this.toast('Copied as a transparent PNG.')}catch(e){dl(b,file);this.toast('Clipboard was blocked, so the PNG was downloaded instead.')}},'image/png');
+      if(!quick)this.setState({download:{status:'idle',file:''}});return}
+    if(!quick)await new Promise(r=>setTimeout(r,700));
+    if(fmt==='svg'){let svg;if(k==='draw')svg=this.svgString();else{const t=this.state.type,f=FONTS[t.font];const txt=t.text.trim().replace(/[<&]/g,c=>c==='<'?'&lt;':'&amp;');svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${Math.round(txt.length*t.size*.5+40)}" height="${Math.round(t.size*1.4)}"><text x="20" y="${Math.round(t.size)}" font-family="'${f.name}', cursive" font-size="${t.size}" fill="${t.color}">${txt}</text></svg>`}dl(new Blob([svg],{type:'image/svg+xml'}),file)}
+    else{const c=document.createElement('canvas');c.width=1600;c.height=600;this.paintSig(c.getContext('2d'),k,{x:40,y:40,w:1520,h:520});c.toBlob(b=>dl(b,file),'image/png')}
+    if(quick)this.toast(`Saved ${file}`);else this.setState({download:{status:'done',file}})}
+
+  /* ---- stamp ---- */
+  onStampFile=e=>{const f=e.currentTarget.files[0];e.currentTarget.value='';if(f)this.loadStamp(f)};
+  loadStamp(f){if(!/^image\/(png|jpeg|webp)$/.test(f.type)){this.toast(`“${f.name}” isn\u2019t a PNG, JPEG or WebP. Choose another graphic.`);return}const r=new FileReader();r.onload=()=>this.setStampImage(r.result,f.name);r.readAsDataURL(f)}
+  setStampImage(src,name){const im=new Image();im.onload=()=>{this.stampImg=im;this.setState(s=>({stamp:{...s.stamp,img:src,imgName:name,msg:''}}))};im.src=src}
+  stampGeom(W,H){const st=this.state.stamp,w=W*st.scale/100,h=w*.4,m=W*.04;let x,y;if(st.pos==='c'){x=(W-w)/2;y=(H-h)/2}else{x=st.pos.endsWith('l')?m:W-w-m;y=st.pos.startsWith('t')?m:H-h-m}return {x,y,w,h}}
+  plate(){const st=this.state.stamp;if(st.contrast==='auto')return 'light';return st.contrast}
+  async stampExport(mode){const k=this.curKind(),st=this.state.stamp,im=this.stampImg;if(!k||!im)return;await this.ensureFont();
+    const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);const g=this.stampGeom(c.width,c.height);const pl=this.plate();x.globalAlpha=st.opacity/100;const pad=g.w*.04;
+    if(pl==='light'){x.fillStyle='rgba(255,255,255,.82)';x.fillRect(g.x-pad,g.y-pad,g.w+pad*2,g.h+pad*2)}if(pl==='dark'){x.fillStyle='rgba(20,18,17,.7)';x.fillRect(g.x-pad,g.y-pad,g.w+pad*2,g.h+pad*2)}
+    this.paintSig(x,k,g,pl==='dark'?'#f3f2f2':null);
+    if(st.badge&&(st.badgeName||st.badgeHandle)){const fs=Math.max(12,g.w*.07);x.font=`800 ${fs}px Archivo, system-ui`;x.textAlign='left';x.textBaseline='top';x.fillStyle=pl==='dark'?'#f3f2f2':'#201e1d';const bx=g.x,by=g.y+g.h+pad*1.5;x.fillStyle='#ec3013';x.fillRect(bx,by,fs*1.6,fs*1.6);x.fillStyle='#f3f2f2';x.font=`800 ${fs}px Archivo, system-ui`;x.fillText((st.badgeName||st.badgeHandle||'?').trim()[0].toUpperCase(),bx+fs*.4,by+fs*.3);x.fillStyle=pl==='dark'?'#f3f2f2':'#201e1d';x.fillText(st.badgeName,bx+fs*2,by);x.font=`400 ${fs*.8}px Archivo, system-ui`;x.fillText(st.badgeHandle,bx+fs*2,by+fs*1.1)}
+    x.globalAlpha=1;const name=`${slug(st.imgName.replace(/\.[^.]+$/,''))}-signed.png`;
+    c.toBlob(async b=>{if(mode==='download'){dl(b,name);this.setState(s=>({stamp:{...s.stamp,msg:`Saved ${name} at ${c.width}×${c.height}.`}}))}else{try{await navigator.clipboard.write([new ClipboardItem({'image/png':b})]);this.setState(s=>({stamp:{...s.stamp,msg:'Copied. Paste it into a doc, a chat or your editor.'}}))}catch(e){this.setState(s=>({stamp:{...s.stamp,msg:'Your browser blocked clipboard access, so the PNG was downloaded instead.'}}));dl(b,name)}}},'image/png')}
+
+  /* ---- animate ---- */
+  animExport(){const a=this.state.animate,total=Math.round(a.duration*a.fps);clearInterval(this.animTimer);this.setState(s=>({animate:{...s.animate,status:'busy',frame:0,key:s.animate.key+1,playing:true}}));
+    const failAt=(this.props.simulateErrors??true)&&!a.failedOnce?Math.round(total*.42):-1;
+    this.animTimer=setInterval(()=>{this.setState(s=>{const f=s.animate.frame+1;if(f===failAt){clearInterval(this.animTimer);return {animate:{...s.animate,status:'failed',frame:f,failedOnce:true}}}if(f>=total){clearInterval(this.animTimer);return {animate:{...s.animate,status:'done',frame:total,file:`signature-reveal-${s.animate.ratio.replace(':','x')}-${s.animate.style}.webm`}}}return {animate:{...s.animate,frame:f}}})},Math.max(12,1000/a.fps*0.6))}
+
+  /* ---- pdf ---- */
+  onPdfFile=e=>{const f=e.currentTarget.files[0];e.currentTarget.value='';if(f)this.loadPdf(f)};
+  loadPdf(f){
+    const fail=(title,text)=>this.setState(s=>({pdf:{...s.pdf,file:null,name:f.name,pages:0,dims:'',error:{title,text},status:'idle'}}));
+    if(!(f.type==='application/pdf'||/\.pdf$/i.test(f.name)))return fail(`“${f.name}” isn\u2019t a PDF`,'Choose a file ending in .pdf. Word documents and images need to be exported to PDF first.');
+    const r=new FileReader();r.onload=()=>{const txt=new TextDecoder('latin1').decode(new Uint8Array(r.result).slice(0,4e6));
+      if(!/^%PDF-/.test(txt.slice(0,16)))return fail(`“${f.name}” doesn\u2019t look like a valid PDF`,'The file may be damaged or renamed. Re-export it from the app that made it and try again.');
+      if(/\/Encrypt\b/.test(txt))return fail('This PDF is protected','It\u2019s encrypted or password-protected, so it can\u2019t be modified here. Remove the protection in your PDF app, then choose it again.');
+      let pages=(txt.match(/\/Type\s*\/Page(?![s])/g)||[]).length;if(!pages){const m=txt.match(/\/Count\s+(\d+)/);pages=m?+m[1]:1}
+      const mb=txt.match(/\/MediaBox\s*\[\s*([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)\s+([\d.\-]+)/);let w=612,h=792;if(mb){w=Math.abs(+mb[3]-+mb[1])||612;h=Math.abs(+mb[4]-+mb[2])||792}
+      const nm=Math.abs(w-612)<2&&Math.abs(h-792)<2?' · US Letter':Math.abs(w-595)<2&&Math.abs(h-842)<2?' · A4':'';
+      this.setState(s=>({pdf:{...s.pdf,file:f,name:f.name,pages,dims:`${Math.round(w)} × ${Math.round(h)} pt${nm}`,error:null,status:'idle',ratio:w/h}}))};r.readAsArrayBuffer(f)}
+  pdfExport(){if(!this.curKind()||!this.state.pdf.file)return;this.setState(s=>({pdf:{...s.pdf,status:'busy'}}));setTimeout(()=>this.setState(s=>({pdf:{...s.pdf,status:'done'}})),1300)}
+
+  /* ---- render ---- */
+  renderVals(){
+    const s=this.state,h=React.createElement,k=this.curKind();
+    const vp=this.props.viewport??'auto';
+    const on=(a,b)=>a===b;
+    const drawEmpty=!s.draw.strokes.length,typeEmpty=!s.type.text.trim();
+    const inks=color=>INKS.map(i=>({...i,on:on(i.v,color),style:{background:i.v}}));
+    const target=OUT[s.intended||s.output];
+    const curDesc=k?`${KIND[k]} signature${k==='type'?' · '+FONTS[s.type.font].name:''}`:'';
+    const isPage=s.stage==='page',isCreate=s.stage==='create',isUse=s.stage==='use',isMissing=isUse&&!k;
+    const cat=s.type.cat||'All';
+    const fontCats=['All',...Object.keys(CATS)].map(id=>({id,on:on(id,cat)}));
+    const fontList=FONTS.filter(f=>cat==='All'||f.cat===cat).map(f=>({...f,on:on(f.i,s.type.font),onText:on(f.i,s.type.font)?'Selected':'',sample:s.type.text.trim()||'Your name',style:{fontFamily:`'${f.name}', cursive`,fontSize:'26px',lineHeight:1.1,color:s.type.color,whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis',fontWeight:f.name==='Tangerine'?700:f.name==='Caveat'?600:400}}));
+    const draftEmpty=!this.hasSig(s.method);
+    /* stamp */
+    const st=s.stamp,pl=this.plate(),dark=pl==='dark';const m='4%';
+    const stampSigStyle={position:'absolute',width:st.scale+'%',opacity:st.opacity/100,display:'flex',flexDirection:'column',alignItems:'flex-start',gap:'4%',...(st.pos==='c'?{left:'50%',top:'50%',transform:'translate(-50%,-50%)'}:{[st.pos.endsWith('l')?'left':'right']:m,[st.pos.startsWith('t')?'top':'bottom']:m})};
+    const stampPlateStyle={width:'100%',aspectRatio:'5/2',padding:'4%',boxSizing:'border-box',background:pl==='light'?'rgba(255,255,255,.82)':dark?'rgba(20,18,17,.7)':'transparent'};
+    const badgeStyle={display:'flex',gap:'.5em',alignItems:'center',fontSize:'clamp(9px,1.4cqw,14px)',color:dark?'#f3f2f2':'#201e1d',lineHeight:1.2,background:pl==='none'?'transparent':dark?'rgba(20,18,17,.7)':'rgba(255,255,255,.82)',padding:'.3em .5em'};
+    const badgeInitialStyle={width:'1.7em',height:'1.7em',background:'#ec3013',color:'#f3f2f2',display:'grid',placeItems:'center',fontWeight:800,fontFamily:'var(--font-heading)'};
+    /* animate */
+    const a=s.animate,ratios={'16:9':[16,9],'9:16':[9,16],'1:1':[1,1]},[rw,rh]=ratios[a.ratio];
+    const frameH=a.ratio==='9:16'?420:a.ratio==='1:1'?360:300;
+    const bgColor=a.bg==='dark'?'#111010':a.bg==='green'?'#00b140':'transparent';
+    const animFrameStyle={aspectRatio:`${rw}/${rh}`,height:frameH+'px',maxWidth:'100%',background:bgColor,display:'flex',alignItems:'center',justifyContent:'center',border:'1px solid var(--color-divider)',overflow:'hidden',position:'relative'};
+    const styleColor=a.style==='gold'?'#d9ad3c':a.style==='neon'?'#4dff9f':a.bg==='dark'?'#f3f2f2':null;
+    const glow=a.style==='gold'?'drop-shadow(0 0 10px rgba(217,173,60,.75))':a.style==='neon'?'drop-shadow(0 0 8px rgba(77,255,159,.9)) drop-shadow(0 0 22px rgba(77,255,159,.5))':'none';
+    const scanFilter=a.style==='gold'?'invert(1) sepia(1) saturate(4) hue-rotate(-12deg) brightness(1.05)':a.style==='neon'?'invert(1) sepia(1) saturate(5) hue-rotate(85deg) brightness(1.1)':a.bg==='dark'?'invert(1)':'none';
+    const animSig=k?h('div',{key:a.key,style:{width:'72%',height:'60%',animation:`smReveal ${a.duration}s cubic-bezier(.45,0,.2,1) both`,animationPlayState:a.playing?'running':'paused',filter:glow}},this.sigBox(k,{color:styleColor,filter:k==='scan'?scanFilter:undefined})):null;
+    const frames=Math.round(a.duration*a.fps);
+    /* pdf */
+    const p=s.pdf,pdfPageStyle={position:'relative',background:'#fff',border:'1px solid var(--color-divider)',boxShadow:'var(--shadow-md)',width:'100%',maxWidth:p.ratio>1?'520px':'340px',aspectRatio:String(p.ratio),overflow:'hidden'};
+    const pm='6%';const pdfSigStyle={position:'absolute',width:p.size+'%',aspectRatio:'5/2',...(p.preset==='c'?{left:'50%',top:'50%',transform:'translate(-50%,-50%)'}:{[p.preset==='bl'?'left':'right']:pm,[p.preset==='tr'?'top':'bottom']:pm})};
+    const prStyle=v=>on(p.preset,v)?{borderColor:'var(--color-accent)',boxShadow:'inset 0 0 0 1px var(--color-accent)'}:{};
+    const pg=PAGES[s.page]||PAGES.help;
+    return {
+      vp,theme:s.theme,isDark:s.theme==='dark',isLight:s.theme==='light',onAct:this.onAct,onField:this.onField,toast:s.toast,
+      chipSig:k?h('div',{style:{width:'48px',height:'20px',containerType:'size',display:'flex',alignItems:'center',justifyContent:'center'}},this.sigEl(k,{fit:true,fitW:150,fitH:90})):h('span',{style:{fontSize:'10px',opacity:.5}},'—'),
+      chipText:k?`${KIND[k]} signature`:'No signature yet',
+      createActive:isCreate,useActive:isUse,crumbStage:isPage?'SignatureMaker':isCreate?'Create':'Use',crumbScreen:isPage?pg.title:isCreate?({draw:'Draw',type:'Type',scan:'Scan'})[s.method]:OUT[s.output],
+      mDraw:isCreate&&on(s.method,'draw'),mType:isCreate&&on(s.method,'type'),mScan:isCreate&&on(s.method,'scan'),
+      oDownload:isUse&&on(s.output,'download'),oStamp:isUse&&on(s.output,'stamp'),oAnimate:isUse&&on(s.output,'animate'),oPdf:isUse&&on(s.output,'pdf'),
+      isDraw:isCreate&&s.method==='draw',isType:isCreate&&s.method==='type',isScan:isCreate&&s.method==='scan',
+      isMissing,isDownload:isUse&&k&&s.output==='download',isStamp:isUse&&k&&s.output==='stamp',isAnimate:isUse&&k&&s.output==='animate',isPdf:isUse&&k&&s.output==='pdf',isPage,
+      continueLabel:s.intended?`Continue to ${target}`:'Use this signature',continueHint:s.intended?`You came from ${target}; your settings there are waiting.`:'Stamp it on a graphic, animate it or add it to a PDF. Your draft stays here and is saved in this browser.',
+      menuOpen:s.menuOpen,dragOver:s.dragOver,draftEmpty,svgOkDraft:s.method!=='scan',svgLabelDraft:s.method==='draw'?'Vector SVG':'Text SVG',svgHintDraft:s.method==='draw'?'Scales to any size without blur':'Depends on the font being installed',
+      onDragOver:this.onDragOver,onDragLeave:this.onDragLeave,onDropScan:this.onDropScan,onDropStamp:this.onDropStamp,onDropPdf:this.onDropPdf,fontCats,fontList,fontCatBlurb:cat==='All'?'12 styles in four families':CATS[cat],
+      /* draw */
+      svgRef:this.svgRef,onDown:this.onDown,onMove:this.onMove,onUp:this.onUp,
+      drawPaths:s.draw.strokes.map((k2,i)=>({d:this.pathD(k2.pts),color:k2.color,w:k2.w,key:i})),drawEmpty,noUndo:drawEmpty,noRedo:!s.draw.redo.length,
+      drawStatus:drawEmpty?'Empty':`${s.draw.strokes.length} stroke${s.draw.strokes.length===1?'':'s'} · ready`,
+      drawInks:inks(s.draw.color),penFine:on(s.draw.w,2),penMed:on(s.draw.w,4),penBold:on(s.draw.w,7),
+      drawPreview:drawEmpty?null:this.sigEl('draw'),
+      /* type */
+      typeText:s.type.text,typeSize:s.type.size,typeEmpty,typeInks:inks(s.type.color),
+      typeStatus:typeEmpty?'Type a name to begin':`${FONTS[s.type.font].name} · ready`,
+      typePreview:typeEmpty?h('span',{style:{fontSize:'15px',color:'rgba(32,30,29,.6)'}},'Your signature appears here as you type'):this.sigEl('type'),
+      /* scan */
+      scanEmpty:!s.scan.src,scanHas:!!s.scan.src&&!s.scan.error,scanOriginal:s.scan.src?h('img',{src:s.scan.src,alt:'Original photo',style:{maxWidth:'100%',maxHeight:'100%',objectFit:'contain'}}):null,scanName:s.scan.name||'No photo chosen',scanThreshold:s.scan.threshold,
+      scanError:!!s.scan.error,scanErrorTitle:s.scan.error?.title,scanErrorText:s.scan.error?.text,scanNotReady:!this.hasSig('scan'),
+      scanStatus:s.scan.busy?'Cleaning…':s.scan.clean?'Cleaned · ready':s.scan.error?'Needs another file':'No photo yet',
+      scanPreview:s.scan.busy?h('span',{style:{width:'16px',height:'16px',border:'2px solid var(--color-accent)',borderRightColor:'transparent',borderRadius:'50%',animation:'smSpin .8s linear infinite'}}):this.sigEl('scan'),
+      /* outputs */
+      outputLabel:OUT[s.output],curDesc,bigSig:k?this.sigBox(k):null,
+      svgOk:k!=='scan',svgLabel:k==='draw'?'Vector SVG':'Text SVG',
+      svgNote:k==='draw'?'SVG keeps your strokes as vectors, so it scales to any size without blur.':k==='type'?'Text SVG references the font by name; it looks right where the font is installed and falls back to a default cursive elsewhere. Use PNG for exact appearance.':'Scanned signatures are pixel images, so they download as PNG only.',
+      dlBusy:s.download.status==='busy',dlDone:s.download.status==='done',dlFile:s.download.file,
+      stampEmpty:!st.img,stampHas:!!st.img,stampImage:st.img?h('img',{src:st.img,alt:'',style:{display:'block',maxWidth:'100%',maxHeight:'520px',width:'auto',height:'auto'}}):null,stampImgName:st.imgName,stampScale:st.scale,stampOpacity:st.opacity,stampBadge:st.badge,stampMsg:st.msg,
+      posTl:on(st.pos,'tl'),posTr:on(st.pos,'tr'),posC:on(st.pos,'c'),posBl:on(st.pos,'bl'),posBr:on(st.pos,'br'),
+      conAuto:on(st.contrast,'auto'),conNone:on(st.contrast,'none'),conLight:on(st.contrast,'light'),conDark:on(st.contrast,'dark'),
+      contrastNote:st.contrast==='auto'?'Auto adds a light plate so the ink stays readable on busy or dark areas.':st.contrast==='none'?'Signature sits directly on the graphic.':st.contrast==='light'?'A translucent white plate behind the signature.':'A translucent dark plate; drawn and typed ink switches to white.',
+      stampSigStyle,stampPlateStyle,stampSig:k?this.sigBox(k,{color:dark&&k!=='scan'?'#f3f2f2':null,filter:dark&&k==='scan'?'invert(1)':undefined}):null,
+      badgeStyle,badgeInitialStyle,badgeInitial:((st.badgeName||st.badgeHandle||'?').trim()[0]||'?').toUpperCase(),badgeName:st.badgeName||'Your name',badgeHandle:st.badgeHandle||'@handle',badgeNameRaw:st.badgeName,badgeHandleRaw:st.badgeHandle,
+      /* animate */
+      animFrameClass:a.bg==='transparent'?'sm-checker':'',animFrameStyle,animSig,animPlaying:a.playing,animPaused:!a.playing,playLabel:a.playing?'Pause':'Play',
+      animDesc:`${a.ratio} · ${a.duration}s at ${a.fps} fps · ${frames} frames`,
+      stClassic:on(a.style,'classic'),stGold:on(a.style,'gold'),stNeon:on(a.style,'neon'),rLand:on(a.ratio,'16:9'),rPort:on(a.ratio,'9:16'),rSq:on(a.ratio,'1:1'),
+      bgDark:on(a.bg,'dark'),bgTrans:on(a.bg,'transparent'),bgGreen:on(a.bg,'green'),animDuration:a.duration,fps30:on(a.fps,30),fps60:on(a.fps,60),
+      animBusy:a.status==='busy',animFailed:a.status==='failed',animDone:a.status==='done',animFrame:a.frame,animFrames:frames,animPct:Math.round(a.frame/frames*100),animBarStyle:{width:Math.round(a.frame/frames*100)+'%'},animFile:a.file,
+      /* pdf */
+      pdfEmpty:!p.file&&!p.error,pdfHas:!!p.file,pdfError:!!p.error,pdfErrorTitle:p.error?.title,pdfErrorText:p.error?.text,pdfName:p.name,pdfPages:p.pages,pdfDims:p.dims,pdfSize:p.size,
+      pdfPageStyle,pdfSigStyle,pdfSig:k?this.sigBox(k):null,
+      prTr:on(p.preset,'tr'),prBr:on(p.preset,'br'),prBl:on(p.preset,'bl'),prC:on(p.preset,'c'),prTrStyle:prStyle('tr'),prBrStyle:prStyle('br'),prBlStyle:prStyle('bl'),prCStyle:prStyle('c'),
+      pdfNotReady:!p.file||p.status==='busy',pdfBusy:p.status==='busy',pdfDone:p.status==='done',pdfOutName:p.name?p.name.replace(/\.pdf$/i,'')+'-signed.pdf':'',
+      /* pages */
+      pageKicker:pg.kicker,pageTitle:pg.title,pageIntro:pg.intro,pageSections:pg.sections,pageCta:pg.cta||'',pageCtaAct:pg.act||'create',pageCtaVal:pg.val||'draw'
+    }
+  }
+}
+</script>
+</body>
+</html>

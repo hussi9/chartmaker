@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Archived files (never deleted, moved here)
+.archive/
+# Local tool state
+.omx/

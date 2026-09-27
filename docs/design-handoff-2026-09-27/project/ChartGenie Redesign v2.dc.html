@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
+<style>
+body{margin:0;background:#e9e5de;font-family:Geist,system-ui,sans-serif;color:#1e293b}
+a{color:#0e9384}a:hover{color:#0b6f65}
+.cg{width:1440px;height:900px;background:#f6f3ee;display:grid;grid-template-columns:72px minmax(0,1fr);overflow:hidden;border:1px solid #d6d0c6;box-shadow:0 20px 60px rgba(30,41,59,.12)}
+.cg-rail{background:#1e293b;color:#f6f3ee;display:flex;flex-direction:column;align-items:center;padding:14px 0}
+.cg-rb{width:56px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:10px;color:rgba(246,243,238,.6);border-radius:8px}
+.cg-rb[data-on="true"]{background:rgba(255,255,255,.08);color:#fff;box-shadow:inset 3px 0 0 #2dd4bf}
+.cg-top{height:60px;display:flex;align-items:center;gap:12px;padding:0 24px;border-bottom:1px solid #e3ded6;background:#fbf9f6}
+.cg-h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1;margin:0}
+.cg-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid #d6d0c6;background:#fff;color:#1e293b;white-space:nowrap}
+.cg-btn.p{background:#0e9384;border-color:#0e9384;color:#fff}
+.cg-btn.g{border-color:transparent;background:transparent;color:#4b5563}
+.cg-chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:500;border:1px solid #d6d0c6;background:#fff;color:#374151;white-space:nowrap}
+.cg-chip[data-on="true"]{background:#1e293b;color:#fff;border-color:#1e293b}
+.cg-chip.t{background:#d9f2ee;border-color:#d9f2ee;color:#0b6f65}
+.cg-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6b7280;font-weight:600}
+.cg-card{background:#fff;border:1px solid #e3ded6;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.cg-cell{padding:14px 16px;border-bottom:1px solid #e3ded6;display:flex;flex-direction:column;gap:8px}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:11px}
+.cg-input{height:34px;border:1px solid #d6d0c6;border-radius:6px;background:#fff;padding:0 10px;font-size:13px;display:flex;align-items:center;color:#1e293b}
+.cg-row{display:grid;grid-template-columns:14px minmax(0,1fr) 64px;gap:8px;align-items:center;height:34px;border-bottom:1px solid #efeae2;font-size:13px}
+.cg-tog{width:36px;height:20px;border-radius:999px;background:#d6d0c6;position:relative;flex:none}
+.cg-tog::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.cg-tog[data-on="true"]{background:#0e9384}.cg-tog[data-on="true"]::after{left:auto;right:2px}
+.dv-hd{display:flex;align-items:baseline;gap:12px;padding:36px 40px 16px;font-size:13px;color:#4b5563}
+.dv-hd b{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;color:#1e293b}
+.dv-id{font:600 10px ui-monospace,monospace;padding:3px 7px;background:#1e293b;color:#fff;border-radius:4px}
+.fm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.fm > div{background:#fff;border:1px solid #e3ded6;border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.45}
+.fm b{font-family:'Bricolage Grotesque',sans-serif;font-size:15px}
+.fm .n{display:inline-flex;align-self:flex-start;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:#d9f2ee;color:#0b6f65}
+.fm .n.i{background:#fdf1dc;color:#8a5a08}
+.ann{position:absolute;background:#1e293b;color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;white-space:nowrap;box-shadow:0 4px 12px rgba(30,41,59,.2)}
+.ann::after{content:"";position:absolute;left:-5px;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:#1e293b;border-left:0}
+.callout{position:absolute;background:#2dd4bf;color:#1e293b;font-size:10px;font-weight:600;padding:3px 7px;border-radius:999px;border:2px solid #f6f3ee;z-index:2}
+.dv-row{display:flex;gap:32px;align-items:flex-start;width:max-content}
+.dv-row > *{flex:none}
+.phone{width:390px;height:844px;background:#f6f3ee;border-radius:44px;border:10px solid #1e293b;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(30,41,59,.18)}
+</style>
+</helmet>
+
+<div style="padding:0 0 60px;display:flex;flex-direction:column">
+<div style="padding:40px 40px 0;max-width:980px">
+  <span class="cg-lbl" style="color:#0e9384">ChartGenie · holistic redesign v2</span>
+  <h1 class="cg-h1" style="font-size:44px;margin:8px 0 12px">From “make a chart” to “publish a number that lands.”</h1>
+  <p style="margin:0 0 20px;font-size:15px;line-height:1.55;color:#4b5563;text-wrap:pretty">The current product is a chart tool. The opportunity is a publishing tool for people with numbers: get the data in with zero friction, let the product propose the chart and the sentence, export every size at once, and make each post a door back to ChartGenie. Below: the principles, the feature map, and five screens that carry it.</p>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;font-size:13px;line-height:1.45">
+    <div style="border-top:2px solid #1e293b;padding-top:10px"><b>Paste anything</b><br><span style="color:#4b5563">Cells, a sentence, a screenshot, a URL. The grid fills itself.</span></div>
+    <div style="border-top:2px solid #1e293b;padding-top:10px"><b>Propose, don’t ask</b><br><span style="color:#4b5563">Suggest the chart, the insight and the caption from the data shape.</span></div>
+    <div style="border-top:2px solid #1e293b;padding-top:10px"><b>Post-ready, every size</b><br><span style="color:#4b5563">One export gives 16:9, 1:1 and 9:16 with platform safe zones checked.</span></div>
+    <div style="border-top:2px solid #1e293b;padding-top:10px"><b>Every post is a loop</b><br><span style="color:#4b5563">Handle badge, share page with “remix”, monthly series reminders.</span></div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">0</span><b>Feature map</b><span>Green = new, amber = improved. Everything runs in the browser; no account needed until you want the shelf synced.</span></div>
+<div class="fm" style="margin:0 40px">
+  <div><span class="n">New</span><b>Paste-anything intake</b>Spreadsheet cells, “sales went from 12k to 34k”, a screenshot of a table or a public sheet link → parsed into rows, units detected (k, M, %, currency).</div>
+  <div><span class="n">New</span><b>Chart suggestions</b>Three ranked looks from the data shape: two points → before/after; dates → line; parts summing to 100 → donut; ranked list → bars.</div>
+  <div><span class="n">New</span><b>Insight chips</b>Auto-computed facts (largest, delta, share, average) you tap to add as a callout on the chart or a line in the caption.</div>
+  <div><span class="n">New</span><b>Caption composer</b>A post caption drafted from title + insights, tone toggle (plain / punchy / analyst), hashtags off by default. Copies with the PNG.</div>
+  <div><span class="n">New</span><b>Export set</b>One click renders 16:9 + 1:1 + 9:16 (+ 4:3) into a zip, each checked against X, LinkedIn and Instagram safe zones.</div>
+  <div><span class="n">New</span><b>Brand kit</b>Palette, font pair, logo corner and handle saved once; “Apply my brand” on any template. Colour-blind-safe variant generated automatically.</div>
+  <div><span class="n">New</span><b>Share page + remix</b>Public link shows the live chart, the caption and a “Remix with your numbers” button that opens the editor with this look. Views counted.</div>
+  <div><span class="n">New</span><b>Monthly series</b>Mark a chart as recurring; next month a card asks for the new numbers and shows last month faded behind for comparison.</div>
+  <div><span class="n i">Improved</span><b>Keyboard-fast grid</b>Tab/Enter navigation, paste a column, ⌘↑↓ reorder, ⌘D duplicate row, unit column, inline sort and “as % of total”.</div>
+  <div><span class="n i">Improved</span><b>Editor layout</b>Data left, post centre at true size, style right; export fixed top-right. Seven header buttons → two. ⌘K command palette for everything else.</div>
+  <div><span class="n i">Improved</span><b>Accessibility check</b>Contrast of labels on bars, minimum text size at export, auto alt-text for the post. A single “Post-ready ✓” indicator on the artboard.</div>
+  <div><span class="n i">Improved</span><b>Mobile quick post</b>Paste → suggestion → export in three taps on a phone; the full editor stays desktop.</div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">1</span><b>Intake — paste anything, get three charts</b><span>Replaces the template gallery as the first screen for returning users; templates remain one tab away.</span></div>
+<div class="cg" style="margin:0 40px" data-screen-label="Intake">
+  <nav class="cg-rail">
+    <div style="width:36px;height:36px;border-radius:10px;background:#2dd4bf;display:grid;place-items:center;margin-bottom:18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+    <div class="cg-rb" data-on="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>New</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Templates</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"></path></svg>My charts</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Series</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"></path><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 21"></path></svg>Brand</div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px;color:#1e293b">H</div><span style="font-size:9px;color:rgba(246,243,238,.6)">@Hussain</span></div>
+  </nav>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="cg-top"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">New chart</span><span class="cg-chip" style="margin-left:auto;gap:8px"><span class="mono">⌘K</span>Search or command</span></header>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 520px;flex:1;min-height:0">
+      <div style="padding:36px 40px;display:flex;flex-direction:column;gap:20px;border-right:1px solid #e3ded6">
+        <h1 class="cg-h1" style="font-size:40px">Paste anything.<br><span style="color:#0e9384">We’ll chart it.</span></h1>
+        <div style="position:relative;background:#fff;border:2px dashed #0e9384;border-radius:12px;padding:20px;min-height:220px;display:flex;flex-direction:column;gap:12px;box-shadow:0 0 0 6px #d9f2ee">
+          <span class="callout" style="top:-12px;left:16px">Detected: 4 rows · numbers · labels</span>
+          <div class="mono" style="font-size:13px;line-height:1.7;color:#1e293b;white-space:pre">USA        87
+Italy      20
+UK         12
+Ireland    15</div>
+          <div style="margin-top:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span class="cg-chip t">Cells</span><span class="cg-chip">Sentence</span><span class="cg-chip">Screenshot</span><span class="cg-chip">Sheet link</span><span class="cg-chip">CSV</span><span style="margin-left:auto;font-size:12px;color:#6b7280">or try <a href="#">sample data</a></span></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center"><span class="cg-btn p" style="height:40px">Continue with these rows →</span><span style="font-size:12px;color:#6b7280">Units: <b>plain numbers</b> · change to %, $, k</span></div>
+        <div style="margin-top:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;font-size:12px;color:#4b5563;line-height:1.5">
+          <div style="border-top:1px solid #d6d0c6;padding-top:8px"><b style="color:#1e293b">Sentence</b><br>“Revenue grew from 12k in Jan to 34k in Jun” → two points, k units, before/after suggested.</div>
+          <div style="border-top:1px solid #d6d0c6;padding-top:8px"><b style="color:#1e293b">Screenshot</b><br>A table screenshot is read in the browser; you confirm the rows before charting.</div>
+          <div style="border-top:1px solid #d6d0c6;padding-top:8px"><b style="color:#1e293b">Sheet link</b><br>A public Google Sheet range; “refresh numbers” later keeps the look and repulls.</div>
+        </div>
+      </div>
+      <div style="padding:36px 32px;display:flex;flex-direction:column;gap:14px;background:#efebe4">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="cg-lbl">Suggested for this data</span><a href="#" style="font-size:12px">All 17 looks</a></div>
+        <div class="cg-card" style="border-color:#0e9384;box-shadow:0 0 0 3px #d9f2ee">
+          <div style="padding:16px 18px 10px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Conversion Funnel</div><div style="font-size:11px;color:#6b7280">Best match · a ranked list with one dominant value</div></div><span class="cg-btn p" style="height:30px;padding:0 10px;font-size:12px">Use</span></div>
+          <div style="padding:0 18px 16px"><svg viewBox="0 0 400 80" style="width:100%"><rect x="0" y="0" width="400" height="16" rx="3" fill="#0e9384"></rect><rect x="78" y="21" width="244" height="16" rx="3" fill="#1e293b"></rect><rect x="112" y="42" width="176" height="16" rx="3" fill="#e0a33a"></rect><rect x="100" y="63" width="200" height="16" rx="3" fill="#e26d5a"></rect></svg></div>
+        </div>
+        <div class="cg-card">
+          <div style="padding:16px 18px 10px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Ranked Bars</div><div style="font-size:11px;color:#6b7280">Clear ordering, easy to read at 1:1</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use</span></div>
+          <div style="padding:0 18px 16px"><svg viewBox="0 0 400 80" style="width:100%"><rect x="0" y="0" width="400" height="14" rx="3" fill="#1e293b"></rect><rect x="0" y="22" width="92" height="14" rx="3" fill="#1e293b" opacity=".8"></rect><rect x="0" y="44" width="69" height="14" rx="3" fill="#1e293b" opacity=".6"></rect><rect x="0" y="66" width="55" height="14" rx="3" fill="#0e9384"></rect></svg></div>
+        </div>
+        <div class="cg-card">
+          <div style="padding:16px 18px 10px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600">Donut Share</div><div style="font-size:11px;color:#6b7280">If these are parts of one total (134)</div></div><span class="cg-btn" style="height:30px;padding:0 10px;font-size:12px">Use</span></div>
+          <div style="padding:0 18px 16px;display:flex;gap:16px;align-items:center"><svg viewBox="0 0 80 80" style="width:72px"><circle cx="40" cy="40" r="30" fill="none" stroke="#e3ded6" stroke-width="12"></circle><circle cx="40" cy="40" r="30" fill="none" stroke="#0e9384" stroke-width="12" stroke-dasharray="122 200" transform="rotate(-90 40 40)"></circle></svg><div style="font-size:12px;color:#4b5563">USA 65% · Italy 15% · Ireland 11% · UK 9%</div></div>
+        </div>
+        <div style="margin-top:auto;font-size:12px;color:#6b7280;line-height:1.5"><b style="color:#1e293b">Insights found:</b> USA is 4.4× the next value · UK is the smallest · total 134. These appear as chips in the editor.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">2</span><b>Editor — insights, caption and export set</b><span>Same three-column shell as before; the right column gains Insights and Caption, the artboard gains callouts and a post-ready check.</span></div>
+<div class="cg" style="margin:0 40px" data-screen-label="Editor v2">
+  <nav class="cg-rail">
+    <div style="width:36px;height:36px;border-radius:10px;background:#2dd4bf;display:grid;place-items:center;margin-bottom:18px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>New</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>Templates</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM4 9h16M9 9v11"></path></svg>My charts</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Series</div>
+    <div class="cg-rb"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"></path><circle cx="9" cy="9" r="2"></circle><path d="M21 15l-5-5L5 21"></path></svg>Brand</div>
+    <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px;color:#1e293b">H</div><span style="font-size:9px;color:rgba(246,243,238,.6)">@Hussain</span></div>
+  </nav>
+  <div style="display:flex;flex-direction:column;min-width:0">
+    <header class="cg-top">
+      <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">Countries</span><span class="cg-chip t" style="height:24px;font-size:11px">Post-ready ✓</span>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center"><span class="mono" style="color:#0e9384;margin-right:8px">● Autosaved</span><span class="cg-btn">Share page</span><span class="cg-btn p">Export set ▾</span></div>
+    </header>
+    <div style="display:grid;grid-template-columns:280px minmax(0,1fr) 320px;flex:1;min-height:0">
+      <aside style="border-right:1px solid #e3ded6;background:#fbf9f6;display:flex;flex-direction:column">
+        <div class="cg-cell" style="flex-direction:row;align-items:center;justify-content:space-between"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Data</span><div style="display:flex;gap:4px"><span class="cg-chip" style="height:26px;font-size:11px">↻ Repull sheet</span><span class="cg-chip" style="height:26px;font-size:11px">% of total</span></div></div>
+        <div class="cg-cell" style="gap:4px">
+          <div style="display:grid;grid-template-columns:14px minmax(0,1fr) 64px;gap:8px;padding-bottom:6px" class="cg-lbl"><span></span><span>Label</span><span style="text-align:right">Value</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#0e9384"></span><span>USA</span><span class="mono" style="text-align:right;font-size:13px">87</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#1e293b"></span><span>Italy</span><span class="mono" style="text-align:right;font-size:13px">20</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#e0a33a"></span><span>UK</span><span class="mono" style="text-align:right;font-size:13px">12</span></div>
+          <div class="cg-row"><span style="width:10px;height:10px;border-radius:50%;background:#e26d5a"></span><span>Ireland</span><span class="mono" style="text-align:right;font-size:13px">15</span></div>
+          <div class="cg-row" style="border-bottom:0;color:#9ca3af"><span style="width:10px;height:10px;border-radius:50%;border:1px dashed #9ca3af"></span><span>Type a label…</span><span></span></div>
+          <div class="mono" style="display:flex;justify-content:space-between;margin-top:8px;color:#6b7280"><span>Total 134 · avg 33.5</span><span>⇥ ⏎ ⌘↑↓ ⌘D</span></div>
+        </div>
+        <div class="cg-cell"><span class="cg-lbl">Units</span><div style="display:flex;border:1px solid #d6d0c6;border-radius:6px;overflow:hidden;font-size:12px"><span style="flex:1;padding:7px 0;text-align:center;background:#1e293b;color:#fff">123</span><span style="flex:1;padding:7px 0;text-align:center">%</span><span style="flex:1;padding:7px 0;text-align:center">$</span><span style="flex:1;padding:7px 0;text-align:center">k / M</span></div></div>
+        <div class="cg-cell" style="border-bottom:0"><span class="cg-lbl">Text on chart</span><div class="cg-input">Countries</div><div class="cg-input" style="color:#9ca3af">Subtitle (optional)</div><div class="cg-input" style="color:#9ca3af">Source</div></div>
+      </aside>
+      <section style="display:flex;flex-direction:column;min-width:0;background:#efebe4">
+        <div style="display:flex;align-items:center;gap:6px;padding:12px 20px;border-bottom:1px solid #e3ded6;background:#f6f3ee"><span class="cg-lbl" style="margin-right:6px">Preview</span><span class="cg-chip" data-on="true">16:9</span><span class="cg-chip">1:1</span><span class="cg-chip">9:16</span><span class="cg-chip">4:3</span><span style="width:1px;height:20px;background:#d6d0c6;margin:0 6px"></span><span class="cg-chip">Safe zones: X</span><span class="mono" style="margin-left:auto;color:#6b7280">1600 × 900 · 50%</span></div>
+        <div style="flex:1;display:grid;place-items:center;padding:24px">
+          <div style="width:680px;aspect-ratio:16/9;background:#fff;border-radius:12px;box-shadow:0 24px 60px rgba(30,41,59,.18),0 0 0 1px #e3ded6;position:relative;padding:34px 42px;display:flex;flex-direction:column">
+            <div style="position:absolute;inset:0;border-radius:12px;pointer-events:none;box-shadow:inset 0 0 0 24px rgba(14,147,132,.06)"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.03em">Countries</div><div style="font-size:12px;color:#6b7280;margin-top:2px">Stage-by-stage drop-off</div></div><span class="mono" style="background:#f6f3ee;border:1px solid #e3ded6;border-radius:999px;padding:4px 10px">@Hussain</span></div>
+            <div style="position:relative;flex:1;margin-top:16px">
+              <svg viewBox="0 0 600 200" style="width:100%;height:100%">
+                <rect x="0" y="0" width="600" height="38" rx="6" fill="#0e9384"></rect><text x="14" y="25" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">USA</text><text x="586" y="25" fill="#fff" font-size="14" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">87 · 100%</text>
+                <rect x="116" y="50" width="368" height="38" rx="6" fill="#1e293b"></rect><text x="130" y="75" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Italy</text><text x="470" y="75" fill="#fff" font-size="14" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">20 · 23%</text>
+                <rect x="165" y="100" width="270" height="38" rx="6" fill="#e0a33a"></rect><text x="179" y="125" fill="#1e293b" font-size="14" font-weight="600" font-family="Geist, sans-serif">UK</text><text x="421" y="125" fill="#1e293b" font-size="14" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">12 · 14%</text>
+                <rect x="150" y="150" width="300" height="38" rx="6" fill="#e26d5a"></rect><text x="164" y="175" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Ireland</text><text x="436" y="175" fill="#fff" font-size="14" font-weight="600" text-anchor="end" font-family="Geist Mono, monospace">15 · 17%</text>
+              </svg>
+              <span class="ann" style="left:62%;top:26%">USA is 4.4× Italy</span>
+            </div>
+            <div class="mono" style="display:flex;justify-content:space-between;margin-top:10px;color:#9ca3af"><span>Source: internal</span><span>chartgenie.xyz</span></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:12px 20px;border-top:1px solid #e3ded6;background:#f6f3ee"><span class="cg-lbl" style="margin-right:6px">Look</span><span class="cg-btn" style="height:32px">Conversion Funnel ▾</span><span class="cg-chip" data-on="true">Clean</span><span class="cg-chip">Bold</span><span class="cg-chip">Dark</span><span class="cg-chip t">Apply my brand</span><span class="cg-btn g" style="margin-left:auto;height:32px">Copy PNG</span><span class="cg-btn g" style="height:32px">Copy PNG + caption</span></div>
+      </section>
+      <aside style="border-left:1px solid #e3ded6;background:#fbf9f6;display:flex;flex-direction:column">
+        <div style="display:flex;border-bottom:1px solid #e3ded6;font-size:12px;font-weight:600"><span style="flex:1;padding:12px 0;text-align:center;border-bottom:2px solid #1e293b">Insights</span><span style="flex:1;padding:12px 0;text-align:center;color:#6b7280">Caption</span><span style="flex:1;padding:12px 0;text-align:center;color:#6b7280">Style</span></div>
+        <div class="cg-cell"><span class="cg-lbl">Tap to add as a callout</span>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span class="cg-chip" data-on="true" style="height:auto;padding:8px 12px;border-radius:8px;justify-content:space-between">USA is 4.4× the next value<span class="mono">on chart</span></span>
+            <span class="cg-chip" style="height:auto;padding:8px 12px;border-radius:8px;justify-content:space-between">USA holds 65% of the total<span class="mono" style="color:#0e9384">+ add</span></span>
+            <span class="cg-chip" style="height:auto;padding:8px 12px;border-radius:8px;justify-content:space-between">UK is the smallest at 12<span class="mono" style="color:#0e9384">+ add</span></span>
+            <span class="cg-chip" style="height:auto;padding:8px 12px;border-radius:8px;justify-content:space-between">Average is 33.5<span class="mono" style="color:#0e9384">+ add</span></span>
+          </div></div>
+        <div class="cg-cell"><span class="cg-lbl">Caption draft · punchy</span>
+          <div style="background:#fff;border:1px solid #d6d0c6;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5">One market carries the funnel: USA at 87 is 4.4× Italy, and 65% of everything. Where would you push next?</div>
+          <div style="display:flex;gap:6px"><span class="cg-chip" style="height:26px;font-size:11px">Plain</span><span class="cg-chip" data-on="true" style="height:26px;font-size:11px">Punchy</span><span class="cg-chip" style="height:26px;font-size:11px">Analyst</span><span class="cg-chip" style="height:26px;font-size:11px;margin-left:auto">Regenerate</span></div></div>
+        <div class="cg-cell"><span class="cg-lbl">Export set</span>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+            <label style="display:flex;justify-content:space-between;align-items:center"><span>16:9 · X / Web · 1600×900</span><span class="cg-tog" data-on="true"></span></label>
+            <label style="display:flex;justify-content:space-between;align-items:center"><span>1:1 · LinkedIn · 1080×1080</span><span class="cg-tog" data-on="true"></span></label>
+            <label style="display:flex;justify-content:space-between;align-items:center"><span>9:16 · Story · 1080×1920</span><span class="cg-tog" data-on="true"></span></label>
+            <label style="display:flex;justify-content:space-between;align-items:center"><span>4:3 · Deck · 1600×1200</span><span class="cg-tog"></span></label>
+          </div><span style="font-size:11px;color:#6b7280">PNG + SVG each, plus caption.txt and alt-text. Zipped.</span></div>
+        <div class="cg-cell" style="border-bottom:0;margin-top:auto;border-top:1px solid #e3ded6"><span class="cg-lbl">Checks</span><div style="font-size:12px;line-height:1.7"><span style="color:#0b6f65">✓</span> Label contrast 7.1:1 · <span style="color:#0b6f65">✓</span> Text ≥ 24px at 1080 · <span style="color:#0b6f65">✓</span> Nothing in X crop zone · <span style="color:#0b6f65">✓</span> Alt text written</div></div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">3</span><b>Share page — every post is a door back in</b><span>What a viewer sees when they follow the link. The remix button opens the editor with this look and sample numbers.</span></div>
+<div style="margin:0 40px;width:1440px;height:760px;background:#fff;border:1px solid #d6d0c6;box-shadow:0 20px 60px rgba(30,41,59,.12);display:grid;grid-template-columns:minmax(0,1fr) 420px;overflow:hidden" data-screen-label="Share page">
+  <div style="background:#efebe4;display:grid;place-items:center;padding:48px">
+    <div style="width:760px;aspect-ratio:16/9;background:#fff;border-radius:12px;box-shadow:0 24px 60px rgba(30,41,59,.18);padding:38px 46px;display:flex;flex-direction:column">
+      <div style="display:flex;justify-content:space-between"><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:32px;letter-spacing:-.03em">Countries</div><div style="font-size:13px;color:#6b7280">Stage-by-stage drop-off</div></div><span class="mono" style="background:#f6f3ee;border:1px solid #e3ded6;border-radius:999px;padding:4px 10px;height:fit-content">@Hussain</span></div>
+      <svg viewBox="0 0 600 200" style="width:100%;flex:1;margin-top:18px"><rect x="0" y="0" width="600" height="38" rx="6" fill="#0e9384"></rect><rect x="116" y="50" width="368" height="38" rx="6" fill="#1e293b"></rect><rect x="165" y="100" width="270" height="38" rx="6" fill="#e0a33a"></rect><rect x="150" y="150" width="300" height="38" rx="6" fill="#e26d5a"></rect><text x="14" y="25" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">USA · 87</text><text x="130" y="75" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Italy · 20</text><text x="179" y="125" fill="#1e293b" font-size="14" font-weight="600" font-family="Geist, sans-serif">UK · 12</text><text x="164" y="175" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Ireland · 15</text></svg>
+    </div>
+  </div>
+  <div style="padding:40px 36px;display:flex;flex-direction:column;gap:18px;border-left:1px solid #e3ded6">
+    <div style="display:flex;align-items:center;gap:10px"><div style="width:32px;height:32px;border-radius:50%;background:#e0a33a;display:grid;place-items:center;font-weight:600;font-size:13px">H</div><div><div style="font-size:13px;font-weight:600">@Hussain</div><div class="mono" style="color:#6b7280">published 2 min ago · 14 views</div></div></div>
+    <h2 class="cg-h1" style="font-size:28px">Countries</h2>
+    <p style="margin:0;font-size:14px;line-height:1.55;color:#4b5563">One market carries the funnel: USA at 87 is 4.4× Italy, and 65% of everything. Where would you push next?</p>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3ded6"><span>USA</span><span class="mono" style="font-size:13px">87 · 65%</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3ded6"><span>Italy</span><span class="mono" style="font-size:13px">20 · 15%</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3ded6"><span>Ireland</span><span class="mono" style="font-size:13px">15 · 11%</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3ded6"><span>UK</span><span class="mono" style="font-size:13px">12 · 9%</span></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="cg-btn p" style="height:40px">Remix with your numbers</span><span class="cg-btn">Download PNG</span><span class="cg-btn g">Copy data</span></div>
+    <div style="margin-top:auto;font-size:12px;color:#6b7280;line-height:1.5">Made with <b style="color:#1e293b">ChartGenie</b> — free, in the browser. The remix opens this exact look with the numbers blank, and credits the original with a small “remixed from @Hussain” line unless removed.</div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">4</span><b>Series & Brand — the reasons to come back</b><span>A recurring chart asks for next month’s numbers; the brand kit makes any template yours in one click.</span></div>
+<div class="dv-row" style="margin:0 40px;gap:24px">
+  <div style="width:920px;height:600px;background:#f6f3ee;border:1px solid #d6d0c6;box-shadow:0 20px 60px rgba(30,41,59,.12);display:flex;flex-direction:column;overflow:hidden" data-screen-label="Series">
+    <header class="cg-top"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">Series</span><span class="cg-btn p" style="margin-left:auto">New series</span></header>
+    <div style="padding:24px 28px;display:flex;flex-direction:column;gap:16px;flex:1">
+      <h2 class="cg-h1" style="font-size:30px">Recurring charts</h2>
+      <div class="cg-card" style="flex-direction:row;border-color:#0e9384;box-shadow:0 0 0 3px #d9f2ee">
+        <div style="width:300px;aspect-ratio:16/9;background:#fff;border-right:1px solid #e3ded6;padding:18px;position:relative">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:14px">MRR by plan</div>
+          <svg viewBox="0 0 240 80" style="width:100%;margin-top:10px"><rect x="0" y="6" width="150" height="14" rx="3" fill="#d6d0c6"></rect><rect x="0" y="0" width="172" height="14" rx="3" fill="#0e9384"></rect><rect x="0" y="30" width="96" height="14" rx="3" fill="#d6d0c6"></rect><rect x="0" y="24" width="90" height="14" rx="3" fill="#1e293b"></rect><rect x="0" y="54" width="60" height="14" rx="3" fill="#d6d0c6"></rect><rect x="0" y="48" width="78" height="14" rx="3" fill="#e0a33a"></rect></svg>
+          <span class="mono" style="position:absolute;right:14px;bottom:10px;color:#9ca3af">grey = last month</span>
+        </div>
+        <div style="padding:16px 20px;display:flex;flex-direction:column;gap:8px;flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">MRR by plan · monthly</span><span class="cg-chip t" style="height:24px;font-size:11px">Due today</span></div>
+          <span style="font-size:13px;color:#4b5563">Paste September’s three numbers. The look, size, handle and caption tone are kept; last month sits faded behind for comparison and the caption gets the deltas.</span>
+          <div class="mono" style="font-size:13px;background:#fff;border:1px solid #d6d0c6;border-radius:6px;padding:8px 10px;color:#9ca3af">Starter, Pro, Team →  paste here</div>
+          <div style="display:flex;gap:8px;margin-top:auto"><span class="cg-btn p">Update & export set</span><span class="cg-btn g">Skip this month</span></div>
+        </div>
+      </div>
+      <div class="cg-card" style="flex-direction:row;align-items:center;padding:12px 16px;gap:14px"><span style="width:44px;height:26px;background:#1e293b;border-radius:4px"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">Weekly signups</div><div class="mono" style="color:#6b7280">weekly · next Monday · 12 posts so far</div></div><span class="cg-btn g">Open</span></div>
+      <div class="cg-card" style="flex-direction:row;align-items:center;padding:12px 16px;gap:14px"><span style="width:44px;height:26px;background:#0e9384;border-radius:4px"></span><div style="flex:1"><div style="font-size:13px;font-weight:600">Countries funnel</div><div class="mono" style="color:#6b7280">quarterly · Oct 1 · 2 posts so far</div></div><span class="cg-btn g">Open</span></div>
+    </div>
+  </div>
+  <div style="width:496px;height:600px;background:#f6f3ee;border:1px solid #d6d0c6;box-shadow:0 20px 60px rgba(30,41,59,.12);display:flex;flex-direction:column;overflow:hidden" data-screen-label="Brand kit">
+    <header class="cg-top"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px">ChartGenie</span><span style="color:#9ca3af">/</span><span style="font-size:13px;font-weight:600">Brand</span></header>
+    <div style="padding:24px 24px 0;display:flex;flex-direction:column;gap:14px;flex:1">
+      <h2 class="cg-h1" style="font-size:30px">My brand</h2>
+      <div class="cg-card">
+        <div class="cg-cell"><span class="cg-lbl">Palette</span><div style="display:flex;gap:6px"><span style="width:36px;height:36px;border-radius:6px;background:#0e9384"></span><span style="width:36px;height:36px;border-radius:6px;background:#1e293b"></span><span style="width:36px;height:36px;border-radius:6px;background:#e0a33a"></span><span style="width:36px;height:36px;border-radius:6px;background:#e26d5a"></span><span style="width:36px;height:36px;border-radius:6px;border:1px dashed #9ca3af;display:grid;place-items:center;color:#9ca3af">+</span></div><span style="font-size:11px;color:#6b7280">Colour-blind-safe variant generated · <a href="#">preview</a></span></div>
+        <div class="cg-cell"><span class="cg-lbl">Type</span><div style="display:flex;justify-content:space-between;font-size:13px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800">Bricolage Grotesque</span><span style="color:#6b7280">headline</span></div><div style="display:flex;justify-content:space-between;font-size:13px"><span>Geist</span><span style="color:#6b7280">labels</span></div></div>
+        <div class="cg-cell"><span class="cg-lbl">Badge</span><div style="display:flex;gap:8px;align-items:center"><span class="mono" style="background:#f6f3ee;border:1px solid #e3ded6;border-radius:999px;padding:4px 10px">@Hussain</span><span class="cg-chip" style="height:26px;font-size:11px">+ logo</span><span style="font-size:12px;color:#6b7280;margin-left:auto">bottom-right</span></div></div>
+        <div class="cg-cell" style="border-bottom:0;flex-direction:row;justify-content:space-between;align-items:center"><span style="font-size:13px">Apply to every new chart</span><span class="cg-tog" data-on="true"></span></div>
+      </div>
+      <span style="font-size:12px;color:#6b7280;line-height:1.5">Saved in this browser. Sign in later to sync brand, charts and series across devices; nothing is required to use ChartGenie.</span>
+    </div>
+  </div>
+</div>
+
+<div class="dv-hd"><span class="dv-id">5</span><b>Mobile quick post</b><span>Paste → suggestion → export in three taps. The full editor stays desktop-only; the phone gets the 80% case.</span></div>
+<div class="dv-row" style="margin:0 40px">
+  <div class="phone" data-screen-label="Mobile · paste">
+    <div style="padding:52px 20px 0;display:flex;flex-direction:column;gap:16px;flex:1">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px">ChartGenie</span><span class="mono" style="background:#fff;border:1px solid #e3ded6;border-radius:999px;padding:3px 9px">@Hussain</span></div>
+      <h2 class="cg-h1" style="font-size:30px">Paste your numbers</h2>
+      <div style="background:#fff;border:2px dashed #0e9384;border-radius:12px;padding:16px;min-height:170px;display:flex;flex-direction:column;gap:10px"><span class="callout" style="position:static;align-self:flex-start">Detected: 4 rows</span><div class="mono" style="font-size:13px;line-height:1.7;white-space:pre">USA        87
+Italy      20
+UK         12
+Ireland    15</div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="cg-chip t">Cells</span><span class="cg-chip">Sentence</span><span class="cg-chip">Photo of a table</span></div>
+      <span class="cg-btn p" style="height:48px;justify-content:center;margin-top:auto;margin-bottom:24px;font-size:15px">See 3 charts →</span>
+    </div>
+  </div>
+  <div class="phone" data-screen-label="Mobile · pick & export">
+    <div style="padding:52px 20px 0;display:flex;flex-direction:column;gap:14px;flex:1;min-height:0">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#6b7280">← Numbers</span><span class="cg-chip t" style="height:24px;font-size:11px">Post-ready ✓</span></div>
+      <div style="display:flex;gap:6px"><span class="cg-chip" data-on="true">1:1</span><span class="cg-chip">9:16</span><span class="cg-chip">16:9</span></div>
+      <div style="aspect-ratio:1;background:#fff;border-radius:12px;box-shadow:0 16px 40px rgba(30,41,59,.16);padding:22px;display:flex;flex-direction:column">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;letter-spacing:-.03em">Countries</div>
+        <svg viewBox="0 0 300 200" style="width:100%;flex:1;margin-top:14px"><rect x="0" y="0" width="300" height="38" rx="6" fill="#0e9384"></rect><rect x="58" y="50" width="184" height="38" rx="6" fill="#1e293b"></rect><rect x="82" y="100" width="136" height="38" rx="6" fill="#e0a33a"></rect><rect x="75" y="150" width="150" height="38" rx="6" fill="#e26d5a"></rect><text x="12" y="25" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">USA · 87</text><text x="70" y="75" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Italy · 20</text><text x="94" y="125" fill="#1e293b" font-size="14" font-weight="600" font-family="Geist, sans-serif">UK · 12</text><text x="87" y="175" fill="#fff" font-size="14" font-weight="600" font-family="Geist, sans-serif">Ireland · 15</text></svg>
+        <div class="mono" style="display:flex;justify-content:space-between;margin-top:10px;color:#9ca3af"><span>@Hussain</span><span>chartgenie.xyz</span></div>
+      </div>
+      <div style="display:flex;gap:8px;overflow:hidden;mask-image:linear-gradient(90deg,#000 85%,transparent)"><span class="cg-chip" data-on="true">Funnel</span><span class="cg-chip">Ranked bars</span><span class="cg-chip">Donut</span><span class="cg-chip">Clean</span><span class="cg-chip">Dark</span></div>
+      <div style="background:#fff;border:1px solid #e3ded6;border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.5;color:#4b5563">One market carries the funnel: USA at 87 is 4.4× Italy… <a href="#">edit caption</a></div>
+      <div style="display:flex;gap:8px;margin-top:auto;margin-bottom:24px"><span class="cg-btn p" style="flex:1;height:48px;justify-content:center;font-size:15px">Share image + caption</span><span class="cg-btn" style="height:48px;width:48px;justify-content:center;padding:0">⋯</span></div>
+    </div>
+  </div>
+  <div style="width:420px;font-size:13px;line-height:1.6;color:#4b5563;padding-top:8px">
+    <span class="cg-lbl">Why these, in order of impact</span>
+    <ol style="margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:8px">
+      <li><b style="color:#1e293b">Intake</b> removes the biggest drop-off: typing numbers into fields. Paste is the universal verb.</li>
+      <li><b style="color:#1e293b">Suggestions + insights</b> make the product feel expert; the user confirms rather than decides.</li>
+      <li><b style="color:#1e293b">Export set + caption</b> finish the actual job, which is posting, not downloading.</li>
+      <li><b style="color:#1e293b">Share page + remix</b> is the growth loop; every published chart recruits the next user.</li>
+      <li><b style="color:#1e293b">Series + brand</b> turn a one-off into a habit and make the second post faster than the first.</li>
+    </ol>
+    <p style="margin:14px 0 0">Honest limits: screenshot reading and caption drafting need a model call or an on-device library; everything else is plain browser code. No account is ever required; sign-in only adds sync.</p>
+  </div>
+</div>
+</div>
+</x-dc>
+</body>
+</html>

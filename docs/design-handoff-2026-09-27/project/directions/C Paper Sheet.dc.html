@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="../_ds/modernist-d72ea4e2-3167-4e12-aa96-1a77206dd85e/styles.css"><style>body{margin:0}</style></helmet>
+<div style="background:var(--color-surface);color:var(--color-text);font-family:var(--font-body);min-height:100vh;display:flex;flex-direction:column">
+  <header style="background:var(--color-bg);border-bottom:2px solid var(--color-divider)">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 24px"><span style="font-family:var(--font-heading);font-weight:800;font-size:17px">SignatureMaker</span><span style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:56px;height:22px;background:repeating-conic-gradient(#dad6d6 0 25%,#f3f2f2 0 50%) 0 0/12px 12px"></span>Drawn signature</span></div>
+    <div style="display:grid;grid-template-columns:3fr 4fr;border-top:1px solid var(--color-divider)">
+      <div style="display:flex;align-items:stretch"><span style="background:var(--color-accent);color:var(--color-bg);padding:10px 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center">1 Create</span><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;font-family:var(--font-heading);font-weight:800;border-bottom:3px solid var(--color-accent)">Draw</a><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">Type</a><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">Scan</a></div>
+      <div style="display:flex;align-items:stretch;border-left:2px solid var(--color-divider)"><span style="border-right:1px solid var(--color-divider);padding:10px 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;opacity:.6">2 Use</span><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">Download</a><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">Stamp</a><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">Animate</a><a href="#" style="padding:10px 18px;color:inherit;text-decoration:none;opacity:.7">PDF</a></div>
+    </div>
+  </header>
+  <main style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px 24px">
+    <div style="width:100%;max-width:820px;display:flex;justify-content:space-between;align-items:baseline"><h1 style="font-size:28px;margin:0">Sign on the line</h1><span style="font-size:12px;opacity:.6">Mouse, finger or stylus · 3 strokes</span></div>
+    <div style="position:relative;width:100%;max-width:820px;aspect-ratio:2/1;background:#fff;box-shadow:var(--shadow-lg)">
+      <svg viewBox="0 0 820 410" style="width:100%;height:100%;display:block"><line x1="70" y1="300" x2="750" y2="300" stroke="#201e1d" stroke-width="1.5"></line><text x="70" y="330" font-size="11" fill="#201e1d" opacity=".5" font-family="Archivo, sans-serif" letter-spacing="1.5">SIGNATURE</text><path d="M110 290 C140 150 170 130 178 220 C186 300 150 320 195 285 C250 240 270 165 300 195 C330 225 300 300 355 260 C410 220 425 165 470 205 C505 235 485 300 545 270 C600 240 630 205 670 225 C700 240 690 290 735 275" fill="none" stroke="#201e1d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <div style="position:absolute;top:12px;right:12px;display:flex;gap:2px;background:var(--color-bg);border:1px solid var(--color-divider);padding:2px"><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">↶</button><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">↷</button><button type="button" class="btn btn-secondary btn-icon" style="border-color:transparent">✕</button></div>
+    </div>
+    <div style="width:100%;max-width:820px;display:flex;align-items:center;background:var(--color-bg);border:1px solid var(--color-divider);box-shadow:var(--shadow-sm)">
+      <div style="display:flex;gap:8px;padding:10px 14px;border-right:1px solid var(--color-divider)"><span style="width:28px;height:28px;background:#201e1d;outline:2px solid var(--color-accent);outline-offset:2px"></span><span style="width:28px;height:28px;background:#1d3557"></span><span style="width:28px;height:28px;background:#2457c5"></span><span style="width:28px;height:28px;background:#ec3013"></span><span style="width:28px;height:28px;background:#1f6b3a"></span></div>
+      <div style="padding:8px 14px;border-right:1px solid var(--color-divider)"><div class="seg"><span class="seg-opt">Fine</span><span class="seg-opt" style="background:var(--color-accent);color:var(--color-bg)">Medium</span><span class="seg-opt">Bold</span></div></div>
+      <div style="margin-left:auto;display:flex;gap:8px;padding:8px 14px"><button type="button" class="btn btn-secondary">Download ▾</button><button type="button" class="btn btn-primary">Use this signature →</button></div>
+    </div>
+    <div style="width:100%;max-width:820px;display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--color-divider);font-size:12px">
+      <div style="padding:12px 0;border-right:1px solid var(--color-divider)"><span style="display:block;opacity:.6;font-size:10px;letter-spacing:.1em;text-transform:uppercase">Transparent preview</span><div style="height:40px;margin-top:6px;margin-right:16px;background:repeating-conic-gradient(#dad6d6 0 25%,#f3f2f2 0 50%) 0 0/12px 12px"></div></div>
+      <div style="padding:12px 16px;border-right:1px solid var(--color-divider)"><span style="display:block;opacity:.6;font-size:10px;letter-spacing:.1em;text-transform:uppercase">Draft</span>Saved in this browser</div>
+      <div style="padding:12px 16px"><span style="display:block;opacity:.6;font-size:10px;letter-spacing:.1em;text-transform:uppercase">Next</span>Download · Stamp · Animate · PDF</div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:800}}"></script>
+</body>
+</html>

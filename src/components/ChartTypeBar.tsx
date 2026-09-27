@@ -22,6 +22,7 @@ import type { ChartType } from '../lib/chartPresets';
 import { triggerHaptic } from '../lib/haptics';
 
 interface ChartTypeBarProps {
+  containerRef?: React.Ref<HTMLDivElement>;
   activeType: ChartType;
   onSelectType: (type: ChartType) => void;
 }
@@ -75,7 +76,7 @@ const CATEGORIES: { id: ChartCategory; label: string; count: number }[] = [
   { id: 'All', label: 'All', count: 17 }
 ];
 
-export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelectType }) => {
+export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ containerRef, activeType, onSelectType }) => {
   const [selectedCategory, setSelectedCategory] = useState<ChartCategory>(() => {
     if (POPULAR_TYPES.includes(activeType)) return 'Popular';
     const match = ALL_17_CHARTS.find(c => c.type === activeType);
@@ -170,7 +171,7 @@ export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelect
   const currentActiveMeta = ALL_17_CHARTS.find(c => c.type === activeType);
 
   return (
-    <div className="chart-type-bar chart-type-selector-wrapper" style={{ position: 'relative' }}>
+    <div className="chart-type-bar chart-type-selector-wrapper" ref={containerRef} style={{ position: 'relative' }}>
       {/* Category Filter Pills & More Button Bar */}
       <div className="chart-category-bar">
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', flex: 1, scrollbarWidth: 'none' }}>
@@ -181,6 +182,7 @@ export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelect
                 key={cat.id}
                 type="button"
                 className={`chart-cat-pill ${isCatActive ? 'active' : ''}`}
+                aria-pressed={isCatActive}
                 onClick={() => {
                   triggerHaptic('light');
                   setSelectedCategory(cat.id);
@@ -206,6 +208,7 @@ export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelect
           ref={moreBtnRef}
           type="button"
           className="chart-cat-pill"
+          aria-expanded={isMoreOpen}
           style={{
             flexShrink: 0,
             background: isMoreOpen ? '#eff6ff' : '#ffffff',
@@ -247,6 +250,7 @@ export const ChartTypeBar: React.FC<ChartTypeBarProps> = ({ activeType, onSelect
                 key={item.type}
                 type="button"
                 className={`chart-type-card ${isActive ? 'active' : ''}`}
+                aria-pressed={isActive}
                 onClick={() => {
                   triggerHaptic('light');
                   onSelectType(item.type);

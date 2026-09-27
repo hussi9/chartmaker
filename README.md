@@ -1,4 +1,4 @@
-# ChartGenie.xyz — Instant AI Chart & Viral Infographic Generator
+# ChartGenie.xyz — Chart Maker
 
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)](https://react.dev/)
@@ -6,7 +6,7 @@
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable-10B981?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 [![Capacitor Ready](https://img.shields.io/badge/Capacitor-iOS%20%26%20Android-1192d3?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
 
-**ChartGenie** is a high-performance, privacy-first, client-side data visualization and viral infographic maker. Turn raw numbers, spreadsheets, and natural language prompts into stunning, publication-ready charts in seconds.
+**ChartGenie** turns numbers you enter or paste from spreadsheets into charts you can export as PNG or SVG. My Charts saves to this browser's local storage; the site also uses analytics that excludes chart content from events.
 
 Built to be **user-friendly**, **viral on social networks (X/Twitter, LinkedIn, TikTok, Instagram)**, and **architected for seamless conversion into native iOS and Android mobile apps via Capacitor or PWA**.
 
@@ -30,16 +30,16 @@ Built to be **user-friendly**, **viral on social networks (X/Twitter, LinkedIn, 
 - **Notion Warm Paper**: Editorial minimalist monochrome for essays and blogs.
 - **Neon Cyber, Vercel Slate, Stripe Finance, Emerald Luxe, Minimal Pastel**.
 
-### 3. 🤖 Intelligent Natural Language AI Parser
+### 3. Smart Parser
 - Type natural prompts like `"Tesla 1.8M, Ford 4.4M, BYD 3.0M"` or `"Rent $1400, Food $500, Fun $200"`.
-- Smart heuristic extraction recognizes currency symbols, percentages, suffixes (`k`, `M`, `B`), dates, and metrics without requiring an API key.
+- Heuristic extraction recognizes currency symbols, percentages, and suffixes (`k`, `M`, `B`). Preview and confirm the parsed rows before using them.
 - Auto-recommends chart types based on data patterns (e.g. time series $\rightarrow$ line chart; percentages $\rightarrow$ donut; comparisons $\rightarrow$ bar).
 
 ### 4. 📲 Native Share & Export Suite
 - **Native Web Share API**: On iOS and Android devices, tap "Native Share" to open the device's native share sheet with the chart image pre-attached (share directly to Instagram Stories, Twitter, WhatsApp, Slack, Messages, or AirDrop).
 - **1-Click Share to X (Twitter)**: Pre-fills tweet text with hashtags and share link.
 - **Direct Clipboard Copy**: Copy high-res 2x PNG straight into system clipboard for immediate pasting into Slack, Notion, Word, or Google Slides.
-- **Lossless Exports**: Vector SVG for Adobe Illustrator & Figma, and Ultra 4K 300 DPI PNGs for print.
+- **Exports**: PNG at 1x, 2x, or 4x pixel scale and SVG generated from the chart display. SVG may contain embedded raster content.
 
 ### 5. 📂 Local Project Manager ("My Charts") & Autosave
 - Automatic debounced background autosave prevents lost work.

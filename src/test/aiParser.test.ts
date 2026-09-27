@@ -15,6 +15,15 @@ describe('AI Natural Language Parser (aiParser)', () => {
     expect(result.data[2].value).toBe(3000000);
   });
 
+  it('keeps the first metric after an introductory title', () => {
+    const result = parseNaturalLanguagePrompt('Website traffic: Organic 4200, Social 1800, Referral 950, Email 600');
+    expect(result.title).toBe('Website traffic');
+    expect(result.data.map(({ name, value }) => [name, value])).toEqual([
+      ['Organic', 4200], ['Social', 1800], ['Referral', 950], ['Email', 600]
+    ]);
+    expect(result.subtitle).toMatch(/4 .*rows/i);
+  });
+
   it('parses currency and percentage values', () => {
     const input = 'Rent: $1500\nFood: $450\nSavings: $600\nFun: $200';
     const result = parseNaturalLanguagePrompt(input);
@@ -40,13 +49,9 @@ describe('AI Natural Language Parser (aiParser)', () => {
     expect(['donut', 'pie']).toContain(result.recommendedType);
   });
 
-  it('provides contextual data for conceptual prompts like crypto and coffee', () => {
-    const cryptoResult = parseNaturalLanguagePrompt('Top crypto market cap');
-    expect(cryptoResult.data.length).toBeGreaterThan(2);
-    expect(cryptoResult.title).toContain('Crypto');
-
-    const coffeeResult = parseNaturalLanguagePrompt('Daily coffee and caffeine');
-    expect(coffeeResult.data.length).toBeGreaterThan(2);
-    expect(coffeeResult.title).toContain('Caffeine');
+  it('does not invent metrics for topic-only prompts', () => {
+    const result = parseNaturalLanguagePrompt('Top crypto market cap');
+    expect(result.data).toEqual([]);
+    expect(result.subtitle).toMatch(/enter.*values|no .*pairs/i);
   });
 });

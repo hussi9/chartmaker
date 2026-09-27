@@ -22,6 +22,9 @@ import { triggerHaptic } from '../lib/haptics';
 import Papa from 'papaparse';
 
 export interface ControlPanelProps {
+  editorRef?: React.Ref<HTMLDivElement>;
+  onViewPreview?: () => void;
+  onChooseChartType?: () => void;
   activeTab: 'content' | 'style' | 'settings';
   onChangeTab: (tab: 'content' | 'style' | 'settings') => void;
   // Content Tab
@@ -137,6 +140,9 @@ const ASPECT_CARDS: { ratio: AspectRatio; name: string; tag: string; boxW: numbe
 ];
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
+  editorRef,
+  onViewPreview,
+  onChooseChartType,
   activeTab,
   onChangeTab,
   title,
@@ -345,7 +351,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   };
 
   return (
-    <div className="control-panel-card">
+    <div className="control-panel-card" ref={editorRef}>
+      <div className="mobile-editor-nav">
+        <button type="button" onClick={onViewPreview}>View preview</button>
+        <button type="button" onClick={onChooseChartType}>Choose chart type</button>
+      </div>
       {/* Top Segmented Pill Toggle: Content vs Style vs Settings */}
       <div className="segmented-tab-track">
         <button
@@ -709,6 +719,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             <h3 className="section-title">Chart Title</h3>
             <input
               type="text"
+              aria-label="Chart title"
               value={title}
               onChange={(e) => onChangeTitle(e.target.value)}
               placeholder="e.g. Countries"
@@ -716,6 +727,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             />
             <input
               type="text"
+              aria-label="Subtitle"
               value={subtitle}
               onChange={(e) => onChangeSubtitle(e.target.value)}
               placeholder="Subtitle (optional)"
@@ -724,6 +736,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             />
             <input
               type="text"
+              aria-label="Data source"
               value={dataSource}
               onChange={(e) => onChangeDataSource?.(e.target.value)}
               placeholder="Data source (optional, e.g. Statista, Bloomberg, Survey)"
@@ -738,9 +751,9 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
               type="button"
               className="quick-tool-btn"
               onClick={onOpenAiPrompt}
-              title="Generate with AI prompt"
+              title="Preview rows with Smart Parser"
             >
-              <Wand2 size={13} color="#6366f1" /> AI Prompt
+              <Wand2 size={13} color="#6366f1" /> Smart Parser
             </button>
             <button
               type="button"
@@ -883,6 +896,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   {/* Name Input */}
                   <input
                     type="text"
+                    aria-label={`Row ${idx + 1} label`}
                     value={item.name}
                     onChange={(e) => handleUpdateItem(item.id, 'name', e.target.value)}
                     placeholder="Label"
@@ -892,54 +906,53 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                   {/* Value Input */}
                   <input
                     type="number"
+                    aria-label={`Row ${idx + 1} value`}
                     value={item.value}
                     onChange={(e) => handleUpdateItem(item.id, 'value', parseFloat(e.target.value) || 0)}
                     placeholder="Value"
                     className="data-input-val"
                   />
 
-                  {/* Reorder Up */}
-                  <button
-                    type="button"
-                    onClick={() => handleMoveRow(idx, 'up')}
-                    className="data-delete-btn"
-                    title="Move up"
-                    disabled={idx === 0}
-                  >
-                    <ChevronUp size={13} />
-                  </button>
+                  <div className="data-row-actions">
+                    <button
+                      type="button"
+                      onClick={() => handleMoveRow(idx, 'up')}
+                      className="data-delete-btn"
+                      aria-label={`Move row ${idx + 1} up`}
+                      disabled={idx === 0}
+                    >
+                      <ChevronUp size={13} />
+                    </button>
 
-                  {/* Reorder Down */}
-                  <button
-                    type="button"
-                    onClick={() => handleMoveRow(idx, 'down')}
-                    className="data-delete-btn"
-                    title="Move down"
-                    disabled={idx === data.length - 1}
-                  >
-                    <ChevronDown size={13} />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveRow(idx, 'down')}
+                      className="data-delete-btn"
+                      aria-label={`Move row ${idx + 1} down`}
+                      disabled={idx === data.length - 1}
+                    >
+                      <ChevronDown size={13} />
+                    </button>
 
-                  {/* Duplicate */}
-                  <button
-                    type="button"
-                    onClick={() => handleDuplicateRow(item.id)}
-                    className="data-delete-btn"
-                    title="Duplicate row"
-                  >
-                    <Copy size={13} />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDuplicateRow(item.id)}
+                      className="data-delete-btn"
+                      aria-label={`Duplicate row ${idx + 1}`}
+                    >
+                      <Copy size={13} />
+                    </button>
 
-                  {/* Delete */}
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="data-delete-btn"
-                    title="Remove item"
-                    disabled={data.length <= 1}
-                  >
-                    <Trash2 size={13} />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteItem(item.id)}
+                      className="data-delete-btn"
+                      aria-label={`Remove row ${idx + 1}`}
+                      disabled={data.length <= 1}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

@@ -1,7 +1,9 @@
 // Google Analytics 4 (GA4) Integration & Telemetry System
 // Supports environment variables (VITE_GA_MEASUREMENT_ID), dynamic client override, and structured conversion tracking.
 
-import { recordChartEvent, recordExportEvent, recordAiPrompt, getCustomGaId } from './learningLoop';
+import { recordChartEvent, recordExportEvent, getCustomGaId } from './learningLoop';
+import { COLOR_SCHEMES } from './chartPresets';
+import type { ChartType } from './chartPresets';
 
 // Declare gtag on window
 declare global {
@@ -43,6 +45,8 @@ export const initGoogleAnalytics = (measurementId?: string) => {
     window.gtag('js', new Date());
   }
 
+  if (script.dataset.configuredId === id) return;
+  script.dataset.configuredId = id;
   window.gtag?.('config', id, {
     page_path: window.location.pathname,
     send_page_view: true
@@ -51,14 +55,27 @@ export const initGoogleAnalytics = (measurementId?: string) => {
 
 // Generic Track Event
 export const trackEvent = (action: string, category: string, label?: string, value?: number, additionalParams?: Record<string, any>) => {
+  const allowedActions = new Set(['chart_update', 'export_chart', 'copy_clipboard', 'smart_parser_apply', 'csv_import', 'theme_change', 'aspect_ratio_change', 'native_share', 'share_twitter', 'copy_reddit_markdown', 'copy_twitter_text', 'copy_linkedin_text', 'export_png', 'export_svg', 'copy_svg_code', 'export_csv', 'export_json']);
+  if (!allowedActions.has(action)) return;
+  const chartTypes: ChartType[] = ['pie', 'donut', 'bar', 'horizontalBar', 'stackedBar', 'stackedColumn', 'stackedHorizontal', 'line', 'stackedLine', 'area', 'stackedArea', 'radar', 'scatter', 'heatmap', 'threshold', 'gauge', 'funnel'];
+  const safeParameter = (key: string, entry: unknown) => {
+    if (['scale', 'points_count', 'row_count'].includes(key)) return typeof entry === 'number' && Number.isFinite(entry) && entry >= 0;
+    if (key === 'success') return typeof entry === 'boolean';
+    if (key === 'export_format') return ['png', 'svg', 'json'].includes(String(entry));
+    if (key === 'chart_type') return chartTypes.includes(entry as ChartType);
+    if (key === 'theme_id') return COLOR_SCHEMES.some(scheme => scheme.id === entry);
+    if (key === 'aspect_ratio') return ['16:9', '1:1', '9:16', '4:3'].includes(String(entry));
+    return false;
+  };
+  const params = Object.fromEntries(Object.entries(additionalParams || {}).filter(([key, entry]) => safeParameter(key, entry)));
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-      ...additionalParams
+      event_category: ['Studio', 'Conversion', 'Engagement', 'Data', 'Customization', 'viral_share', 'social_export', 'export'].includes(category) ? category : 'Other',
+      ...(typeof value === 'number' && Number.isFinite(value) ? { value } : {}),
+      ...params
     });
   }
+  void label;
 };
 
 // Specific Conversion & User Flow Trackers
@@ -85,14 +102,8 @@ export const trackCopyChart = () => {
   recordExportEvent('clipboard_copy');
 };
 
-export const trackAiPromptGenerate = (prompt: string, success: boolean) => {
-  trackEvent('ai_prompt_generate', 'AI_Studio', success ? 'success' : 'failed', prompt.length, {
-    prompt_length: prompt.length,
-    success
-  });
-  if (success) {
-    recordAiPrompt(prompt);
-  }
+export const trackSmartParserApply = (rowsCount: number) => {
+  trackEvent('smart_parser_apply', 'Data', undefined, rowsCount, { row_count: rowsCount });
 };
 
 export const trackCsvImport = (rowsCount: number) => {
@@ -102,9 +113,9 @@ export const trackCsvImport = (rowsCount: number) => {
 };
 
 export const trackThemeSelection = (themeId: string) => {
-  trackEvent('theme_change', 'Customization', themeId);
+  trackEvent('theme_change', 'Customization', undefined, undefined, { theme_id: themeId });
 };
 
 export const trackAspectRatioSelection = (ratio: string) => {
-  trackEvent('aspect_ratio_change', 'Customization', ratio);
+  trackEvent('aspect_ratio_change', 'Customization', undefined, undefined, { aspect_ratio: ratio });
 };

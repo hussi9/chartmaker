@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-d72ea4e2-3167-4e12-aa96-1a77206dd85e/styles.css">
+<style>
+body{margin:0}
+.n-node{border:1px solid var(--color-divider);padding:10px 12px;background:var(--color-surface);font-size:13px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.n-node b{font-family:var(--font-heading);font-weight:800;font-size:14px}
+.n-node small{font-size:11px;opacity:.65}
+.n-hub{border:2px solid var(--color-accent);background:var(--color-bg)}
+.n-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.n-colh{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.65;padding-bottom:6px;border-bottom:2px solid var(--color-divider)}
+.n-arrow{display:flex;align-items:center;justify-content:center;color:var(--color-accent);font-size:12px;text-align:center;padding:0 4px;line-height:1.3}
+.n-row{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--color-divider);font-size:14px}
+.n-row h4{margin:0;font-size:14px}
+.n-row p{margin:0;text-wrap:pretty}
+.n-map{display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1fr) 72px minmax(0,1.1fr) 72px minmax(0,1fr);gap:0 4px;align-items:start}
+@media (max-width:820px){.n-map{grid-template-columns:1fr}.n-arrow{padding:6px 0;justify-content:flex-start}.n-row{grid-template-columns:1fr;gap:4px}}
+</style>
+</helmet>
+<div style="background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);min-height:100vh">
+<header class="nav" style="gap:var(--space-3)"><span class="nav-brand">SignatureMaker</span><a href="SignatureMaker.dc.html">Prototype</a><a href="#" aria-current="page">Notes</a></header>
+<main style="padding:var(--space-8) var(--space-4);max-width:1080px;display:flex;flex-direction:column;gap:var(--space-8)">
+
+<section style="display:flex;flex-direction:column;gap:var(--space-4)">
+  <div><span class="card-kicker">Deliverable 1</span><h1 style="font-size:34px;margin:0">User-flow map</h1><p style="margin:var(--space-2) 0 0;max-width:62ch;text-wrap:pretty">Two stages share one signature. Create holds three independent drafts; whichever the user continues from becomes the current signature. Use holds four destinations, each keeping its own file and settings. Every arrow below is reversible without loss.</p></div>
+  <div class="n-map">
+    <div class="n-col"><div class="n-colh">Entry points</div>
+      <div class="n-node"><b>Direct to Draw</b><small>Default landing · empty canvas state</small></div>
+      <div class="n-node"><b>Guide pages</b><small>Draw Online · Transparent PNG · PDF guide → CTA into the relevant screen</small></div>
+      <div class="n-node"><b>Direct to an output</b><small>e.g. PDF link. No signature yet → "Missing signature" panel remembers the intended output</small></div>
+    </div>
+    <div class="n-arrow">→</div>
+    <div class="n-col"><div class="n-colh">Create · 3 drafts</div>
+      <div class="n-node"><b>Draw</b><small>strokes · ink · pen · undo/redo</small></div>
+      <div class="n-node"><b>Type</b><small>name · font (12) · ink · size</small></div>
+      <div class="n-node"><b>Scan</b><small>photo · threshold · cleaned PNG</small></div>
+      <div class="n-node" style="background:transparent;border-style:dashed"><small>Switching method never discards another draft. "Continue to …" is the single primary action; disabled until the draft has content.</small></div>
+    </div>
+    <div class="n-arrow">Continue<br>→</div>
+    <div class="n-col"><div class="n-colh">Current signature</div>
+      <div class="n-node n-hub"><b>One signature in the header chip</b><small>Kind + thumbnail, visible on every screen. Clicking it opens the draft it came from. Chip reads "No signature yet" until a draft exists.</small></div>
+      <div class="n-node" style="background:transparent;border-style:dashed"><small>Fallback: if the user jumps straight to Use with an un-continued draft, the most recently edited draft is used, so no dead end.</small></div>
+    </div>
+    <div class="n-arrow">→<br><span style="opacity:.7">Edit ←</span></div>
+    <div class="n-col"><div class="n-colh">Use · 4 destinations</div>
+      <div class="n-node"><b>Download</b><small>PNG · SVG (draw/type only) · success line</small></div>
+      <div class="n-node"><b>Stamp</b><small>graphic · position · scale · opacity · badge · contrast</small></div>
+      <div class="n-node"><b>Animate</b><small>style · format · background · duration · fps · export progress</small></div>
+      <div class="n-node"><b>PDF</b><small>file · pages · dims · preset · size</small></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-3)">
+    <div class="n-node"><b>Return paths</b><small>"Edit signature" on every output reopens the exact method the current signature came from. Coming back to the output finds file and settings unchanged; the preview re-renders with the edited signature.</small></div>
+    <div class="n-node"><b>Missing signature</b><small>Output opened with no signature → one panel explaining what's needed with three creation actions (Type primary). Intended output is stored; "Continue to PDF" brings the user back.</small></div>
+    <div class="n-node"><b>Error recovery</b><small>Scan: wrong type / no ink found → "Choose another file". PDF: not a PDF, damaged, or encrypted → explained, "Choose another PDF". Animate: recording failure → frame reached, nothing saved, Try again or Dismiss. Export cancel → toast, state intact.</small></div>
+  </div>
+</section>
+
+<section>
+  <span class="card-kicker">Deliverable 5</span><h2 style="font-size:26px;margin:0 0 var(--space-3)">Navigation</h2>
+  <div class="n-row"><h4>Two labelled groups, one bar</h4><p>Create (Draw · Type · Scan) and Use (Download · Stamp · Animate · PDF) sit as two segmented controls under the header. The active segment is filled with the accent; the inactive group stays reachable, so moving between stages is always one click.</p></div>
+  <div class="n-row"><h4>One primary per screen</h4><p>Create screens have a single primary "Continue to {destination}". Outputs have a single primary export. Everything else (Edit signature, Replace file, Copy) is secondary or ghost. Step numbers and repeated headings are omitted; the segmented control is the only wayfinding.</p></div>
+  <div class="n-row"><h4>Inputs vs outputs</h4><p>Every screen is a two-column workspace: the working canvas or live preview on the left, compact controls on the right, actions pinned to the bottom of the control panel behind a 2px rule.</p></div>
+  <div class="n-row"><h4>Supporting pages</h4><p>Footer links open templated guide/legal pages inside the same shell with one CTA back into the tool. The header and stage bar stay in place.</p></div>
+</section>
+
+<section>
+  <h2 style="font-size:26px;margin:0 0 var(--space-3)">State preservation</h2>
+  <div class="n-row"><h4>Three drafts</h4><p>Draw, Type and Scan each own a draft object (strokes/redo stack, text/font/ink/size, photo/threshold/cleaned PNG). Switching method, stage or page never clears them.</p></div>
+  <div class="n-row"><h4>Current signature</h4><p>Set when the user continues from a draft. Editing keeps the same kind; returning to an output re-renders it with the change. Clearing a draft makes the chip fall back to the next draft with content, or to "No signature yet".</p></div>
+  <div class="n-row"><h4>Per-output settings</h4><p>Stamp keeps its graphic, position, scale, opacity, badge and contrast; Animate keeps style, format, background, duration and fps; PDF keeps the file, its parsed metadata, preset and size. Success messages reset when a setting changes so a stale "Saved" never shows.</p></div>
+  <div class="n-row"><h4>Intended output</h4><p>Entering an output without a signature stores that output. The Create screen's primary reads "Continue to PDF" and the hint says the settings are waiting; continuing returns there and clears the intent.</p></div>
+  <div class="n-row"><h4>Prototype scope</h4><p>Canvas drawing, typing, photo clean-up, PNG/SVG download and stamp compositing are real and local. WebM recording and PDF writing are simulated with realistic progress, cancel, failure and success states (the first Animate export fails once to demonstrate recovery; toggle in Tweaks).</p></div>
+</section>
+
+<section>
+  <h2 style="font-size:26px;margin:0 0 var(--space-3)">Responsive behaviour</h2>
+  <div class="n-row"><h4>Desktop ≥ 761px</h4><p>Header with brand, signature chip and theme toggle; stage bar with both groups; two-column workspace (fluid canvas, 340px controls). Font grid is three across.</p></div>
+  <div class="n-row"><h4>Tablet</h4><p>Same structure; the stage bar wraps to two rows when both groups don't fit. Controls column keeps its width; canvas shrinks.</p></div>
+  <div class="n-row"><h4>Mobile ≤ 760px</h4><p>Chip drops its text label; the stage bar shows only the active group at full width with 44px targets; a bottom tab bar (Create · Use) switches stages. Workspace stacks: canvas first, controls beneath, actions at the end of the panel. Font grid becomes two across; scan previews stack. Force either layout with the Viewport tweak.</p></div>
+  <div class="n-row"><h4>Accessibility</h4><p>Modernist tokens: 2px accent focus ring, ≥ 3:1 chrome and ≥ 4.5:1 body contrast in both themes, pressed states via aria-pressed, canvas ignores non-primary buttons and uses pointer capture for stylus and touch.</p></div>
+</section>
+
+<section>
+  <span class="card-kicker">Deliverable 4</span><h2 style="font-size:26px;margin:0 0 var(--space-3)">Demo scripts</h2>
+  <div class="n-row"><h4>Type → Download → Edit → Download</h4><p>Type a name, pick a style, Continue to Download, save PNG, Edit signature (lands on Type with the same font), change ink, return via Use · Download.</p></div>
+  <div class="n-row"><h4>Draw → Stamp → Edit → Stamp</h4><p>Draw, Continue, open Stamp, use the sample photo, set corner/scale/badge, Edit signature, add a stroke, Use · Stamp: photo and settings intact.</p></div>
+  <div class="n-row"><h4>Scan → Animate → Edit → Animate</h4><p>Scan a photo, tune Paper removal, Continue, open Animate, export (first attempt fails, retry succeeds), Edit signature, adjust threshold, return.</p></div>
+  <div class="n-row"><h4>PDF without a signature</h4><p>Open Use · PDF on a fresh load: missing-signature panel. Type it, Continue to PDF, land back on PDF.</p></div>
+  <div class="n-row"><h4>PDF upload → placement → Edit → return</h4><p>Choose a PDF, see name/pages/dimensions, pick a preset and size, Edit signature, come back: file and placement retained.</p></div>
+</section>
+</main>
+</div>
+</x-dc>
+</body>
+</html>

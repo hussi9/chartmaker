@@ -47,10 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="glass-panel app-header" style={{ padding: '16px 20px', marginBottom: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
+    <header className="glass-panel app-header">
+      <div className="header-content">
         {/* Brand & Badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="header-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{
             width: '42px',
             height: '42px',
@@ -69,9 +69,9 @@ export const Header: React.FC<HeaderProps> = ({
               <h1 style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0 }}>
                 ChartGenie<span className="glow-text">.xyz</span>
               </h1>
-              <span style={{
+              <span className="header-brand-badge" style={{
                 background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2))',
-                color: '#38bdf8',
+                color: '#075985',
                 border: '1px solid rgba(6, 182, 212, 0.4)',
                 fontSize: '0.68rem',
                 fontWeight: 800,
@@ -80,17 +80,27 @@ export const Header: React.FC<HeaderProps> = ({
                 textTransform: 'uppercase',
                 letterSpacing: '0.06em'
               }}>
-                Viral Pro
+                Free Chart Maker
               </span>
             </div>
             <p className="header-subtitle" style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: 0 }}>
-              Instant AI Charts • 4K Vector Exports • Native App Ready
+              Your numbers → a chart ready to export
             </p>
           </div>
         </div>
 
         {/* Desktop / Tablet Actions Bar */}
-        <div className="header-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="header-actions">
+          <button
+            onClick={() => {
+              triggerHaptic('medium');
+              onOpenExport();
+            }}
+            className="btn-primary"
+            style={{ fontSize: '0.84rem', padding: '8px 16px' }}
+          >
+            <Download size={15} /> Export
+          </button>
           <button
             onClick={() => {
               triggerHaptic('light');
@@ -141,7 +151,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={handleShareLink}
             className="btn-secondary"
-            style={{ borderColor: 'rgba(56, 189, 248, 0.4)', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', padding: '8px 14px' }}
+            style={{ borderColor: 'rgba(3, 105, 161, 0.4)', color: '#0369a1', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.84rem', padding: '8px 14px' }}
           >
             {copiedShare ? <Check size={15} color="#10b981" /> : <Share2 size={15} />}
             {copiedShare ? 'Link Copied!' : 'Share'}
@@ -153,20 +163,9 @@ export const Header: React.FC<HeaderProps> = ({
               onOpenAiPrompt();
             }}
             className="btn-secondary"
-            style={{ borderColor: 'rgba(168, 85, 247, 0.4)', color: '#d8b4fe', fontSize: '0.84rem', padding: '8px 14px' }}
+            style={{ borderColor: 'rgba(109, 40, 217, 0.4)', color: '#6d28d9', fontSize: '0.84rem', padding: '8px 14px' }}
           >
-            <Wand2 size={15} /> AI Prompt
-          </button>
-
-          <button
-            onClick={() => {
-              triggerHaptic('medium');
-              onOpenExport();
-            }}
-            className="btn-primary"
-            style={{ fontSize: '0.84rem', padding: '8px 16px' }}
-          >
-            <Download size={15} /> Export
+            <Wand2 size={15} /> Smart Parser
           </button>
         </div>
       </div>
