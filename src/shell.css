@@ -45,7 +45,7 @@
 .cg-chip:hover { background: var(--paper-2); }
 .cg-chip[data-on='true'] { background: var(--ink); color: #fff; border-color: var(--ink); }
 .cg-chip-tint { background: var(--teal-tint); border-color: var(--teal-tint); color: var(--teal-deep); }
-.cg-shell-narrow .cg-chip { min-height: 38px; }
+.cg-shell-narrow .cg-chip, .cg-shell-narrow .cg-seg-opt, .cg-shell-narrow .cg-btn { min-height: var(--tap); min-width: var(--tap); justify-content: center; }
 
 /* Segmented control */
 .cg-seg { display: flex; border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; font-size: 12px; background: #fff; }
