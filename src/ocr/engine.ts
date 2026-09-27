@@ -13,7 +13,14 @@ function linesFrom(text: string): string[] {
 }
 
 async function loadPrimaryRecognizer(): Promise<Recognizer> {
-  const { PaddleOcrService } = await import('ppu-paddle-ocr');
+  // The package's default entry ("ppu-paddle-ocr") always pulls in its
+  // Node/OpenCV processing path (ppu-ocv → @napi-rs/canvas, a native
+  // addon) even when unused at runtime, which a browser bundler cannot
+  // build at all (confirmed: `vite build` fails on its .node binary). The
+  // dedicated "ppu-paddle-ocr/web" entry is built for exactly this case —
+  // HTMLCanvasElement/OffscreenCanvas only, no native dependency — and
+  // documents the same PaddleOcrService API used here.
+  const { PaddleOcrService } = await import('ppu-paddle-ocr/web');
   const service = new PaddleOcrService();
   await service.initialize();
   return async (file: File) => {
