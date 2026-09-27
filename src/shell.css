@@ -87,3 +87,18 @@
 .cg-shell-narrow .cg-autosave-text, .cg-shell-narrow .cg-btn-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .cg-shell-narrow .cg-topbar-actions .cg-btn { padding: 0 12px; }
 .cg-shell-narrow .cg-topbar-actions .cg-btn .cg-btn-icon { margin: 0; }
+
+/* Menus, dialogs, textareas (shared by every screen) */
+.cg-import { position: relative; }
+.cg-menu { position: absolute; right: 0; top: calc(100% + 4px); background: #fff; border: 1px solid var(--line); border-radius: var(--r-3); box-shadow: var(--shadow-pop); min-width: 160px; padding: 4px; z-index: 25; display: flex; flex-direction: column; }
+.cg-menu-item { text-align: left; border: 0; background: transparent; padding: 8px 10px; border-radius: var(--r-2); font: 500 13px var(--font-ui); color: var(--ink); cursor: pointer; min-height: 36px; }
+.cg-menu-item:hover { background: var(--well); }
+
+.cg-dialog-backdrop { position: fixed; inset: 0; background: rgba(30, 41, 59, 0.45); display: grid; place-items: center; z-index: 50; padding: 16px; }
+.cg-dialog { background: #fff; border-radius: var(--r-5); box-shadow: var(--shadow-frame); width: min(560px, 100%); padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.cg-dialog-title { font-family: var(--font-display); font-weight: 800; font-size: 20px; margin: 0; }
+.cg-dialog-body { margin: 0; font-size: 13px; color: var(--ink-2); }
+.cg-textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-2); padding: 10px; font: 500 13px var(--font-mono); color: var(--ink); resize: vertical; min-height: 120px; }
+.cg-dialog-status { color: var(--ink-3); min-height: 16px; }
+.cg-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+

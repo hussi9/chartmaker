@@ -14,7 +14,7 @@ export function Rail(): React.JSX.Element {
         <BarChart3 size={20} strokeWidth={2.4} color="#1e293b" />
       </Link>
       {NAV.map((n) => (
-        <Link key={n.to} to={to(n.to)} className="cg-rb" activeOptions={{ exact: n.to === '/' }} activeProps={{ 'aria-current': 'page', 'data-on': 'true' }}>
+        <Link key={n.to} to={to(n.to)} className="cg-rb" activeOptions={{ exact: n.to.startsWith('/?'), includeSearch: false }} activeProps={{ 'aria-current': 'page', 'data-on': 'true' }}>
           {n.icon()}
           <span>{n.label}</span>
         </Link>
