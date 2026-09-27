@@ -37,7 +37,7 @@ export function initGoogleAnalytics(measurementId?: string): void {
 
 // Every event and every parameter it may carry. Strings must match the listed values.
 const EVENTS = {
-  intake_detect: { kind: ['cells', 'sentence', 'csv', 'empty'], rows: 'number' },
+  intake_detect: { kind: ['cells', 'sentence', 'csv', 'image', 'empty'], rows: 'number' },
   suggestion_use: { type: 'chartType', rank: 'number' },
   export_set: { sizes: 'number', formats: ['png', 'svg', 'png+svg'] },
   export_one: { format: ['png', 'svg', 'csv', 'copy'] },

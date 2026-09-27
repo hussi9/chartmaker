@@ -3,7 +3,7 @@
 import Papa from 'papaparse';
 import type { Row, Unit } from '../chart/types';
 
-export type IntakeKind = 'cells' | 'sentence' | 'csv' | 'empty';
+export type IntakeKind = 'cells' | 'sentence' | 'csv' | 'image' | 'empty';
 
 export interface Detection {
   kind: IntakeKind;
