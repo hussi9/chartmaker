@@ -87,7 +87,7 @@ export function ruleLine(ctx: PlotCtx, horizontal = false): Record<string, unkno
     silent: true,
     symbol: 'none',
     lineStyle: { color: ctx.look.muted, type: 'dashed', width: 2 },
-    label: { formatter: text, position: horizontal ? 'end' : 'insideEndTop', color: ctx.look.ink, fontFamily: FONT_STACK.mono, fontSize: ctx.look.label - 1 },
+    label: { formatter: text, position: horizontal ? 'end' : 'insideStartTop', color: ctx.look.ink, fontFamily: FONT_STACK.mono, fontSize: ctx.look.label - 1 },
     data: [horizontal ? { xAxis: value, label: { formatter: text } } : { yAxis: value, label: { formatter: text } }],
   };
 }

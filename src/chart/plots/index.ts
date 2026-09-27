@@ -6,8 +6,20 @@ import { formatValue } from '../format';
 import type { PlotCtx, PlotDef } from './types';
 import { MAX_ROWS } from './common';
 import { bar } from './bar';
+import { horizontalBar, stackedBar, stackedColumn, stackedHorizontal, threshold } from './bars';
+import { line, area, stackedLine, stackedArea } from './lines';
+import { pie, donut, gauge } from './arcs';
+import { scatter, matrix, radar, heatmap } from './points';
+import { funnel } from './funnel';
+import { kpi } from './kpi';
 
-const DEFS: PlotDef[] = [bar];
+const DEFS: PlotDef[] = [
+  bar, horizontalBar, stackedBar, stackedColumn, stackedHorizontal, threshold,
+  line, area, stackedLine, stackedArea,
+  pie, donut, gauge,
+  scatter, matrix, radar, heatmap,
+  funnel, kpi,
+];
 
 export const PLOTS = Object.fromEntries(DEFS.map((d) => [d.type, d])) as Record<ChartType, PlotDef>;
 
