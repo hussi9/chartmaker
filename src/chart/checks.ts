@@ -6,6 +6,8 @@ import { LOOKS, POST_SIZES } from './types';
 import { frame } from './frame';
 import { defaultMeasurer, type TextMeasurer } from './measure';
 import { plotSvg } from './render/plotSvg';
+import { PLOTS } from './plots';
+import { MAX_ROWS } from './plots/common';
 import { textBoxes } from './render/parse';
 import type { Box, TextBox } from './layout-types';
 import { SAFE_ZONES, type Platform } from './safezones';
@@ -15,7 +17,7 @@ import type { Insight } from '../insights/types';
 export type { Platform } from './safezones';
 export { SAFE_ZONES } from './safezones';
 
-export type CheckId = 'contrast' | 'textSize' | 'cropZone' | 'altText';
+export type CheckId = 'data' | 'contrast' | 'textSize' | 'cropZone' | 'altText';
 export interface Check { id: CheckId; pass: boolean; detail: string }
 
 // APCA: Lc 60 for fluent body text, Lc 45 for large/bold text (labels here are ≥ 24px, weight ≥ 600).
@@ -180,5 +182,13 @@ export function checks(spec: ChartSpec, sizes: PostSizeId[], platforms: Platform
   const alt = altText(spec, insightList);
   const altCheck: Check = alt ? { id: 'altText', pass: true, detail: alt } : { id: 'altText', pass: false, detail: 'Add a title so alt text can be written' };
 
-  return [contrast, textSize, cropZone, altCheck];
+  // 5. Data the plot can draw, all of it
+  const accepts = PLOTS[spec.type].accepts(spec.data.slice(0, MAX_ROWS));
+  const data: Check = !accepts.ok
+    ? { id: 'data', pass: false, detail: accepts.reason }
+    : spec.data.length > MAX_ROWS
+      ? { id: 'data', pass: false, detail: `Showing ${MAX_ROWS} of ${spec.data.length} rows; the chart is cut` }
+      : { id: 'data', pass: true, detail: `${spec.data.length} row${spec.data.length === 1 ? '' : 's'} drawn` };
+
+  return [data, contrast, textSize, cropZone, altCheck];
 }

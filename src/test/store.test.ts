@@ -100,3 +100,47 @@ describe('ui store', () => {
     expect(useUi.getState().exportSizes).toEqual(['16:9', '1:1', '9:16']);
   });
 });
+
+describe('row limit', () => {
+  it('caps rows at 500 in the store and tells the person', async () => {
+    useDoc.getState().newDoc();
+    useDoc.getState().setRows(Array.from({ length: 600 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: i })));
+    expect(useDoc.getState().spec.data.length).toBe(500);
+    expect(useUi.getState().toasts.some((t) => /500 rows/.test(t.message))).toBe(true);
+  });
+});
+
+describe('undo and autosave (review item 5)', () => {
+  it('an undo is autosaved like any other edit', async () => {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    const id = useDoc.getState().newDoc({ text: { title: 'A' } });
+    useDoc.getState().setSpec((d) => { d.text.title = 'B'; });
+    await sleep(700);
+    expect((await db.charts.get(id))?.spec.text.title).toBe('B');
+    useDoc.temporal.getState().undo();
+    expect(useDoc.getState().spec.text.title).toBe('A');
+    expect(useDoc.getState().saveState).toBe('saving');
+    await sleep(700);
+    expect((await db.charts.get(id))?.spec.text.title).toBe('A');
+  });
+});
+
+describe('load failures (review item 15)', () => {
+  it('returns false instead of rejecting when storage throws', async () => {
+    const spy = vi.spyOn(db.charts, 'get').mockRejectedValueOnce(new Error('boom'));
+    await expect(useDoc.getState().load('x')).resolves.toBe(false);
+    spy.mockRestore();
+  });
+});
+
+describe('undo stack hygiene', () => {
+  it('a completed autosave does not become an undo step', async () => {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    useDoc.getState().newDoc({ text: { title: 'A' } });
+    useDoc.getState().setSpec((d) => { d.text.title = 'B'; });
+    await sleep(700); // autosave ran and wrote saveState: 'saved'
+    expect(useDoc.temporal.getState().pastStates).toHaveLength(1);
+    useDoc.temporal.getState().undo();
+    expect(useDoc.getState().spec.text.title).toBe('A');
+  });
+});

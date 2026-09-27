@@ -6,10 +6,10 @@ import type { ChartSpec } from '../types';
 import { frame } from '../frame';
 import { canvasMeasurer } from '../measure';
 import { echarts, installMeasurer } from '../echarts';
-import { PLOTS, plotContext } from '../plots';
+import { plotContext } from '../plots';
 import { textBoxes } from './parse';
 import { placeCallouts } from './callouts';
-import { plotSvg } from './plotSvg';
+import { plotSvg, buildOrRefuse } from './plotSvg';
 import { compose } from './compose';
 import { LOOKS } from '../types';
 
@@ -37,7 +37,7 @@ export function Chart({ spec, className, onReady, static: isStatic }: ChartProps
     installMeasurer(measure);
     if (!inst.current) inst.current = echarts.init(host.current, null, { renderer: 'svg', width: f.plot.w, height: f.plot.h });
     inst.current.resize({ width: f.plot.w, height: f.plot.h });
-    inst.current.setOption(PLOTS[spec.type].build(plotContext(spec, f, measure)), { notMerge: true, lazyUpdate: false });
+    inst.current.setOption(buildOrRefuse(spec, plotContext(spec, f, measure)), { notMerge: true, lazyUpdate: false });
     onReady?.();
   }, [spec, f, measure, isStatic, onReady]);
 

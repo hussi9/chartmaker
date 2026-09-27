@@ -78,3 +78,11 @@ describe('SharePage', () => {
     expect(screen.getByRole('link', { name: /make one/i })).toBeInTheDocument();
   });
 });
+
+describe('honest share page (review item 10)', () => {
+  it('never prints a fabricated time', async () => {
+    mount(`/s/${encodeState(spec)}`);
+    await screen.findByRole('button', { name: /remix with your numbers/i });
+    expect(screen.queryByText(/just now|ago/)).toBeNull();
+  });
+});

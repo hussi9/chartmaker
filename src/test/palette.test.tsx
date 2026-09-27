@@ -63,3 +63,19 @@ describe('CommandPalette', () => {
     expect(await screen.findByText('Charts page')).toBeInTheDocument();
   });
 });
+
+describe('Save chart (review item 13)', () => {
+  it('does not claim "Saved" when storage is unavailable', async () => {
+    const user = userEvent.setup();
+    useUi.setState({ storage: 'unavailable' });
+    mount();
+    await screen.findByText('Editor page');
+    await user.keyboard('{Meta>}k{/Meta}');
+    await user.type(screen.getByRole('combobox', { name: /search or command/i }), 'save chart');
+    await user.click(await screen.findByRole('option', { name: /^save chart/i }));
+    await waitFor(() => expect(useUi.getState().toasts.length).toBeGreaterThan(0));
+    const msgs = useUi.getState().toasts.map((t) => t.message);
+    expect(msgs.some((m) => /not saved/i.test(m))).toBe(true);
+    expect(msgs).not.toContain('Saved');
+  });
+});

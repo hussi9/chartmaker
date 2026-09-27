@@ -6,6 +6,7 @@ import type { Frame, TextBox } from '../layout-types';
 import { FONT_FAMILY } from '../measure';
 import type { CalloutPlacement } from './callouts';
 import { fontFaceCss } from './fonts-embed';
+import { MAX_ROWS } from '../plots/common';
 
 function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -63,6 +64,11 @@ export function compose(spec: ChartSpec, f: Frame, plot: string, callouts: Callo
   }
   if (f.logo) parts.push(`<image x="${r(f.logo.x)}" y="${r(f.logo.y)}" width="${r(f.logo.w)}" height="${r(f.logo.h)}" href="${esc(f.logo.href)}" preserveAspectRatio="xMidYMid meet"/>`);
   parts.push(`<g transform="translate(${r(f.plot.x)} ${r(f.plot.y)})">${plot}</g>`);
+  if (spec.data.length > MAX_ROWS) {
+    const note = `Showing ${MAX_ROWS} of ${spec.data.length} rows`;
+    const size = f.site.size;
+    parts.push(text({ id: 'capnote', text: note, size, role: 'mono', weight: 500, fill: look.muted, anchor: 'end', x: f.plot.x, y: f.plot.y + f.plot.h - size * 1.3, w: f.plot.w, h: size * 1.3 }));
+  }
   parts.push(calloutMarkup(callouts));
   if (f.remix) parts.push(text(f.remix));
   if (f.source) parts.push(text(f.source));

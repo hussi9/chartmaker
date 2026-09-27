@@ -131,12 +131,12 @@ describe('DataGrid', () => {
     expect(rows().map((r) => r.label)).toEqual(['USA', 'Italy', 'UK', 'Ireland']);
   });
 
-  it('windows long lists: 600 rows render far fewer inputs', () => {
-    const many: Row[] = Array.from({ length: 600 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: i }));
+  it('windows long lists: 400 rows render far fewer inputs', () => {
+    const many: Row[] = Array.from({ length: 400 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: i }));
     useDoc.getState().setRows(many);
     render(<DataGrid />);
     expect(labelInputs().length).toBeLessThanOrEqual(120);
-    expect(screen.getByText(/600 rows/)).toBeInTheDocument();
+    expect(screen.getByText(/400 rows/)).toBeInTheDocument();
   });
 
   it('colour dot cycles the palette for that row', async () => {

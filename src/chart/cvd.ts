@@ -2,7 +2,6 @@
 import { converter, filterDeficiencyDeuter, filterDeficiencyProt, filterDeficiencyTrit, formatHex, parse } from 'culori';
 import type { ChartSpec } from './types';
 import type { BrandDoc } from '../db';
-import { db } from '../db';
 
 export type Deficiency = 'deuteranopia' | 'protanopia' | 'tritanopia';
 
@@ -70,10 +69,3 @@ export async function blobToDataUrl(b: Blob): Promise<string> {
   });
 }
 
-// For a fresh document: apply the stored brand when "apply to every new chart" is on.
-export async function brandForNewDoc(spec: ChartSpec): Promise<ChartSpec> {
-  const brand = await db.brand.get('brand').catch(() => undefined);
-  if (!brand || !brand.applyToNew) return spec;
-  const logo = brand.logo ? await blobToDataUrl(brand.logo).catch(() => undefined) : undefined;
-  return applyBrand(spec, brand, logo);
-}

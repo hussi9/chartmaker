@@ -98,11 +98,12 @@ describe('Brand screen', () => {
     await waitFor(async () => expect((await db.brand.get('brand'))?.logo).toBeDefined());
   });
 
-  it('a new doc picks up the brand when apply-to-new is on', async () => {
-    await db.brand.put({ id: 'brand', palette: ['#010101', '#020202'], safe: false, handle: 'ada', corner: 'br', applyToNew: true });
-    const { brandForNewDoc } = await import('@/chart/cvd');
-    const spec = await brandForNewDoc(useDoc.getState().spec);
-    expect(spec.palette).toEqual(['#010101', '#020202']);
-    expect(spec.options.handle).toBe('ada');
+  it('every entry path picks up the brand when apply-to-new is on, even when a template carries its own palette', async () => {
+    useUi.setState({ brand: { id: 'brand', palette: ['#010101', '#020202'], safe: false, handle: 'ada', corner: 'br', applyToNew: true } });
+    const { defaultSpec: mk } = await import('@/chart/types');
+    const fromTemplate = mk({ palette: ['#ff0000', '#00ff00'] });
+    useDoc.getState().newDoc({ ...fromTemplate, data: fromTemplate.data.map((r) => ({ ...r })) });
+    expect(useDoc.getState().spec.palette).toEqual(['#010101', '#020202']);
+    expect(useDoc.getState().spec.options.handle).toBe('ada');
   });
 });

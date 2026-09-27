@@ -99,7 +99,7 @@ export function MyCharts(): React.JSX.Element {
         <section className="cg-card cg-mycharts-empty">
           <span className="cg-lbl">Nothing here yet</span>
           <span className="cg-lookcard-blank-title">No charts yet</span>
-          <span className="cg-hint">Pick a look or paste your numbers. Charts you save appear here.</span>
+          <span className="cg-hint">Pick a look or paste your numbers. Every chart you open is autosaved here.</span>
           <div style={{ display: 'flex', gap: 8 }}>
             <Link to={to('/?templates=1')} className="cg-btn cg-btn-primary">Pick a look</Link>
             <Link to={to('/new')} className="cg-btn">Paste numbers</Link>

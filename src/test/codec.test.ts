@@ -94,3 +94,42 @@ describe('decodeLegacyHash', () => {
     expect(decodeLegacyHash(encodeState(defaultSpec()))).toBeNull();
   });
 });
+
+describe('legacy links as the archived product built them', () => {
+  const legacy = { title: 'Countries', chartType: 'funnel', schemeId: 'spotify', data: [{ name: 'USA', value: 87 }, { name: 'Italy', value: 20 }] };
+  const b64 = btoa(encodeURIComponent(JSON.stringify(legacy)));
+
+  it('decodes a "#state=<b64>" hash (App.tsx:503 shape), not only a bare hash', () => {
+    expect(decodeLegacyHash('#state=' + b64)).not.toBeNull();
+    expect(decodeLegacyHash('state=' + b64)?.text.title).toBe('Countries');
+  });
+
+  it('redirects "/#state=…" and "/anything#state=…" to the share route, keeping the hash', async () => {
+    const { legacyHashRedirect } = await import('@/lib/legacyLink');
+    expect(legacyHashRedirect({ pathname: '/', hash: '#state=' + b64 })).toEqual({ to: '/s', hash: 'state=' + b64 });
+    expect(legacyHashRedirect({ pathname: '/edit/x', hash: 'state=' + b64 })).toEqual({ to: '/s', hash: 'state=' + b64 });
+    expect(legacyHashRedirect({ pathname: '/s', hash: 'state=' + b64 })).toBeNull();
+    expect(legacyHashRedirect({ pathname: '/', hash: '' })).toBeNull();
+  });
+});
+
+describe('shareUrls validation', () => {
+  it('refuses a spec the schema rejects instead of minting a dead link', async () => {
+    const { defaultSpec: mk } = await import('@/chart/types');
+    const spec = mk();
+    spec.data = Array.from({ length: 501 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: i }));
+    const u = shareUrls(spec, 'https://chartgenie.xyz');
+    expect(u.error).toMatch(/500/);
+    expect(u.path).toBeUndefined();
+  });
+});
+
+describe('inflate bound (review item 18)', () => {
+  it('rejects a gzip bomb without inflating it', async () => {
+    const { gzipSync, strToU8 } = await import('fflate');
+    const bomb = gzipSync(strToU8(' '.repeat(4_000_000)));
+    const b64 = btoa(String.fromCharCode(...bomb)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    expect(bomb.length).toBeLessThan(10_000);
+    expect(decodeState(b64)).toBeNull();
+  });
+});

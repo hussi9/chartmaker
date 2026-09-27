@@ -94,3 +94,16 @@ describe('detectCsvFile()', () => {
     expect(d.rows.map((r) => [r.label, r.value])).toEqual([['A', 1], ['B', 2]]);
   });
 });
+
+describe('thousands separators are not CSV commas', () => {
+  it('parses "Revenue 3,400" lines as label + number, keeping every line', async () => {
+    const { detect } = await import('@/insights/intake');
+    const d = detect('Revenue 3,400\nGrowth 12%\nCosts 1,200');
+    expect(d.rows.map((r) => [r.label, r.value])).toEqual([['Revenue', 3400], ['Growth', 12], ['Costs', 1200]]);
+  });
+  it('still reads a real CSV with a header', async () => {
+    const { detect } = await import('@/insights/intake');
+    const d = detect('label,value\nUSA,87\nItaly,20');
+    expect(d.rows.map((r) => [r.label, r.value])).toEqual([['USA', 87], ['Italy', 20]]);
+  });
+});

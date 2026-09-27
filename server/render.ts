@@ -15,8 +15,11 @@ export function specFromState(state: unknown): ChartSpec | null {
   return decodeState(state);
 }
 
+export const CARD = { w: 1200, h: 675 } as const;
+
+// Link previews are cropped to ~1.91:1 by X and LinkedIn, so the card is always 16:9.
 export function cardSvg(spec: ChartSpec): string {
-  return svgString(spec, { measure: metricsMeasurer(), embedFonts: false });
+  return svgString({ ...spec, size: '16:9' }, { measure: metricsMeasurer(), embedFonts: false });
 }
 
 export function cardPng(spec: ChartSpec, width = 1200): Buffer {

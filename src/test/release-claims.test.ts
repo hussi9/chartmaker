@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 // Every user-facing claim must be true of the code. These phrases are not.
-const FORBIDDEN = /aggregateRating|reviewCount|300 DPI|lossless|AI chart|AI-powered|AI-assisted|data never leaves|never leaves your browser|100% private|instant AI|view count|views counted|synced across|we'll remind you|we will remind you|sign in later|sign-in later/i;
+const FORBIDDEN = /aggregateRating|reviewCount|300 DPI|lossless|AI chart|AI-powered|AI-assisted|data never leaves|never leaves your browser|100% private|instant AI|view count|views counted|synced across|we'll remind you|we will remind you|sign in later|sign-in later|only when you save|charts you save|when you save/i;
 
 function walk(dir: string, out: string[] = []): string[] {
   for (const name of readdirSync(dir)) {

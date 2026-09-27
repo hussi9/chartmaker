@@ -116,3 +116,15 @@ describe('Editor', () => {
     expect(await screen.findByText('Templates page')).toBeInTheDocument();
   });
 });
+
+describe('?export=set (review item 11)', () => {
+  it('runs the export set once when the editor opens with export=set', async () => {
+    const exportSet = await import('@/export/exportSet');
+    const spy = vi.spyOn(exportSet, 'buildExportSet').mockResolvedValue(new Blob(['zip']));
+    const png = await import('@/export/png');
+    const dl = vi.spyOn(png, 'downloadBlob').mockImplementation(() => {});
+    mount(`/edit/${useDoc.getState().id}?export=set`);
+    await waitFor(() => expect(spy).toHaveBeenCalledTimes(1));
+    spy.mockRestore(); dl.mockRestore();
+  });
+});

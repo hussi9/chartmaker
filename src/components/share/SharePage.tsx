@@ -5,7 +5,6 @@ import { Link, useNavigate, useParams, type LinkProps } from '@tanstack/react-ro
 import { Chart } from '../../chart/render/Chart';
 import { decodeLegacyHash, decodeState } from '../../codec/state';
 import { formatValue } from '../../chart/format';
-import { relativeTime } from '../../lib/time';
 import { useDoc, newId } from '../../store/document';
 import { useUi } from '../../store/ui';
 import { useTopBar } from '../shell/TopBar';
@@ -87,7 +86,7 @@ export function SharePage(): React.JSX.Element {
         {handle && (
           <div className="cg-share-author">
             <span className="cg-rail-avatar" aria-hidden="true">{handle.charAt(0).toUpperCase()}</span>
-            <div><div className="cg-share-handle">@{handle}</div><div className="cg-mono cg-hint">shared as a link · {relativeTime(Date.now())}</div></div>
+            <div><div className="cg-share-handle">@{handle}</div><div className="cg-mono cg-hint">shared as a link</div></div>
           </div>
         )}
         <h1 className="cg-h1" style={{ fontSize: 28 }}>{spec.text.title || 'Untitled'}</h1>

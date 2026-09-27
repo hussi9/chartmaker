@@ -7,6 +7,7 @@ import { db } from '../db';
 import { defaultSpec, type ChartSpec, type Row } from '../chart/types';
 import { svgString } from '../chart/render/svgString';
 import { useUi } from './ui';
+import { MAX_ROWS } from '../codec/state';
 import { applyBrand } from '../chart/cvd';
 
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error' | 'unavailable';
@@ -55,7 +56,8 @@ export const useDoc = create<DocState>()(
         const id = newId();
         const brand = useUi.getState().brand;
         const base = defaultSpec(partial);
-        const spec = brand?.applyToNew && !partial.palette ? applyBrand(base, brand, brand.logoDataUrl) : base;
+        // "Apply to every new chart" means the brand wins over a template's own palette.
+        const spec = brand?.applyToNew ? applyBrand(base, brand, brand.logoDataUrl) : base;
         set({ id, spec, dirty: true, saveState: 'idle' });
         useDoc.temporal.getState().clear();
         scheduleSave();
@@ -71,7 +73,8 @@ export const useDoc = create<DocState>()(
 
       async load(id) {
         if (useUi.getState().storage !== 'ok') return false;
-        const doc = await db.charts.get(id);
+        let doc;
+        try { doc = await db.charts.get(id); } catch { return false; }
         if (!doc) return false;
         set({ id: doc.id, spec: doc.spec, dirty: false, saveState: 'saved' });
         useDoc.temporal.getState().clear();
@@ -81,6 +84,10 @@ export const useDoc = create<DocState>()(
       setSpec(recipe) {
         set((s) => {
           recipe(s.spec);
+          if (s.spec.data.length > MAX_ROWS) {
+            s.spec.data.length = MAX_ROWS;
+            useUi.getState().toast(`${MAX_ROWS} rows max — extra rows were dropped.`);
+          }
           s.dirty = true;
           s.saveState = 'saving';
         });
@@ -120,7 +127,8 @@ export const useDoc = create<DocState>()(
         return id;
       },
     })),
-    { partialize: (s) => ({ spec: s.spec }), limit: 100 },
+    // Only spec changes are history; autosave's dirty/saveState writes must not become undo steps.
+    { partialize: (s) => ({ spec: s.spec }), equality: (a, b) => a.spec === b.spec, limit: 100 },
   ),
 );
 
@@ -128,3 +136,12 @@ function scheduleSave(): void {
   if (autosaveTimer) clearTimeout(autosaveTimer);
   autosaveTimer = setTimeout(() => { autosaveTimer = null; void useDoc.getState().save(); }, AUTOSAVE_MS);
 }
+
+// zundo's undo/redo write the spec back through the raw setState, bypassing setSpec.
+// Treat those writes like any other edit: mark dirty and schedule the autosave.
+useDoc.subscribe((s, prev) => {
+  if (s.spec !== prev.spec && s.dirty === prev.dirty && s.saveState === prev.saveState && s.id === prev.id && s.id) {
+    useDoc.setState({ dirty: true, saveState: 'saving' });
+    scheduleSave();
+  }
+});

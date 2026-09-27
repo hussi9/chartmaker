@@ -1,6 +1,6 @@
 # ChartGenie.xyz — a chart maker for posts
 
-> Paste numbers, get a post-ready chart. Free, no account, everything runs in the browser and charts you save stay in that browser.
+> Paste numbers, get a post-ready chart. Free, no account, everything runs in the browser and charts are autosaved in that browser.
 
 ## What it does
 - **Paste anything**: spreadsheet cells, a CSV, or a sentence like “Revenue grew from 12k in Jan to 34k in Jun” become rows; units (%, $, k/M) are detected and you confirm the rows before charting.
@@ -22,4 +22,4 @@
 - https://chartgenie.xyz/sitemap.xml
 
 ## Privacy
-Charts are edited in the browser and saved to this browser's storage when you save. Share links carry the chart data inside the address so a preview card can be rendered on request; nothing is stored server-side. Site analytics runs without chart titles, labels, values, captions or share links in events.
+Charts are edited in the browser and autosaved to this browser's storage as you edit. Share links carry the chart data inside the address so a preview card can be rendered on request; nothing is stored server-side. Site analytics runs without chart titles, labels, values, captions or share links in events.

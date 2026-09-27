@@ -67,20 +67,32 @@ export function encodeState(spec: ChartSpec): string {
   return toBase64Url(gzipSync(strToU8(JSON.stringify(spec)), { level: 9 }));
 }
 
+const MAX_INFLATED = 512 * 1024; // a 500-row spec is ~60 KB; anything bigger is not ours
+
 export function decodeState(s: string): ChartSpec | null {
   const bytes = fromBase64Url(s);
   if (!bytes || bytes.length < 10) return null;
+  // gzip's trailer carries the inflated size; refuse bombs before touching them.
+  const isize = new DataView(bytes.buffer, bytes.byteOffset + bytes.length - 4, 4).getUint32(0, true);
+  if (isize > MAX_INFLATED) return null;
   try {
-    const parsed = ChartSpecSchema.safeParse(JSON.parse(strFromU8(gunzipSync(bytes))));
+    const parsed = ChartSpecSchema.safeParse(JSON.parse(strFromU8(gunzipSync(bytes, { out: new Uint8Array(isize) }))));
     return parsed.success ? parsed.data : null;
   } catch {
     return null;
   }
 }
 
-export interface ShareUrls { path?: string; hash: string }
+export interface ShareUrls { path?: string; hash: string; /** Set when the spec cannot be shared; path and hash are then empty. */ error?: string }
 
 export function shareUrls(spec: ChartSpec, origin: string): ShareUrls {
+  const ok = ChartSpecSchema.safeParse(spec);
+  if (!ok.success) {
+    const issue = ok.error.issues[0];
+    const where = issue?.path.join('.') ?? '';
+    const why = where === 'data' ? `${MAX_ROWS} rows max` : issue?.message ?? 'invalid chart';
+    return { hash: '', error: `This chart can't be shared yet: ${why}.` };
+  }
   const state = encodeState(spec);
   const base = origin.replace(/\/$/, '');
   return { path: state.length <= MAX_PATH_STATE ? `${base}/s/${state}` : undefined, hash: `${base}/s#${state}` };
@@ -105,7 +117,10 @@ const LegacySchema = z.object({
 });
 
 export function decodeLegacyHash(hash: string): ChartSpec | null {
-  const clean = hash.startsWith('#') ? hash.slice(1) : hash;
+  let clean = hash.startsWith('#') ? hash.slice(1) : hash;
+  // The archived product wrote `#state=<b64>`; strip that prefix.
+  const at = clean.indexOf('state=');
+  if (at >= 0) clean = clean.slice(at + 'state='.length).split('&')[0];
   if (!clean || clean.length < 5) return null;
   let raw: unknown;
   try {

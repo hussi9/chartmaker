@@ -159,7 +159,9 @@ export function detect(text: string): Detection {
     const r = fromTable(lines.map((l) => l.split('\t')), 'cells');
     if (r) return r;
   }
-  const commaRows = lines.filter((l) => l.includes(','));
+  // "3,400" is a number, not two cells: judge CSV-ness with thousands separators removed.
+  const noThousands = lines.map((l) => l.replace(/(\d),(?=\d{3}(?!\d))/g, '$1'));
+  const commaRows = noThousands.filter((l) => l.includes(','));
   if (lines.length >= 2 && commaRows.length >= lines.length - 1) {
     const parsed = Papa.parse<string[]>(t, { skipEmptyLines: true });
     const r = fromTable(parsed.data, 'csv');

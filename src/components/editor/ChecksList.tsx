@@ -17,5 +17,5 @@ export function ChecksList({ results }: { results: Check[] }): React.JSX.Element
 }
 
 function label(id: Check['id']): string {
-  return id === 'contrast' ? 'Label contrast' : id === 'textSize' ? 'Text size' : id === 'cropZone' ? 'Crop zones' : 'Alt text';
+  return id === 'data' ? 'Data' : id === 'contrast' ? 'Label contrast' : id === 'textSize' ? 'Text size' : id === 'cropZone' ? 'Crop zones' : 'Alt text';
 }

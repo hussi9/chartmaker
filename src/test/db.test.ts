@@ -107,7 +107,7 @@ describe('backup', () => {
     await resetDbForTests();
     await openDb();
     const res = await importBackup(blob, 'replace');
-    expect(res).toEqual({ charts: 1, series: 1 });
+    expect(res).toEqual({ charts: 1, series: 1, skipped: 0 });
     expect((await db.charts.get('a'))?.spec.text.title).toBe('Countries');
     const brand = await db.brand.get('brand');
     expect(brand?.logo).toBeInstanceOf(Blob);
@@ -128,5 +128,19 @@ describe('backup', () => {
     await expect(importBackup(new Blob(['nope']), 'replace')).rejects.toBeInstanceOf(BackupError);
     await expect(importBackup(new Blob([JSON.stringify({ hello: 1 })]), 'replace')).rejects.toBeInstanceOf(BackupError);
     expect(await db.charts.count()).toBe(0);
+  });
+});
+
+describe('backup restore with a bad chart', () => {
+  it('skips the invalid chart, restores the rest, and reports the skip', async () => {
+    const { defaultSpec: mk } = await import('@/chart/types');
+    const good = { id: 'good', spec: mk({ text: { title: 'Good' } }), createdAt: 1, updatedAt: 1 };
+    const bad = { id: 'bad', spec: { ...mk(), data: Array.from({ length: 501 }, (_, i) => ({ id: `r${i}`, label: 'x', value: i })) }, createdAt: 1, updatedAt: 1 };
+    const blob = new NodeBlob([JSON.stringify({ version: 1, charts: [good, bad], series: [], brand: null, settings: null })], { type: 'application/json' }) as unknown as Blob;
+    const res = await importBackup(blob, 'replace');
+    expect(res.charts).toBe(1);
+    expect(res.skipped).toBe(1);
+    expect(await db.charts.get('good')).toBeTruthy();
+    expect(await db.charts.get('bad')).toBeUndefined();
   });
 });

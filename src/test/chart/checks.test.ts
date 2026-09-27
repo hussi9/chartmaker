@@ -9,9 +9,9 @@ const m = metricsMeasurer();
 const byId = (list: { id: string; pass: boolean; detail: string }[], id: string) => list.find((c) => c.id === id)!;
 
 describe('checks()', () => {
-  it('passes the clean sample on all four checks', () => {
+  it('passes the clean sample on all five checks', () => {
     const out = checks(defaultSpec(), ['16:9', '1:1'], ['x', 'linkedin'], m);
-    expect(out.map((c) => c.id)).toEqual(['contrast', 'textSize', 'cropZone', 'altText']);
+    expect(out.map((c) => c.id)).toEqual(['data', 'contrast', 'textSize', 'cropZone', 'altText']);
     expect(out.every((c) => c.pass)).toBe(true);
   });
 
@@ -86,5 +86,21 @@ describe('altText()', () => {
 
   it('returns an empty string without a title', () => {
     expect(altText(defaultSpec({ text: { title: '' } }), [])).toBe('');
+  });
+});
+
+describe('data checks (review items 6 and 7)', () => {
+  it('fails when the plot refuses the rows', () => {
+    const spec = defaultSpec({ type: 'funnel', data: [{ id: 'a', label: 'Visited', value: 100 }, { id: 'b', label: 'Paid', value: -5 }] });
+    const c = byId(checks(spec, ['16:9'], [], m), 'data');
+    expect(c.pass).toBe(false);
+    expect(c.detail).toMatch(/negative|below zero|≥ 0/i);
+  });
+  it('fails when rows were cut to the drawing cap', () => {
+    const spec = defaultSpec({ type: 'bar', data: Array.from({ length: 70 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: 10 })) });
+    expect(byId(checks(spec, ['16:9'], [], m), 'data')).toMatchObject({ pass: false, detail: expect.stringContaining('60 of 70') });
+  });
+  it('passes for ordinary rows', () => {
+    expect(byId(checks(defaultSpec(), ['16:9'], [], m), 'data').pass).toBe(true);
   });
 });

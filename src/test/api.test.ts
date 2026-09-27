@@ -71,3 +71,19 @@ describe('api/share', () => {
     expect(String(res.get().body)).not.toContain('/og.png');
   });
 });
+
+describe('card shape (review item 9)', () => {
+  it('renders the card as 16:9 whatever the post size, and says so in the tags', async () => {
+    const og = (await import('../../server/og')).default;
+    const share = (await import('../../server/share')).default;
+    const state = encodeState(defaultSpec({ size: '9:16', text: { title: 'Story' } }));
+    let res = mockRes();
+    await og({ query: { state }, headers: {} } as never, res as never);
+    const png = res.get().body as Buffer;
+    expect(png.readUInt32BE(16)).toBe(1200);
+    expect(png.readUInt32BE(20)).toBe(675);
+    res = mockRes();
+    await share({ query: { state }, headers: { host: 'chartgenie.xyz' } } as never, res as never);
+    expect(String(res.get().body)).toContain('<meta property="og:image:height" content="675">');
+  }, 30_000);
+});

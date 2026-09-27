@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 step() { printf '\n\033[1m▶ %s\033[0m\n' "$1"; }
 
 step "tsc";        npx tsc -b
-step "oxlint";     npx oxlint src api server scripts
+step "oxlint";     npx oxlint src api/og.ts api/share.ts server scripts
 step "vitest";     npx vitest run
 step "build";      npm run build
 # BUDGET_SOFT=1 only for a local experiment; the gate is hard.

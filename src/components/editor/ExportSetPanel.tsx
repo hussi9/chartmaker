@@ -1,5 +1,5 @@
 // Export set: choose sizes, get one zip with PNG + SVG each, caption and alt text.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDoc } from '../../store/document';
 import { useUi } from '../../store/ui';
 import { POST_SIZES, POST_SIZE_IDS, type PostSizeId } from '../../chart/types';
@@ -16,7 +16,9 @@ export function captionText(spec: ReturnType<typeof useDoc.getState>['spec']): s
   return spec.caption?.text ?? captionFrom(spec, insights(spec.data), spec.caption?.tone ?? 'punchy');
 }
 
-export function ExportSetPanel(): React.JSX.Element {
+export interface ExportSetPanelProps { /** Run the export once on mount (Series → "Update & export set"). */ autoRun?: boolean; onAutoRun?: () => void }
+
+export function ExportSetPanel({ autoRun, onAutoRun }: ExportSetPanelProps = {}): React.JSX.Element {
   const spec = useDoc((s) => s.spec);
   const sizes = useUi((s) => s.exportSizes);
   const setSizes = useUi((s) => s.setExportSizes);
@@ -24,6 +26,15 @@ export function ExportSetPanel(): React.JSX.Element {
   const [progress, setProgress] = useState<[number, number] | null>(null);
 
   const toggle = (id: PostSizeId, on: boolean) => setSizes(on ? [...POST_SIZE_IDS.filter((s) => s === id || sizes.includes(s))] : sizes.filter((s) => s !== id));
+
+  const ran = useRef(false);
+  useEffect(() => {
+    if (!autoRun || ran.current) return;
+    ran.current = true;
+    onAutoRun?.();
+    void run();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun]);
 
   const run = async () => {
     if (sizes.length === 0) { toast('Pick at least one size.'); return; }

@@ -1,34 +1,14 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet, redirect } from '@tanstack/react-router';
+import { legacyHashRedirect } from '../lib/legacyLink';
 import { Shell } from '../components/shell/Shell';
-import { openDb, db } from '../db';
-import { migrateFromLocalStorage } from '../db/migrate';
-import { notifyDue } from '../db/series';
-import { blobToDataUrl } from '../chart/cvd';
-import { useUi } from '../store/ui';
-
-let booted: Promise<void> | null = null;
-
-// Runs once per session: open storage, pull the v1 library in, load the handle.
-function boot(): Promise<void> {
-  if (!booted) {
-    booted = (async () => {
-      const storage = await openDb();
-      useUi.setState({ storage });
-      if (storage === 'ok') {
-        await migrateFromLocalStorage();
-        const settings = await db.settings.get('settings');
-        if (settings?.handle) useUi.setState({ handle: settings.handle });
-        void notifyDue();
-        const brand = await db.brand.get('brand');
-        if (brand) useUi.setState({ brand: { ...brand, logoDataUrl: brand.logo ? await blobToDataUrl(brand.logo).catch(() => undefined) : undefined } });
-      }
-    })();
-  }
-  return booted;
-}
+import { boot } from '../lib/boot';
 
 export const Route = createRootRoute({
-  beforeLoad: () => boot(),
+  beforeLoad: ({ location }) => {
+    const legacy = legacyHashRedirect(location);
+    if (legacy) throw redirect(legacy as never);
+    return boot();
+  },
   component: () => (
     <Shell>
       <Outlet />

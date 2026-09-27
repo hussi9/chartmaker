@@ -1,6 +1,6 @@
 // The editor: data left, the post in the middle at true size, style right.
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, type LinkProps } from '@tanstack/react-router';
+import { useNavigate, useParams, useSearch, type LinkProps } from '@tanstack/react-router';
 import { Link2 } from 'lucide-react';
 import { useDoc } from '../../store/document';
 import { useUi } from '../../store/ui';
@@ -34,6 +34,7 @@ function saveLabel(state: string): string {
 
 export function Editor(): React.JSX.Element {
   const params = useParams({ strict: false }) as { id?: string };
+  const search = useSearch({ strict: false }) as { export?: string };
   const navigate = useNavigate();
   const doc = useDoc();
   const ui = useUi();
@@ -55,6 +56,7 @@ export function Editor(): React.JSX.Element {
 
   const share = useCallback(async () => {
     const urls = shareUrls(doc.spec, window.location.origin);
+    if (urls.error) { ui.toast(urls.error); return; }
     const url = urls.path ?? urls.hash;
     const mode = urls.path ? 'path' : 'hash';
     try {
@@ -142,7 +144,7 @@ export function Editor(): React.JSX.Element {
         {ui.rightTab === 'caption' && <CaptionPanel />}
         {ui.rightTab === 'style' && <StylePanel brandPalette={brand ? { id: 'brand', name: 'My brand', colors: brand.safe ? safePalette(brand.palette) : brand.palette } : undefined} />}
         <div className="cg-editor-right-foot">
-          <ExportSetPanel />
+          <ExportSetPanel autoRun={search.export === 'set'} onAutoRun={() => void navigate({ to: '/edit/$id' as never, params: { id: params.id } as never, search: {} as never, replace: true })} />
           <ChecksList results={results} />
         </div>
       </aside>

@@ -45,7 +45,7 @@ export function Landing({ route, type, steps, intakeFirst }: LandingProps): Reac
         </ol>
       </div>
       <p className="cg-hint" style={{ fontSize: 13 }}>
-        {CHART_TYPES.length} chart looks, four post sizes (X, LinkedIn, Story, Deck), PNG and SVG export, and a share link that unfurls as a card. Everything runs in your browser; charts you save stay in this browser.
+        {CHART_TYPES.length} chart looks, four post sizes (X, LinkedIn, Story, Deck), PNG and SVG export, and a share link that unfurls as a card. Everything runs in your browser; charts are autosaved in this browser.
       </p>
       <Link to={to('/?templates=1')} className="cg-linkbtn">See every look →</Link>
     </div>

@@ -28,7 +28,8 @@ export function plotContext(spec: ChartSpec, f: Frame, m: TextMeasurer): PlotCtx
   const capped = Math.max(0, all.length - MAX_ROWS);
   const palette = spec.palette.length ? spec.palette : ['#1e293b'];
   const rows = all.slice(0, MAX_ROWS).map((r, i) => ({ ...r, color: r.color ?? palette[i % palette.length] }));
-  const total = rows.reduce((a, r) => a + (Number.isFinite(r.value) ? r.value : 0), 0);
+  // Shares are of the whole dataset even when only the first MAX_ROWS are drawn.
+  const total = all.reduce((a, r) => a + (Number.isFinite(r.value) ? r.value : 0), 0);
   const unit = majorityUnit(rows);
   return {
     spec, rows, plot: f.plot, look: scaleLook(LOOKS[spec.look], f.w / 1600), palette, total, capped, m, unit,

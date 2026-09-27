@@ -87,3 +87,31 @@ describe('common option fragments', () => {
     expect(ghostSeries(ctx, { type: 'bar' })).toBeNull();
   });
 });
+
+describe('row cap (review item 6)', () => {
+  const many = Array.from({ length: 70 }, (_, i) => ({ id: `r${i}`, label: `Row ${i}`, value: 10 }));
+  it('shares are computed over every row, not only the drawn ones', () => {
+    const spec = defaultSpec({ type: 'bar', data: many });
+    const ctx = plotContext(spec, frame(spec, metricsMeasurer()), metricsMeasurer());
+    expect(ctx.rows).toHaveLength(60);
+    expect(ctx.capped).toBe(10);
+    expect(ctx.total).toBe(700);
+  });
+  it('the rendered chart says how many rows are shown', async () => {
+    const { svgString } = await import('@/chart/render/svgString');
+    const svg = svgString(defaultSpec({ type: 'bar', data: many }), { measure: metricsMeasurer() });
+    expect(svg).toContain('Showing 60 of 70 rows');
+  });
+});
+
+describe('rows the plot refuses (review item 7)', () => {
+  it('a funnel with a negative row draws the reason instead of a wrong chart', async () => {
+    const { svgString } = await import('@/chart/render/svgString');
+    const spec = defaultSpec({ type: 'funnel', data: [{ id: 'a', label: 'Visited', value: 100 }, { id: 'b', label: 'Paid', value: -5 }] });
+    const reason = PLOTS.funnel.accepts(spec.data);
+    expect(reason.ok).toBe(false);
+    const svg = svgString(spec, { measure: metricsMeasurer() });
+    expect(svg).toContain(reason.ok ? '' : reason.reason);
+    expect(svg).not.toContain('-5');
+  });
+});

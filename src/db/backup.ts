@@ -72,13 +72,15 @@ const RowsSchema = z.array(z.object({ id: z.string(), label: z.string(), value: 
 
 const BackupSchema = z.object({
   version: z.literal(1),
-  charts: z.array(z.object({ id: z.string().min(1), spec: ChartSpecSchema, createdAt: z.number(), updatedAt: z.number(), sharedAt: z.number().optional(), sharedUrl: z.string().optional(), thumb: BlobJsonSchema.optional() })),
+  charts: z.array(z.unknown()),
   series: z.array(z.object({ id: z.string().min(1), chartId: z.string(), cadence: z.enum(['weekly', 'monthly', 'quarterly']), nextDue: z.number(), snapshots: z.array(z.object({ at: z.number(), rows: RowsSchema })), notifiedAt: z.number().optional() })).default([]),
   brand: z.object({ id: z.literal('brand'), palette: z.array(z.string()), safe: z.boolean(), handle: z.string().optional(), corner: z.enum(['br', 'bl', 'tr', 'tl']), applyToNew: z.boolean(), logo: BlobJsonSchema.optional() }).nullable().default(null),
   settings: z.object({ id: z.literal('settings'), handle: z.string().optional(), lastRoute: z.string().optional(), migratedAt: z.number().optional() }).nullable().default(null),
 });
 
-export async function importBackup(file: Blob, mode: 'merge' | 'replace'): Promise<{ charts: number; series: number }> {
+const ChartEntrySchema = z.object({ id: z.string().min(1), spec: ChartSpecSchema, createdAt: z.number(), updatedAt: z.number(), sharedAt: z.number().optional(), sharedUrl: z.string().optional(), thumb: BlobJsonSchema.optional() });
+
+export async function importBackup(file: Blob, mode: 'merge' | 'replace'): Promise<{ charts: number; series: number; skipped: number }> {
   let raw: unknown;
   try {
     raw = JSON.parse(await blobText(file));
@@ -88,11 +90,14 @@ export async function importBackup(file: Blob, mode: 'merge' | 'replace'): Promi
   const parsed = BackupSchema.safeParse(raw);
   if (!parsed.success) throw new BackupError('That file is not a ChartGenie backup (unexpected contents).');
   const b = parsed.data;
+  // A chart that fails today's limits must not block every other chart in the file.
+  const charts = b.charts.map((c) => ChartEntrySchema.safeParse(c)).filter((r) => r.success).map((r) => r.data);
+  const skipped = b.charts.length - charts.length;
   await db.transaction('rw', db.charts, db.series, db.brand, db.settings, async () => {
     if (mode === 'replace') {
       await Promise.all([db.charts.clear(), db.series.clear(), db.brand.clear(), db.settings.clear()]);
     }
-    for (const c of b.charts) {
+    for (const c of charts) {
       if (mode === 'merge' && (await db.charts.get(c.id))) continue;
       const { thumb, ...rest } = c;
       await db.charts.put({ ...rest, thumb: jsonToBlob(thumb) });
@@ -107,5 +112,5 @@ export async function importBackup(file: Blob, mode: 'merge' | 'replace'): Promi
     }
     if (b.settings && (mode === 'replace' || !(await db.settings.get('settings')))) await db.settings.put(b.settings);
   });
-  return { charts: b.charts.length, series: b.series.length };
+  return { charts: charts.length, series: b.series.length, skipped };
 }
