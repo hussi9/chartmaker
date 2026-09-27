@@ -654,4 +654,4 @@ Share button (top bar): `shareUrls(spec, origin)`; copies `path` when present el
 
 ## Preview
 
-- 2026-09-27:  (commit c072d77 + e2e fixes). Playwright suite (desktop + phone) passed against it twice; `/s/<state>` serves OG tags and `/s/<state>/og.png` a 1200×675 PNG; unknown paths 404. Previews sit behind Vercel SSO; run with `BASE_URL=<preview> VERCEL_BYPASS=<automation bypass secret> npx playwright test`.
+- 2026-09-27: https://chartmaker-r01t1aqjz-aimasterz.vercel.app (commit c072d77 + e2e fixes). Playwright suite (desktop + phone) passed against it twice; `/s/<state>` serves OG tags and `/s/<state>/og.png` a 1200×675 PNG; unknown paths 404. Previews sit behind Vercel SSO; run with `BASE_URL=<preview> VERCEL_BYPASS=<automation bypass secret> npx playwright test`.
