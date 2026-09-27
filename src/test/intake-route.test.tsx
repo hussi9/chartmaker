@@ -6,6 +6,7 @@ import { createRouter, createMemoryHistory, RouterProvider, createRootRoute, cre
 import { Shell } from '@/components/shell/Shell';
 import { Intake } from '@/components/intake/Intake';
 import type { Detection } from '@/insights/intake';
+import type { Recognizer } from '@/ocr/engine';
 import { useDoc } from '@/store/document';
 import { useUi } from '@/store/ui';
 import { openDb } from '@/db';
@@ -135,13 +136,20 @@ describe('Quick post (phone)', () => {
 });
 
 vi.mock('@/insights/detectImage', () => ({ detectImage: vi.fn() }));
-vi.mock('@/ocr/engine', () => ({ isEngineReady: vi.fn(() => false) }));
+vi.mock('@/ocr/engine', () => ({ isEngineReady: vi.fn(() => false), ensureEngine: vi.fn().mockResolvedValue(undefined) }));
+
+// Never actually invoked in these tests — detectImage is mocked separately
+// and is what handleImage calls after ensureEngine() resolves. Only its
+// resolution timing (not its return value) is under test here.
+const fakeRecognizer: Recognizer = async () => [];
 
 describe('useIntake picture handling', () => {
-  it('shows "setting up" on the first (uncached) picture, since that pays for the model download', async () => {
+  it('shows "setting up" while the engine loads, then "reading" once it is ready, on the first (uncached) picture', async () => {
     const { detectImage } = await import('@/insights/detectImage');
-    const { isEngineReady } = await import('@/ocr/engine');
+    const { isEngineReady, ensureEngine } = await import('@/ocr/engine');
     vi.mocked(isEngineReady).mockReturnValue(false);
+    let resolveEngine!: () => void;
+    vi.mocked(ensureEngine).mockReturnValueOnce(new Promise((r) => { resolveEngine = () => r(fakeRecognizer); }));
     let resolve!: (d: Detection) => void;
     vi.mocked(detectImage).mockReturnValue(new Promise((r) => { resolve = r; }));
     mount('/new');
@@ -149,6 +157,8 @@ describe('useIntake picture handling', () => {
     const file = new File(['x'], 'photo.png', { type: 'image/png' });
     fireEvent.change(input, { target: { files: [file] } });
     expect(await screen.findByText(/setting up picture reading/i)).toBeInTheDocument();
+    await act(async () => { resolveEngine(); await Promise.resolve(); await Promise.resolve(); });
+    expect(screen.getByText(/reading your picture/i)).toBeInTheDocument();
     resolve({ kind: 'image', rows: [{ id: '1', label: 'USA', value: 87 }], warnings: [] });
     await waitFor(() => expect(screen.getByDisplayValue(/USA 87/)).toBeInTheDocument());
   });
@@ -168,22 +178,49 @@ describe('useIntake picture handling', () => {
     await waitFor(() => expect(screen.getByDisplayValue(/USA 87/)).toBeInTheDocument());
   });
 
+  it('does not start the 20s read-timeout until the engine has finished loading (review item I1)', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    const { isEngineReady, ensureEngine } = await import('@/ocr/engine');
+    vi.mocked(isEngineReady).mockReturnValue(false);
+    let resolveEngine!: () => void;
+    vi.mocked(ensureEngine).mockReturnValueOnce(new Promise((r) => { resolveEngine = () => r(fakeRecognizer); }));
+    vi.mocked(detectImage).mockReturnValue(new Promise(() => {})); // the read itself never resolves in this test
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    vi.useFakeTimers();
+    fireEvent.change(input, { target: { files: [new File(['x'], 'photo.png', { type: 'image/png' })] } });
+    // The model download can legitimately take longer than the old combined 20s budget.
+    await act(async () => { await vi.advanceTimersByTimeAsync(25_000); });
+    expect(screen.getByText(/setting up picture reading/i)).toBeInTheDocument();
+    expect(screen.queryByText(/took too long|try again/i)).toBeNull();
+    // The engine finishes loading; the read gets its own fresh 20s budget.
+    await act(async () => { resolveEngine(); await Promise.resolve(); await Promise.resolve(); });
+    expect(screen.getByText(/reading your picture/i)).toBeInTheDocument();
+    await act(async () => { await vi.advanceTimersByTimeAsync(20_000); });
+    expect(screen.getByText(/took too long|try again/i)).toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
   it('a second picked file wins over a slower first one (Review Focus 3)', async () => {
     const { detectImage } = await import('@/insights/detectImage');
-    let resolveFirst!: (d: Detection) => void;
-    let resolveSecond!: (d: Detection) => void;
-    vi.mocked(detectImage)
-      .mockReturnValueOnce(new Promise((r) => { resolveFirst = r; }))
-      .mockReturnValueOnce(new Promise((r) => { resolveSecond = r; }));
+    const pending: { file: File; resolve: (d: Detection) => void }[] = [];
+    vi.mocked(detectImage).mockImplementation(
+      (file) => new Promise((resolve) => { pending.push({ file, resolve }); }),
+    );
     mount('/new');
     const input = await screen.findByLabelText('Picture file');
     fireEvent.change(input, { target: { files: [new File(['1'], 'a.png', { type: 'image/png' })] } });
     fireEvent.change(input, { target: { files: [new File(['2'], 'b.png', { type: 'image/png' })] } });
-    resolveSecond({ kind: 'image', rows: [{ id: '2', label: 'Newer', value: 2 }], warnings: [] });
+    // Two picks made back to back, before either's engine-ready check
+    // settles: the stale one is discarded at that gate and must never reach
+    // detectImage at all (a stronger guarantee than the old code gave,
+    // which called detectImage for both and discarded the loser's result
+    // only after the fact) — see the ensureEngine().then() isMine() guard
+    // in Intake.tsx's handleImage.
+    await waitFor(() => expect(pending.length).toBeGreaterThan(0));
+    expect(pending.every((p) => p.file.name === 'b.png')).toBe(true);
+    pending.forEach((p) => p.resolve({ kind: 'image', rows: [{ id: '2', label: 'Newer', value: 2 }], warnings: [] }));
     await waitFor(() => expect(screen.getByDisplayValue(/Newer 2/)).toBeInTheDocument());
-    resolveFirst({ kind: 'image', rows: [{ id: '1', label: 'Stale', value: 1 }], warnings: [] });
-    await new Promise((r) => setTimeout(r, 10));
-    expect(screen.queryByDisplayValue(/Stale/)).toBeNull();
   });
 
   it('rejects a file over 15MB before calling detectImage (Review Focus 2)', async () => {

@@ -41,15 +41,18 @@ async function loadFallbackRecognizer(): Promise<Recognizer> {
 
 let loaders = { primary: loadPrimaryRecognizer, fallback: loadFallbackRecognizer };
 let cached: Recognizer | null = null;
+let loading: Promise<Recognizer> | null = null;
 
 export function _setLoadersForTests(overrides: Partial<typeof loaders>): void {
   loaders = { ...loaders, ...overrides };
   cached = null;
+  loading = null;
 }
 
 export function _resetEngineForTests(): void {
   loaders = { primary: loadPrimaryRecognizer, fallback: loadFallbackRecognizer };
   cached = null;
+  loading = null;
 }
 
 /** True once an engine has been loaded and cached — callers use this to tell a slow, one-time model download apart from a fast, per-image read. */
@@ -57,13 +60,30 @@ export function isEngineReady(): boolean {
   return cached !== null;
 }
 
-export async function recognizeImage(file: File): Promise<string[]> {
-  if (!cached) {
-    try {
-      cached = await loaders.primary();
-    } catch {
-      cached = await loaders.fallback();
-    }
+// Two pictures picked before the first model download finishes must share
+// that one download, not each start their own (a real out-of-memory risk on
+// a phone: two ORT sessions in memory at once). Callers that need to show a
+// distinct "setting up" phase — see Intake.tsx's handleImage — await this
+// directly, before starting their own per-read timeout, so that budget
+// never has to cover the model download too.
+export function ensureEngine(): Promise<Recognizer> {
+  if (cached) return Promise.resolve(cached);
+  if (!loading) {
+    loading = (async () => {
+      try {
+        return await loaders.primary();
+      } catch {
+        return await loaders.fallback();
+      }
+    })().then(
+      (recognizer) => { cached = recognizer; loading = null; return recognizer; },
+      (error) => { loading = null; throw error; },
+    );
   }
-  return cached(file);
+  return loading;
+}
+
+export async function recognizeImage(file: File): Promise<string[]> {
+  const recognizer = await ensureEngine();
+  return recognizer(file);
 }

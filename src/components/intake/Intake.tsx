@@ -6,7 +6,7 @@ import { useDoc, newId } from '../../store/document';
 import { useUi } from '../../store/ui';
 import { detect } from '../../insights/intake';
 import { detectImage } from '../../insights/detectImage';
-import { isEngineReady } from '../../ocr/engine';
+import { isEngineReady, ensureEngine } from '../../ocr/engine';
 import { suggest } from '../../insights/suggest';
 import { insights } from '../../insights';
 import { CHART_TYPES, defaultSpec, type ChartSpec, type ChartType, type Unit } from '../../chart/types';
@@ -42,26 +42,40 @@ export function useIntake(initialText = '') {
     if (file.size > MAX_IMAGE_BYTES) { setImageWarning(TOO_LARGE); return; }
     setImageWarning(null);
     const myRequest = ++requestRef.current;
-    let timedOut = false;
-    const timer = setTimeout(() => {
-      timedOut = true;
-      if (requestRef.current === myRequest) { setImageState('idle'); setImageWarning(TOO_SLOW); }
-    }, IMAGE_TIMEOUT_MS);
+    const isMine = () => requestRef.current === myRequest;
     // The first picture in a session pays for a multi-MB model download;
-    // every one after that is just the (fast) per-image read.
+    // every one after that is just the (fast) per-image read. The 20s
+    // budget below covers only the read — a slow model download (real on a
+    // throttled connection) must not burn the same clock and read as
+    // "stuck" (review item I1), so it starts only once ensureEngine()
+    // resolves, not when the picture is first picked.
     setImageState(isEngineReady() ? 'reading' : 'loading-engine');
-    void detectImage(file).then((d) => {
-      clearTimeout(timer);
-      if (timedOut || requestRef.current !== myRequest) return; // a newer pick, or already timed out, wins
-      setImageState('idle');
-      if (d.warnings.length) setImageWarning(d.warnings[0]);
-      if (d.rows.length) { setText(d.rows.map((r) => `${r.label}\t${r.value}`).join('\n')); track('intake_detect', { kind: 'image', rows: d.rows.length }); }
-    }).catch(() => {
-      clearTimeout(timer);
-      if (timedOut || requestRef.current !== myRequest) return;
-      setImageState('idle');
-      setImageWarning(TOO_SLOW);
-    });
+    void ensureEngine().then(
+      () => {
+        if (!isMine()) return;
+        setImageState('reading');
+        let timedOut = false;
+        const timer = setTimeout(() => {
+          timedOut = true;
+          if (isMine()) { setImageState('idle'); setImageWarning(TOO_SLOW); }
+        }, IMAGE_TIMEOUT_MS);
+        void detectImage(file).then((d) => {
+          clearTimeout(timer);
+          if (timedOut || !isMine()) return; // a newer pick, or already timed out, wins
+          setImageState('idle');
+          if (d.warnings.length) setImageWarning(d.warnings[0]);
+          if (d.rows.length) { setText(d.rows.map((r) => `${r.label}\t${r.value}`).join('\n')); track('intake_detect', { kind: 'image', rows: d.rows.length }); }
+        }).catch(() => {
+          clearTimeout(timer);
+          if (timedOut || !isMine()) return;
+          setImageState('idle');
+          setImageWarning(TOO_SLOW);
+        });
+      },
+      () => {
+        if (isMine()) { setImageState('idle'); setImageWarning(TOO_SLOW); }
+      },
+    );
   }, []);
 
   return { text, setText, detection, unit, setUnit: setUnitOverride, rows, suggestions, baseSpec, imageState, imageWarning, handleImage };

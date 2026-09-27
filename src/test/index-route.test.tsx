@@ -18,6 +18,11 @@ import { defaultSpec } from '@/chart/types';
 // the network — never let a unit test reach it, even indirectly through the
 // shareInbox hydration path below.
 vi.mock('@/insights/detectImage', () => ({ detectImage: vi.fn().mockResolvedValue({ kind: 'image', rows: [], warnings: [] }) }));
+// Intake.tsx's handleImage calls ensureEngine() directly, ahead of (and
+// independent from) detectImage, to gate its "setting up" vs "reading"
+// state — mocking detectImage alone no longer keeps the real engine.ts
+// dynamic import() out of this unit test.
+vi.mock('@/ocr/engine', () => ({ isEngineReady: vi.fn(() => true), ensureEngine: vi.fn().mockResolvedValue(async () => []) }));
 
 vi.mock('@/chart/echarts', async (orig) => {
   const real = await orig<typeof import('@/chart/echarts')>();
