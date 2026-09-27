@@ -1,10 +1,11 @@
 import 'fake-indexeddb/auto';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import { render, screen, within, waitFor, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createRouter, createMemoryHistory, RouterProvider, createRootRoute, createRoute, Outlet } from '@tanstack/react-router';
 import { Shell } from '@/components/shell/Shell';
 import { Intake } from '@/components/intake/Intake';
+import type { Detection } from '@/insights/intake';
 import { useDoc } from '@/store/document';
 import { useUi } from '@/store/ui';
 import { openDb } from '@/db';
@@ -130,5 +131,83 @@ describe('Quick post (phone)', () => {
     await waitFor(() => expect(downloadBlob).toHaveBeenCalled());
     await user.click(screen.getByRole('button', { name: /more actions/i }));
     expect(screen.getByRole('menuitem', { name: /open full editor/i })).toBeInTheDocument();
+  });
+});
+
+vi.mock('@/insights/detectImage', () => ({ detectImage: vi.fn() }));
+vi.mock('@/ocr/engine', () => ({ isEngineReady: vi.fn(() => false) }));
+
+describe('useIntake picture handling', () => {
+  it('shows "setting up" on the first (uncached) picture, since that pays for the model download', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    const { isEngineReady } = await import('@/ocr/engine');
+    vi.mocked(isEngineReady).mockReturnValue(false);
+    let resolve!: (d: Detection) => void;
+    vi.mocked(detectImage).mockReturnValue(new Promise((r) => { resolve = r; }));
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    const file = new File(['x'], 'photo.png', { type: 'image/png' });
+    fireEvent.change(input, { target: { files: [file] } });
+    expect(await screen.findByText(/setting up picture reading/i)).toBeInTheDocument();
+    resolve({ kind: 'image', rows: [{ id: '1', label: 'USA', value: 87 }], warnings: [] });
+    await waitFor(() => expect(screen.getByDisplayValue(/USA 87/)).toBeInTheDocument());
+  });
+
+  it('shows "reading" (not "setting up") once the engine is already cached', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    const { isEngineReady } = await import('@/ocr/engine');
+    vi.mocked(isEngineReady).mockReturnValue(true);
+    let resolve!: (d: Detection) => void;
+    vi.mocked(detectImage).mockReturnValue(new Promise((r) => { resolve = r; }));
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    fireEvent.change(input, { target: { files: [new File(['x'], 'photo.png', { type: 'image/png' })] } });
+    expect(await screen.findByText(/reading your picture/i)).toBeInTheDocument();
+    expect(screen.queryByText(/setting up picture reading/i)).toBeNull();
+    resolve({ kind: 'image', rows: [{ id: '1', label: 'USA', value: 87 }], warnings: [] });
+    await waitFor(() => expect(screen.getByDisplayValue(/USA 87/)).toBeInTheDocument());
+  });
+
+  it('a second picked file wins over a slower first one (Review Focus 3)', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    let resolveFirst!: (d: Detection) => void;
+    let resolveSecond!: (d: Detection) => void;
+    vi.mocked(detectImage)
+      .mockReturnValueOnce(new Promise((r) => { resolveFirst = r; }))
+      .mockReturnValueOnce(new Promise((r) => { resolveSecond = r; }));
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    fireEvent.change(input, { target: { files: [new File(['1'], 'a.png', { type: 'image/png' })] } });
+    fireEvent.change(input, { target: { files: [new File(['2'], 'b.png', { type: 'image/png' })] } });
+    resolveSecond({ kind: 'image', rows: [{ id: '2', label: 'Newer', value: 2 }], warnings: [] });
+    await waitFor(() => expect(screen.getByDisplayValue(/Newer 2/)).toBeInTheDocument());
+    resolveFirst({ kind: 'image', rows: [{ id: '1', label: 'Stale', value: 1 }], warnings: [] });
+    await new Promise((r) => setTimeout(r, 10));
+    expect(screen.queryByDisplayValue(/Stale/)).toBeNull();
+  });
+
+  it('rejects a file over 15MB before calling detectImage (Review Focus 2)', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    const big = new File([new Uint8Array(16 * 1024 * 1024)], 'huge.png', { type: 'image/png' });
+    fireEvent.change(input, { target: { files: [big] } });
+    expect(await screen.findByText(/too large|smaller picture/i)).toBeInTheDocument();
+    expect(detectImage).not.toHaveBeenCalled();
+  });
+
+  it('times out a stuck recognition after 20s and shows a retry warning (Review Focus 2)', async () => {
+    const { detectImage } = await import('@/insights/detectImage');
+    vi.mocked(detectImage).mockReturnValue(new Promise(() => {})); // never resolves
+    mount('/new');
+    const input = await screen.findByLabelText('Picture file');
+    // Fake timers only for the 20s wait itself — findByLabelText above needs
+    // real timers to resolve; Testing Library's fake-timer auto-detection
+    // for its own polling is unreliable across Vitest versions.
+    vi.useFakeTimers();
+    fireEvent.change(input, { target: { files: [new File(['x'], 'photo.png', { type: 'image/png' })] } });
+    await act(async () => { await vi.advanceTimersByTimeAsync(20_000); });
+    expect(screen.getByText(/took too long|try again/i)).toBeInTheDocument();
+    vi.useRealTimers();
   });
 });

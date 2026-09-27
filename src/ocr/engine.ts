@@ -45,6 +45,11 @@ export function _resetEngineForTests(): void {
   cached = null;
 }
 
+/** True once an engine has been loaded and cached — callers use this to tell a slow, one-time model download apart from a fast, per-image read. */
+export function isEngineReady(): boolean {
+  return cached !== null;
+}
+
 export async function recognizeImage(file: File): Promise<string[]> {
   if (!cached) {
     try {

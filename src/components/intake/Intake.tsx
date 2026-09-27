@@ -1,10 +1,12 @@
 // New chart: paste anything, get three charts. On phones this is the quick-post flow.
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearch, type LinkProps } from '@tanstack/react-router';
 import { useTopBar } from '../shell/TopBar';
 import { useDoc, newId } from '../../store/document';
 import { useUi } from '../../store/ui';
 import { detect } from '../../insights/intake';
+import { detectImage } from '../../insights/detectImage';
+import { isEngineReady } from '../../ocr/engine';
 import { suggest } from '../../insights/suggest';
 import { insights } from '../../insights';
 import { CHART_TYPES, defaultSpec, type ChartSpec, type ChartType, type Unit } from '../../chart/types';
@@ -17,9 +19,17 @@ import './intake.css';
 
 const to = (p: string) => p as LinkProps['to'];
 
+const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+const IMAGE_TIMEOUT_MS = 20_000;
+const TOO_LARGE = 'That picture is too large — try a smaller picture (under 15MB).';
+const TOO_SLOW = "That took too long to read. Try again, or paste the numbers instead.";
+
 export function useIntake(initialText = '') {
   const [text, setText] = useState(initialText);
   const [unitOverride, setUnitOverride] = useState<Unit | 'number' | null>(null);
+  const [imageState, setImageState] = useState<'idle' | 'loading-engine' | 'reading'>('idle');
+  const [imageWarning, setImageWarning] = useState<string | null>(null);
+  const requestRef = useRef(0);
   const detection = useMemo(() => detect(text), [text]);
   const unit: Unit | 'number' = unitOverride ?? detection.unit ?? 'number';
   const rows = useMemo(() => detection.rows.map((r) => ({ ...r, id: newId(), ...(unit === 'number' ? { unit: undefined } : { unit }) })), [detection.rows, unit]);
@@ -27,7 +37,34 @@ export function useIntake(initialText = '') {
   const title = detection.title ?? (detection.columns && detection.columns.length >= 2 ? `${detection.columns[1]} by ${detection.columns[0]}` : 'Untitled');
   const baseSpec = useMemo<ChartSpec>(() => defaultSpec({ data: rows, text: { title }, type: suggestions[0]?.type ?? 'bar' }), [rows, title, suggestions]);
   useEffect(() => { if (detection.rows.length) track('intake_detect', { kind: detection.kind, rows: detection.rows.length }); }, [detection.kind, detection.rows.length]);
-  return { text, setText, detection, unit, setUnit: setUnitOverride, rows, suggestions, baseSpec };
+
+  const handleImage = useCallback((file: File) => {
+    if (file.size > MAX_IMAGE_BYTES) { setImageWarning(TOO_LARGE); return; }
+    setImageWarning(null);
+    const myRequest = ++requestRef.current;
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      if (requestRef.current === myRequest) { setImageState('idle'); setImageWarning(TOO_SLOW); }
+    }, IMAGE_TIMEOUT_MS);
+    // The first picture in a session pays for a multi-MB model download;
+    // every one after that is just the (fast) per-image read.
+    setImageState(isEngineReady() ? 'reading' : 'loading-engine');
+    void detectImage(file).then((d) => {
+      clearTimeout(timer);
+      if (timedOut || requestRef.current !== myRequest) return; // a newer pick, or already timed out, wins
+      setImageState('idle');
+      if (d.warnings.length) setImageWarning(d.warnings[0]);
+      if (d.rows.length) { setText(d.rows.map((r) => `${r.label}\t${r.value}`).join('\n')); track('intake_detect', { kind: 'image', rows: d.rows.length }); }
+    }).catch(() => {
+      clearTimeout(timer);
+      if (timedOut || requestRef.current !== myRequest) return;
+      setImageState('idle');
+      setImageWarning(TOO_SLOW);
+    });
+  }, []);
+
+  return { text, setText, detection, unit, setUnit: setUnitOverride, rows, suggestions, baseSpec, imageState, imageWarning, handleImage };
 }
 
 export function Intake(): React.JSX.Element {
@@ -55,7 +92,7 @@ export function Intake(): React.JSX.Element {
     <div className="cg-intake">
       <div className="cg-intake-left">
         <h1 className="cg-h1 cg-intake-h1">Paste anything.<br /><span className="cg-intake-accent">We’ll chart it.</span></h1>
-        <PasteBox text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} />
+        <PasteBox text={intake.text} onText={intake.setText} detection={detection} unit={intake.unit} onUnit={intake.setUnit} onImage={intake.handleImage} imageState={intake.imageState} imageWarning={intake.imageWarning} />
         <div className="cg-intake-cta">
           <Button variant="primary" size="lg" disabled={rows.length === 0} onClick={() => { const top = suggestions[0]; if (top) open(top.type, 0); }} aria-label="Continue with these rows">Continue with these rows →</Button>
           {rows.length > 0 && <span className="cg-hint">Units: <b>{intake.unit === 'number' ? 'plain numbers' : intake.unit}</b> · change with the control above</span>}
