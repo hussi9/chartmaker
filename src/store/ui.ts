@@ -10,6 +10,9 @@ export interface Toast { id: number; message: string; action?: ToastAction }
 export interface UiState {
   storage: StorageState;
   narrow: boolean;
+  /** ⌘K palette visibility; the shell owns the shortcut so it works before the palette chunk loads. */
+  palette: boolean;
+  setPalette(open: boolean): void;
   handle?: string;
   brand?: BrandDoc & { logoDataUrl?: string };
   rightTab: 'insights' | 'caption' | 'style';
@@ -30,6 +33,8 @@ let toastSeq = 0;
 export const useUi = create<UiState>()((set, get) => ({
   storage: 'unavailable',
   narrow: false,
+  palette: false,
+  setPalette: (open) => set({ palette: open }),
   handle: undefined,
   brand: undefined,
   rightTab: 'insights',

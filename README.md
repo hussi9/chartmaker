@@ -1,126 +1,47 @@
-# ChartGenie.xyz — Chart Maker
+# ChartGenie — a chart maker for posts
 
-[![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![PWA Ready](https://img.shields.io/badge/PWA-Installable-10B981?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
-[![Capacitor Ready](https://img.shields.io/badge/Capacitor-iOS%20%26%20Android-1192d3?logo=capacitor&logoColor=white)](https://capacitorjs.com/)
+Live at [chartgenie.xyz](https://chartgenie.xyz). Paste numbers, get a post-ready chart. Free, no account, everything runs in the browser and saved charts stay in that browser.
 
-**ChartGenie** turns numbers you enter or paste from spreadsheets into charts you can export as PNG or SVG. My Charts saves to this browser's local storage; the site also uses analytics that excludes chart content from events.
+## What it does
 
-Built to be **user-friendly**, **viral on social networks (X/Twitter, LinkedIn, TikTok, Instagram)**, and **architected for seamless conversion into native iOS and Android mobile apps via Capacitor or PWA**.
+- **Paste anything.** Spreadsheet cells, a CSV, or a sentence like "Revenue grew from 12k in Jan to 34k in Jun" become rows. Units (%, $, k/M) are detected and you confirm the rows before charting. `.csv` files can be dropped in, opened with the installed app, or shared to it from the OS share sheet.
+- **Three suggestions** ranked from the shape of the data (two points → before/after, dates → line, parts of 100 → donut, a drop-off → funnel).
+- **Nineteen chart looks** drawn by Apache ECharts inside ChartGenie's own frame: bars, ranked bars, stacked and 100% stacked, line, area, stacked line/area, pie, donut, radar, scatter, heat grid, rule chart, gauge, conversion funnel, KPI headline, 2×2 priority matrix.
+- **Four post sizes** with platform crop-zone overlays: 16:9 (X / web, 1600×900), 1:1 (LinkedIn, 1080×1080), 9:16 (Story, 1080×1920), 4:3 (deck, 1600×1200).
+- **Post-ready checks** computed from the rendered chart: label contrast (APCA), minimum text size at the smallest export, nothing inside a crop zone, alt text present.
+- **Insights and captions.** Facts computed from the rows (largest, share, ratio, average, change over time) can be pinned on the chart as callouts. A caption is drafted on the device in three tones; if the browser ships a built-in language model it can rewrite the caption on the device.
+- **Export set.** PNG (2× pixel density) and SVG for every chosen size plus `caption.txt` and `alt-text.txt`, zipped. Single PNG, SVG and CSV downloads, copy-PNG to the clipboard, and the OS share sheet where the browser supports it.
+- **Share links** carry the whole chart inside the address. `/s/<state>` unfurls as a preview card rendered on request; nothing is stored server-side. "Remix with your numbers" opens the same look with blank values.
+- **My charts, Series, Brand.** Saved charts with real thumbnails; recurring charts that ask for next period's numbers with last period faded behind; a brand kit (palette, colour-blind-safe variant, handle, logo). All in IndexedDB in this browser, with JSON backup and restore.
+- **⌘K command palette** for every action, and search landings at `/pie-chart-maker`, `/bar-graph-maker`, `/convert-excel-to-chart`.
+- **Installable PWA** with `share_target` and `.csv` file handling.
 
----
+## Stack
 
-## ⚡ What Makes It Viral & User-Friendly?
+React 19 (React Compiler), Vite 8, TypeScript 6 strict, TanStack Router (file routes), Zustand + Immer + zundo, Dexie (IndexedDB), Apache ECharts 6 (SVG renderer, tree-shaken, also used for SSR of preview cards), `@resvg/resvg-wasm` for PNG in the browser and `@resvg/resvg-js` in the Vercel Node functions, self-hosted Bricolage Grotesque / Geist / Geist Mono, cmdk, culori + apca-w3, Vitest + Testing Library, Playwright.
 
-### 1. 🔥 Viral Meme & Social Presets
-- **Relatable Humorous Charts**: "Where Developer Time Actually Goes", "Where My Salary Vanishes", "Anatomy of a 1-Hour Zoom Meeting", "Expectation vs Reality".
-- **Social Media Aspect Ratios**:
-  - `1:1` — Square Instagram & LinkedIn feed posts
-  - `9:16` — TikTok, Instagram Reels, YouTube Shorts & Stories
-  - `16:9` — X / Twitter headers, YouTube thumbnails & presentation slides
-  - `4:3` — Keynote & PDF slide decks
-- **Creator Watermark / Handle**: Add `@yourhandle` directly on the visual canvas for attribution when screenshots and exports get reposted.
-
-### 2. 🎨 High-Contrast Aesthetic Themes
-- **Spotify Wrapped**: Electric neon green (`#1ed760`), magenta, and deep pitch-black contrast.
-- **Apple Keynote / Studio**: Sleek frosted glass, SF Pro aesthetic, and macOS color palette.
-- **Terminal Amber**: Retro Bloomberg-style amber and phosphor green data aesthetic.
-- **Notion Warm Paper**: Editorial minimalist monochrome for essays and blogs.
-- **Neon Cyber, Vercel Slate, Stripe Finance, Emerald Luxe, Minimal Pastel**.
-
-### 3. Smart Parser
-- Type natural prompts like `"Tesla 1.8M, Ford 4.4M, BYD 3.0M"` or `"Rent $1400, Food $500, Fun $200"`.
-- Heuristic extraction recognizes currency symbols, percentages, and suffixes (`k`, `M`, `B`). Preview and confirm the parsed rows before using them.
-- Auto-recommends chart types based on data patterns (e.g. time series $\rightarrow$ line chart; percentages $\rightarrow$ donut; comparisons $\rightarrow$ bar).
-
-### 4. 📲 Native Share & Export Suite
-- **Native Web Share API**: On iOS and Android devices, tap "Native Share" to open the device's native share sheet with the chart image pre-attached (share directly to Instagram Stories, Twitter, WhatsApp, Slack, Messages, or AirDrop).
-- **1-Click Share to X (Twitter)**: Pre-fills tweet text with hashtags and share link.
-- **Direct Clipboard Copy**: Copy high-res 2x PNG straight into system clipboard for immediate pasting into Slack, Notion, Word, or Google Slides.
-- **Exports**: PNG at 1x, 2x, or 4x pixel scale and SVG generated from the chart display. SVG may contain embedded raster content.
-
-### 5. 📂 Local Project Manager ("My Charts") & Autosave
-- Automatic debounced background autosave prevents lost work.
-- "My Saved Charts" drawer allows saving, switching between, and deleting multiple projects on device without needing external logins or servers.
-- Haptic tactile feedback (`navigator.vibrate`) on touch interactions.
-
----
-
-## 📱 How to Convert into a Native Mobile App (iOS & Android)
-
-ChartGenie is built 100% client-side with no remote server state, safe-area inset support, and mobile bottom navigation—making it plug-and-play with **Capacitor**.
-
-### Quick Setup with Capacitor:
-
-1. **Install Capacitor in the project**:
-   ```bash
-   npm install @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android
-   ```
-
-2. **Initialize Capacitor**:
-   ```bash
-   npx cap init ChartGenie xyz.chartgenie.app --web-dir dist
-   ```
-   *(A pre-configured [`capacitor.config.json`](file:///Users/airbook/devpro/chartmaker/capacitor.config.json) is already included in this repository).*
-
-3. **Build the production web app**:
-   ```bash
-   npm run build
-   ```
-
-4. **Add iOS & Android platforms**:
-   ```bash
-   npx cap add ios
-   npx cap add android
-   ```
-
-5. **Sync web assets to mobile shell**:
-   ```bash
-   npx cap sync
-   ```
-
-6. **Open in Xcode or Android Studio**:
-   ```bash
-   # For iOS (macOS required):
-   npx cap open ios
-
-   # For Android:
-   npx cap open android
-   ```
-
-7. **Run on Device or Emulator**: Click "Run" in Xcode or Android Studio to test on physical iPhone or Android devices!
-
----
-
-## 🌐 Progressive Web App (PWA) Installation
-
-ChartGenie can also be installed as a standalone app directly from any mobile or desktop browser without the App Store:
-- **On iOS (Safari)**: Tap the Share button $\rightarrow$ Select **"Add to Home Screen"**.
-- **On Android (Chrome)**: Tap the menu $\rightarrow$ Select **"Install App"**.
-- **On macOS / Windows (Chrome/Edge)**: Click the Install icon in the address bar.
-
----
-
-## 💻 Local Development
+## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Start local dev server
-npm run dev
-
-# Run Oxlint linter
-npm run lint
-
-# Compile TypeScript & production bundle
-npm run build
+npm run dev          # http://localhost:5173
+npm test             # vitest
+npm run e2e          # playwright (desktop 1440×900 + phone 390×844)
+scripts/check.sh     # format, lint, types, unit tests, build, bundle budget — the local CI gate
 ```
 
----
+Font metrics and the resvg wasm are generated by `scripts/gen-font-metrics.mjs` and committed.
 
-## 🔒 Privacy & Security
+## Deploy
 
-- **100% Client-Side Processing**: All CSV parsing, data transformations, chart rendering, and image generation occur inside the user's browser memory. Confidential business data is never transmitted to third-party servers.
+Vercel project `chartmaker`. `vercel.json` rewrites `/s/:state` to the share function and `/s/:state/og.png` to the card renderer; every other app route serves `index.html`, and unknown paths are a true 404.
+
+## Privacy
+
+Editing, checks, captions and exports run in the browser. Charts are saved to this browser's storage only when you save. A share link you create carries the chart data inside the address so the preview card can be drawn on request; nothing is stored on a server. Analytics events never include titles, labels, values, captions or share links.
+
+## Docs
+
+- `docs/superpowers/specs/2026-09-27-chartgenie-redesign-design.md` — the design spec
+- `docs/superpowers/plans/2026-09-27-chartgenie-redesign.md` — the implementation plan
+- `docs/design-handoff-2026-09-27/` — the Claude Design handoff and gap analysis

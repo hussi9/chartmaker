@@ -1,7 +1,6 @@
 import { Link, type LinkProps } from '@tanstack/react-router';
 import { NAV } from './nav';
 
-// Route files land in Tasks 16–25; Task 25 removes this cast once every target exists.
 const to = (p: string) => p as LinkProps['to'];
 
 export function TabBar(): React.JSX.Element {

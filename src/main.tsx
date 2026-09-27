@@ -14,6 +14,16 @@ declare module '@tanstack/react-router' {
 
 initGoogleAnalytics();
 
+// PWA file handling: a .csv opened with ChartGenie lands on the intake screen.
+const lq = (window as { launchQueue?: { setConsumer(cb: (p: { files: { getFile(): Promise<File> }[] }) => void): void } }).launchQueue;
+lq?.setConsumer(async (params) => {
+  const handle = params.files?.[0];
+  if (!handle) return;
+  const file = await handle.getFile();
+  const text = (await file.text()).slice(0, 20_000);
+  void router.navigate({ to: '/new', search: { text } });
+});
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <RouterProvider router={router} />

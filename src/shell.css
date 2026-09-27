@@ -108,3 +108,13 @@
 
 
 .cg-linkbtn { display: inline-flex; align-items: center; background: none; border: 0; padding: 0; color: var(--teal); font: inherit; text-decoration: underline; cursor: pointer; min-height: var(--tap); }
+
+/* Search landings */
+.cg-landing { gap: var(--space-4); max-width: 1040px; }
+.cg-landing-lead { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-2); max-width: 62ch; }
+.cg-landing-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 24px; align-items: start; }
+.cg-shell-narrow .cg-landing-grid { grid-template-columns: 1fr; }
+.cg-landing-example { overflow: hidden; }
+.cg-landing-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 14px; line-height: 1.5; }
+.cg-landing-steps li { display: flex; gap: 12px; align-items: flex-start; }
+.cg-landing-step-n { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 600 12px var(--font-mono); }

@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as BarGraphMakerRouteImport } from './routes/bar-graph-maker'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ChartsRouteImport } from './routes/charts'
+import { Route as ConvertExcelToChartRouteImport } from './routes/convert-excel-to-chart'
 import { Route as NewRouteImport } from './routes/new'
+import { Route as PieChartMakerRouteImport } from './routes/pie-chart-maker'
 import { Route as SeriesRouteImport } from './routes/series'
 import { Route as EditIdRouteImport } from './routes/edit.$id'
 import { Route as SIndexRouteImport } from './routes/s.index'
@@ -29,6 +32,11 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BarGraphMakerRoute = BarGraphMakerRouteImport.update({
+  id: '/bar-graph-maker',
+  path: '/bar-graph-maker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BrandRoute = BrandRouteImport.update({
   id: '/brand',
   path: '/brand',
@@ -39,9 +47,19 @@ const ChartsRoute = ChartsRouteImport.update({
   path: '/charts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConvertExcelToChartRoute = ConvertExcelToChartRouteImport.update({
+  id: '/convert-excel-to-chart',
+  path: '/convert-excel-to-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewRoute = NewRouteImport.update({
   id: '/new',
   path: '/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PieChartMakerRoute = PieChartMakerRouteImport.update({
+  id: '/pie-chart-maker',
+  path: '/pie-chart-maker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SeriesRoute = SeriesRouteImport.update({
@@ -68,9 +86,12 @@ const SStateRoute = SStateRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
+  '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
   '/new': typeof NewRoute
+  '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
@@ -79,9 +100,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
+  '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
   '/new': typeof NewRoute
+  '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
@@ -91,9 +115,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
+  '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
   '/new': typeof NewRoute
+  '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
@@ -104,9 +131,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$'
+    | '/bar-graph-maker'
     | '/brand'
     | '/charts'
+    | '/convert-excel-to-chart'
     | '/new'
+    | '/pie-chart-maker'
     | '/series'
     | '/edit/$id'
     | '/s/$state'
@@ -115,9 +145,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/bar-graph-maker'
     | '/brand'
     | '/charts'
+    | '/convert-excel-to-chart'
     | '/new'
+    | '/pie-chart-maker'
     | '/series'
     | '/edit/$id'
     | '/s/$state'
@@ -126,9 +159,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$'
+    | '/bar-graph-maker'
     | '/brand'
     | '/charts'
+    | '/convert-excel-to-chart'
     | '/new'
+    | '/pie-chart-maker'
     | '/series'
     | '/edit/$id'
     | '/s/$state'
@@ -138,9 +174,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
+  BarGraphMakerRoute: typeof BarGraphMakerRoute
   BrandRoute: typeof BrandRoute
   ChartsRoute: typeof ChartsRoute
+  ConvertExcelToChartRoute: typeof ConvertExcelToChartRoute
   NewRoute: typeof NewRoute
+  PieChartMakerRoute: typeof PieChartMakerRoute
   SeriesRoute: typeof SeriesRoute
   EditIdRoute: typeof EditIdRoute
   SStateRoute: typeof SStateRoute
@@ -163,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bar-graph-maker': {
+      id: '/bar-graph-maker'
+      path: '/bar-graph-maker'
+      fullPath: '/bar-graph-maker'
+      preLoaderRoute: typeof BarGraphMakerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/brand': {
       id: '/brand'
       path: '/brand'
@@ -177,11 +223,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChartsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/convert-excel-to-chart': {
+      id: '/convert-excel-to-chart'
+      path: '/convert-excel-to-chart'
+      fullPath: '/convert-excel-to-chart'
+      preLoaderRoute: typeof ConvertExcelToChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/new': {
       id: '/new'
       path: '/new'
       fullPath: '/new'
       preLoaderRoute: typeof NewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pie-chart-maker': {
+      id: '/pie-chart-maker'
+      path: '/pie-chart-maker'
+      fullPath: '/pie-chart-maker'
+      preLoaderRoute: typeof PieChartMakerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/series': {
@@ -218,9 +278,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
+  BarGraphMakerRoute: BarGraphMakerRoute,
   BrandRoute: BrandRoute,
   ChartsRoute: ChartsRoute,
+  ConvertExcelToChartRoute: ConvertExcelToChartRoute,
   NewRoute: NewRoute,
+  PieChartMakerRoute: PieChartMakerRoute,
   SeriesRoute: SeriesRoute,
   EditIdRoute: EditIdRoute,
   SStateRoute: SStateRoute,

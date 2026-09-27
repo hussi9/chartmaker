@@ -1,18 +1,25 @@
-# ChartGenie.xyz — Chart Maker
+# ChartGenie.xyz — a chart maker for posts
 
-> ChartGenie makes charts from values you enter or paste. Export PNG at 1x, 2x, or 4x pixel scale, or export SVG from the displayed chart.
+> Paste numbers, get a post-ready chart. Free, no account, everything runs in the browser and charts you save stay in that browser.
 
-## Key Capabilities & Features
-- **Smart Parser**: Preview label and value pairs from plain text and confirm the rows before use.
-- **Multi-Format Aspect Ratios**: Instant framing for 16:9 (Landscape / Slide), 1:1 (Square / Feed), 9:16 (Vertical Story / Reels), and 4:3 (Deck).
-- **Aesthetic Themes & Modes**: 12 handcrafted color palettes (Apple, Linear, Midnight, Emerald, Sunset, Neon Cyber, Berry, Warm Amber, Pastel, Slate, etc.) and 6 canvas modes (Light, Dark, Spotify Wrapped, Paper Texture, True OLED, Slate).
-- **Export**: PNG at 1x, 2x, or 4x pixel scale, SVG, and clipboard copy. SVG may contain embedded raster content.
-- **Local saves**: Charts saved to My Charts use this browser's local storage. Site analytics excludes chart titles, labels, values, and prompt text.
-- **Interactive Data Table**: Reorder, duplicate, color-pick, and toggle individual series or import CSV/TSV spreadsheets.
+## What it does
+- **Paste anything**: spreadsheet cells, a CSV, or a sentence like “Revenue grew from 12k in Jan to 34k in Jun” become rows; units (%, $, k/M) are detected and you confirm the rows before charting.
+- **Chart suggestions**: three ranked looks from the shape of the data (two points → before/after, dates → line, parts of 100 → donut, a drop-off → funnel).
+- **19 chart looks**: bars, ranked bars, stacked bars, 100% stacked, line, area, stacked line and area, pie, donut, radar, scatter, heat grid, rule chart, gauge, conversion funnel, KPI headline and a 2×2 priority matrix.
+- **Four post sizes**: 16:9 (X / web, 1600×900), 1:1 (LinkedIn, 1080×1080), 9:16 (Story, 1080×1920) and 4:3 (deck, 1600×1200), with platform crop-zone overlays.
+- **Post-ready checks**, computed from the rendered chart: label contrast (APCA), minimum text size at the smallest export, nothing inside a platform crop zone, alt text present.
+- **Insights and captions**: facts computed from the rows (largest, share, ratio, average, change over time) can be pinned on the chart as callouts; a caption is drafted on the device in three tones. If the browser ships a built-in language model it can rewrite the caption on the device; nothing is sent to a server.
+- **Export set**: one click renders PNG and SVG for every chosen size, plus caption.txt and alt-text.txt, zipped. Fonts are embedded in the SVG.
+- **Share links**: the whole chart travels inside the link. Links of the form /s/<state> unfurl as a preview card; the card is rendered on request and nothing is stored. A “Remix with your numbers” button opens the same look with blank values.
+- **My charts, Series and Brand**: saved charts with real thumbnails, recurring charts that ask for next period’s numbers with last period faded behind, and a brand kit (palette, colour-blind-safe variant, handle, logo) — all saved in this browser. A JSON backup can be exported and restored.
 
-## Direct Links & Routes
-- Main Web Studio: https://chartgenie.xyz/
-- Pie Chart Maker: https://chartgenie.xyz/pie-chart-maker
-- Bar Graph Generator: https://chartgenie.xyz/bar-graph-maker
-- Spreadsheet to Chart Converter: https://chartgenie.xyz/convert-excel-to-chart
-- Sitemap: https://chartgenie.xyz/sitemap.xml
+## Routes
+- https://chartgenie.xyz/ — templates (returning people land on /new)
+- https://chartgenie.xyz/new — paste anything
+- https://chartgenie.xyz/pie-chart-maker — pie chart maker
+- https://chartgenie.xyz/bar-graph-maker — bar graph maker
+- https://chartgenie.xyz/convert-excel-to-chart — spreadsheet rows to a chart
+- https://chartgenie.xyz/sitemap.xml
+
+## Privacy
+Charts are edited in the browser and saved to this browser's storage when you save. Share links carry the chart data inside the address so a preview card can be rendered on request; nothing is stored server-side. Site analytics runs without chart titles, labels, values, captions or share links in events.
