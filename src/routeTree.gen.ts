@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as EditIdRouteImport } from './routes/edit.$id'
+import { Route as SIndexRouteImport } from './routes/s.index'
+import { Route as SStateRouteImport } from './routes/s.$state'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +30,53 @@ const EditIdRoute = EditIdRouteImport.update({
   path: '/edit/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SIndexRoute = SIndexRouteImport.update({
+  id: '/s/',
+  path: '/s/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SStateRoute = SStateRouteImport.update({
+  id: '/s/$state',
+  path: '/s/$state',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/edit/$id': typeof EditIdRoute
+  '/s/$state': typeof SStateRoute
+  '/s/': typeof SIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/edit/$id': typeof EditIdRoute
+  '/s/$state': typeof SStateRoute
+  '/s': typeof SIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
   '/edit/$id': typeof EditIdRoute
+  '/s/$state': typeof SStateRoute
+  '/s/': typeof SIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$' | '/edit/$id'
+  fullPaths: '/' | '/$' | '/edit/$id' | '/s/$state' | '/s/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$' | '/edit/$id'
-  id: '__root__' | '/' | '/$' | '/edit/$id'
+  to: '/' | '/$' | '/edit/$id' | '/s/$state' | '/s'
+  id: '__root__' | '/' | '/$' | '/edit/$id' | '/s/$state' | '/s/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
   EditIdRoute: typeof EditIdRoute
+  SStateRoute: typeof SStateRoute
+  SIndexRoute: typeof SIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s/': {
+      id: '/s/'
+      path: '/s'
+      fullPath: '/s/'
+      preLoaderRoute: typeof SIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/s/$state': {
+      id: '/s/$state'
+      path: '/s/$state'
+      fullPath: '/s/$state'
+      preLoaderRoute: typeof SStateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +123,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
   EditIdRoute: EditIdRoute,
+  SStateRoute: SStateRoute,
+  SIndexRoute: SIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

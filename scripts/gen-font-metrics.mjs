@@ -23,11 +23,13 @@ CHARS.push(...'–—…·•×→←↑↓▲▼€£¥‰′″‘’“”');
 
 mkdirSync('src/chart/metrics', { recursive: true });
 mkdirSync('public/fonts', { recursive: true });
+mkdirSync('api/_fonts', { recursive: true });
 
 for (const f of FONTS) {
   const woff2 = readFileSync(require.resolve(`${f.pkg}/files/${f.file}`));
   const ttf = Buffer.from(await decompress(woff2));
   writeFileSync(join('public/fonts', f.out), ttf);
+  writeFileSync(join('api/_fonts', f.out), ttf); // bundled with the share-card function
   const font = opentype.parse(ttf.buffer.slice(ttf.byteOffset, ttf.byteOffset + ttf.byteLength));
   const glyphs = {};
   let sum = 0;

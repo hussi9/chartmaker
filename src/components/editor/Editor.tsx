@@ -22,6 +22,7 @@ import { insights } from '../../insights';
 import { canvasMeasurer } from '../../chart/measure';
 import { shareUrls } from '../../codec/state';
 import { track } from '../../lib/gtag';
+import { db } from '../../db';
 import './editor.css';
 
 const homeTo = '/' as LinkProps['to'];
@@ -51,16 +52,21 @@ export function Editor(): React.JSX.Element {
 
   const share = useCallback(async () => {
     const urls = shareUrls(doc.spec, window.location.origin);
-    const url = urls.hash;
+    const url = urls.path ?? urls.hash;
+    const mode = urls.path ? 'path' : 'hash';
     try {
       await navigator.clipboard.writeText(url);
-      ui.toast('Link copied');
-      track('share_copy', { mode: 'hash' });
+      ui.toast(mode === 'path' ? 'Link copied. It unfurls with a preview card.' : 'Link copied (long chart: no preview card).');
+      track('share_copy', { mode });
+      if (doc.id && ui.storage === 'ok') {
+        const existing = await db.charts.get(doc.id);
+        if (existing) await db.charts.put({ ...existing, sharedAt: Date.now(), sharedUrl: url });
+      }
     } catch {
       ui.toast('Could not copy. The link is in the address bar.');
       window.history.replaceState(null, '', url);
     }
-  }, [doc.spec, ui]);
+  }, [doc.spec, doc.id, ui]);
 
   useEffect(() => {
     useTopBar.getState().set({
