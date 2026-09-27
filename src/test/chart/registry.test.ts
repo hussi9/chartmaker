@@ -65,7 +65,7 @@ describe('common option fragments', () => {
   });
 
   it('itemStyle is flat by default and adds depth when asked', () => {
-    expect(itemStyle('#0e9384', ctx)).toMatchObject({ color: '#0e9384', borderRadius: 6 });
+    expect(itemStyle('#0e9384', ctx)).toMatchObject({ color: '#0e9384', borderRadius: 12 });
     const deep = plotContext({ ...spec, options: { ...spec.options, depth: true } }, frame(spec, m), m);
     const s = itemStyle('#0e9384', deep) as { shadowBlur?: number; color: unknown };
     expect(s.shadowBlur).toBeGreaterThan(0);

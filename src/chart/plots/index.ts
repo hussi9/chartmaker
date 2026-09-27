@@ -1,7 +1,7 @@
 import type { ChartSpec, ChartType } from '../types';
 import type { Frame } from '../layout-types';
 import type { TextMeasurer } from '../measure';
-import { LOOKS } from '../types';
+import { LOOKS, scaleLook } from '../types';
 import { formatValue } from '../format';
 import type { PlotCtx, PlotDef } from './types';
 import { MAX_ROWS } from './common';
@@ -31,7 +31,7 @@ export function plotContext(spec: ChartSpec, f: Frame, m: TextMeasurer): PlotCtx
   const total = rows.reduce((a, r) => a + (Number.isFinite(r.value) ? r.value : 0), 0);
   const unit = majorityUnit(rows);
   return {
-    spec, rows, plot: f.plot, look: LOOKS[spec.look], palette, total, capped, m, unit,
+    spec, rows, plot: f.plot, look: scaleLook(LOOKS[spec.look], f.w / 1600), palette, total, capped, m, unit,
     fmt: (v, rowUnit) => formatValue(v, rowUnit ?? unit, spec.values, total),
   };
 }

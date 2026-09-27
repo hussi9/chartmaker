@@ -86,16 +86,22 @@ export interface LookTokens {
   border?: string;
 }
 
+// Sizes are true pixels for a 1600-wide post; the design mock shows the artboard at 50%.
 const clean: LookTokens = {
   bg: '#ffffff', ink: '#1e293b', muted: '#6b7280', grid: '#e3ded6', line: '#d6d0c6',
-  radius: 6, title: 30, subtitle: 13, label: 15, value: 15, barGap: 0.25,
+  radius: 12, title: 60, subtitle: 26, label: 36, value: 36, barGap: 0.25,
 };
 export const LOOKS: Record<LookId, LookTokens> = {
   clean,
-  bold: { ...clean, title: 40, label: 18, value: 18, barGap: 0.12 },
+  bold: { ...clean, title: 80, label: 40, value: 40, barGap: 0.12 },
   dark: { ...clean, bg: '#1e293b', ink: '#f6f3ee', muted: '#cbd5e1', grid: '#334155', line: '#475569' },
   newsletter: { ...clean, border: '#1e293b', radius: 0 },
 };
+
+export function scaleLook(look: LookTokens, scale: number): LookTokens {
+  const s = (n: number) => Math.max(12, Math.round(n * scale));
+  return { ...look, radius: Math.round(look.radius * scale), title: s(look.title), subtitle: s(look.subtitle), label: s(look.label), value: s(look.value) };
+}
 
 export interface Palette { id: string; name: string; colors: string[] }
 export const PALETTES: Palette[] = [

@@ -24,6 +24,7 @@ describe('frame()', () => {
     expect(f.title![0].y + f.title![0].h).toBeLessThanOrEqual(f.plot.y);
     expect(f.site.text).toBe('chartgenie.xyz');
     expect(f.site.anchor).toBe('end');
+    expect(f.site.x + f.site.w).toBeCloseTo(1600 - 44, 5);
     expect(f.site.y).toBeGreaterThanOrEqual(f.plot.y + f.plot.h);
   });
 
@@ -61,7 +62,7 @@ describe('frame()', () => {
   it('scales title size with the post width and clamps at 24px', () => {
     const wide = frame(defaultSpec({ size: '16:9' }), m).title![0].size;
     const square = frame(defaultSpec({ size: '1:1' }), m).title![0].size;
-    expect(wide).toBe(30);
+    expect(wide).toBe(60);
     expect(square).toBeGreaterThanOrEqual(24);
     expect(square).toBeLessThan(wide);
   });

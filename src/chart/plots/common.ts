@@ -74,7 +74,7 @@ export function valueAxis(ctx: PlotCtx, horizontal = false): Record<string, unkn
     axisLine: { show: false },
     axisTick: { show: false },
     splitLine: { show: spec.options.grid && !horizontal, lineStyle: { color: look.grid, type: 'dashed' } },
-    axisLabel: { show: !horizontal, color: look.muted, fontSize: look.label - 2, fontFamily: FONT_STACK.mono, formatter: (v: number) => formatAxis(v, ctx.unit) },
+    axisLabel: { show: !horizontal, color: look.muted, fontSize: look.label, fontFamily: FONT_STACK.mono, formatter: (v: number) => formatAxis(v, ctx.unit) },
   };
 }
 
@@ -87,7 +87,7 @@ export function ruleLine(ctx: PlotCtx, horizontal = false): Record<string, unkno
     silent: true,
     symbol: 'none',
     lineStyle: { color: ctx.look.muted, type: 'dashed', width: 2 },
-    label: { formatter: text, position: horizontal ? 'end' : 'insideStartTop', color: ctx.look.ink, fontFamily: FONT_STACK.mono, fontSize: ctx.look.label - 1 },
+    label: { formatter: text, position: horizontal ? 'end' : 'insideStartTop', color: ctx.look.ink, fontFamily: FONT_STACK.mono, fontSize: ctx.look.label },
     data: [horizontal ? { xAxis: value, label: { formatter: text } } : { yAxis: value, label: { formatter: text } }],
   };
 }

@@ -34,7 +34,7 @@ describe('chart spec constants', () => {
   });
 
   it('looks carry the tokens the frame and plots need', () => {
-    expect(LOOKS.clean).toMatchObject({ bg: '#ffffff', ink: '#1e293b', radius: 6, title: 30 });
+    expect(LOOKS.clean).toMatchObject({ bg: '#ffffff', ink: '#1e293b', radius: 12, title: 60 });
     expect(LOOKS.dark.bg).toBe('#1e293b');
     expect(LOOKS.newsletter.border).toBe('#1e293b');
     expect(LOOKS.bold.title).toBeGreaterThan(LOOKS.clean.title);

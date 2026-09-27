@@ -50,16 +50,16 @@ export function frame(spec: ChartSpec, m: TextMeasurer): Frame {
   let badgeW = 0;
   if (spec.options.showHandle && spec.options.handle) {
     const text = `@${spec.options.handle.replace(/^@/, '')}`;
-    const size = Math.max(11, Math.round(13 * scale));
+    const size = Math.max(14, Math.round(26 * scale));
     const tw = m.width(text, size, 'mono', 500);
     const pill: Box = { x: inner.x + inner.w - (tw + 24), y: inner.y, w: tw + 24, h: size + 14 };
-    badge = { id: 'badge', text, size, role: 'mono', weight: 500, fill: look.ink, anchor: 'middle', x: pill.x + pill.w / 2, y: pill.y + 7, w: tw, h: size, pill };
+    badge = { id: 'badge', text, size, role: 'mono', weight: 500, fill: look.ink, anchor: 'middle', x: pill.x + (pill.w - tw) / 2, y: pill.y + 7, w: tw, h: size, pill };
     badgeW = pill.w + GAP;
   }
 
   let logo: Frame['logo'];
   if (spec.options.logoDataUrl) {
-    const s = Math.round(40 * scale);
+    const s = Math.round(72 * scale);
     const corner = spec.options.logoCorner ?? 'br';
     logo = {
       href: spec.options.logoDataUrl,
@@ -80,16 +80,17 @@ export function frame(spec: ChartSpec, m: TextMeasurer): Frame {
 
   let subtitle: TextBox | undefined;
   if (spec.text.subtitle) {
-    const size = Math.max(11, Math.round(look.subtitle * scale));
+    const size = Math.max(14, Math.round(look.subtitle * scale));
     const text = truncate(spec.text.subtitle, titleMaxW, size, m, 'ui', 500);
     subtitle = { id: 'subtitle', text, size, role: 'ui', weight: 500, fill: look.muted, anchor: 'start', x: inner.x, y: cursor + 2, w: m.width(text, size, 'ui', 500), h: size * 1.3 };
     cursor += 2 + size * 1.3;
   }
 
-  const footSize = Math.max(11, Math.round(11 * scale));
+  const footSize = Math.max(14, Math.round(22 * scale));
   const footH = footSize * 1.3;
   const footY = inner.y + inner.h - footH;
-  const site: TextBox = { id: 'site', text: SITE_LABEL, size: footSize, role: 'mono', weight: 500, fill: look.muted, anchor: 'end', x: inner.x + inner.w, y: footY, w: m.width(SITE_LABEL, footSize, 'mono', 500), h: footH };
+  const siteW = m.width(SITE_LABEL, footSize, 'mono', 500);
+  const site: TextBox = { id: 'site', text: SITE_LABEL, size: footSize, role: 'mono', weight: 500, fill: look.muted, anchor: 'end', x: inner.x + inner.w - siteW, y: footY, w: siteW, h: footH };
   let source: TextBox | undefined;
   if (spec.text.source) {
     const text = `Source: ${spec.text.source}`;

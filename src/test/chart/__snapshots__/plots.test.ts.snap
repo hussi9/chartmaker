@@ -28,7 +28,7 @@ exports[`area > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -63,13 +63,13 @@ exports[`area > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -100,7 +100,7 @@ exports[`area > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -150,7 +150,7 @@ exports[`area > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -185,13 +185,13 @@ exports[`area > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -222,7 +222,7 @@ exports[`area > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -272,7 +272,7 @@ exports[`area > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -307,13 +307,13 @@ exports[`area > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -344,7 +344,7 @@ exports[`area > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -394,7 +394,7 @@ exports[`area > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -429,13 +429,13 @@ exports[`area > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -466,7 +466,7 @@ exports[`area > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -505,28 +505,28 @@ exports[`bar > option is stable in look bold 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 52,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 24,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 18,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 9,
@@ -535,7 +535,7 @@ exports[`bar > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -550,13 +550,13 @@ exports[`bar > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -584,7 +584,7 @@ exports[`bar > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -623,28 +623,28 @@ exports[`bar > option is stable in look clean 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 52,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 24,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 18,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 9,
@@ -653,7 +653,7 @@ exports[`bar > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -668,13 +668,13 @@ exports[`bar > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -702,7 +702,7 @@ exports[`bar > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -741,28 +741,28 @@ exports[`bar > option is stable in look dark 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 52,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 24,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 18,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 9,
@@ -771,7 +771,7 @@ exports[`bar > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -786,13 +786,13 @@ exports[`bar > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -820,7 +820,7 @@ exports[`bar > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -889,7 +889,7 @@ exports[`bar > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -904,13 +904,13 @@ exports[`bar > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -938,7 +938,7 @@ exports[`bar > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -971,7 +971,7 @@ exports[`donut > option is stable in look bold 1`] = `
         "align": "center",
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 44,
+        "fontSize": 88,
         "fontWeight": 800,
         "text": "100",
       },
@@ -984,7 +984,7 @@ exports[`donut > option is stable in look bold 1`] = `
         "align": "center",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "text": "total",
       },
       "top": "56%",
@@ -1001,7 +1001,7 @@ exports[`donut > option is stable in look bold 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#0e9384",
           },
@@ -1011,7 +1011,7 @@ exports[`donut > option is stable in look bold 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#1e293b",
           },
@@ -1021,7 +1021,7 @@ exports[`donut > option is stable in look bold 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#e0a33a",
           },
@@ -1032,9 +1032,9 @@ exports[`donut > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "formatter": "[fn]",
-        "lineHeight": 22,
+        "lineHeight": 44,
         "position": "outside",
         "show": true,
       },
@@ -1060,7 +1060,7 @@ exports[`donut > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
 }
 `;
@@ -1076,7 +1076,7 @@ exports[`donut > option is stable in look clean 1`] = `
         "align": "center",
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 33,
+        "fontSize": 66,
         "fontWeight": 800,
         "text": "100",
       },
@@ -1089,7 +1089,7 @@ exports[`donut > option is stable in look clean 1`] = `
         "align": "center",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "total",
       },
       "top": "56%",
@@ -1106,7 +1106,7 @@ exports[`donut > option is stable in look clean 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#0e9384",
           },
@@ -1116,7 +1116,7 @@ exports[`donut > option is stable in look clean 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#1e293b",
           },
@@ -1126,7 +1126,7 @@ exports[`donut > option is stable in look clean 1`] = `
         {
           "itemStyle": {
             "borderColor": "#ffffff",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#e0a33a",
           },
@@ -1137,9 +1137,9 @@ exports[`donut > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -1165,7 +1165,7 @@ exports[`donut > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -1181,7 +1181,7 @@ exports[`donut > option is stable in look dark 1`] = `
         "align": "center",
         "fill": "#f6f3ee",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 33,
+        "fontSize": 66,
         "fontWeight": 800,
         "text": "100",
       },
@@ -1194,7 +1194,7 @@ exports[`donut > option is stable in look dark 1`] = `
         "align": "center",
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "total",
       },
       "top": "56%",
@@ -1211,7 +1211,7 @@ exports[`donut > option is stable in look dark 1`] = `
         {
           "itemStyle": {
             "borderColor": "#1e293b",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#0e9384",
           },
@@ -1221,7 +1221,7 @@ exports[`donut > option is stable in look dark 1`] = `
         {
           "itemStyle": {
             "borderColor": "#1e293b",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#1e293b",
           },
@@ -1231,7 +1231,7 @@ exports[`donut > option is stable in look dark 1`] = `
         {
           "itemStyle": {
             "borderColor": "#1e293b",
-            "borderRadius": 6,
+            "borderRadius": 12,
             "borderWidth": 2,
             "color": "#e0a33a",
           },
@@ -1242,9 +1242,9 @@ exports[`donut > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -1270,7 +1270,7 @@ exports[`donut > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -1286,7 +1286,7 @@ exports[`donut > option is stable in look newsletter 1`] = `
         "align": "center",
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 33,
+        "fontSize": 66,
         "fontWeight": 800,
         "text": "100",
       },
@@ -1299,7 +1299,7 @@ exports[`donut > option is stable in look newsletter 1`] = `
         "align": "center",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "total",
       },
       "top": "56%",
@@ -1347,9 +1347,9 @@ exports[`donut > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -1375,7 +1375,7 @@ exports[`donut > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -1418,7 +1418,7 @@ exports[`funnel > option is stable in look bold 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "label": {
@@ -1429,7 +1429,7 @@ exports[`funnel > option is stable in look bold 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "label": {
@@ -1440,7 +1440,7 @@ exports[`funnel > option is stable in look bold 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "label": {
@@ -1451,7 +1451,7 @@ exports[`funnel > option is stable in look bold 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "label": {
@@ -1467,7 +1467,7 @@ exports[`funnel > option is stable in look bold 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideLeft",
@@ -1518,7 +1518,7 @@ exports[`funnel > option is stable in look bold 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideRight",
@@ -1532,7 +1532,7 @@ exports[`funnel > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "max": 1,
@@ -1591,7 +1591,7 @@ exports[`funnel > option is stable in look clean 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "label": {
@@ -1602,7 +1602,7 @@ exports[`funnel > option is stable in look clean 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "label": {
@@ -1613,7 +1613,7 @@ exports[`funnel > option is stable in look clean 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "label": {
@@ -1624,7 +1624,7 @@ exports[`funnel > option is stable in look clean 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "label": {
@@ -1640,7 +1640,7 @@ exports[`funnel > option is stable in look clean 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideLeft",
@@ -1691,7 +1691,7 @@ exports[`funnel > option is stable in look clean 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideRight",
@@ -1705,7 +1705,7 @@ exports[`funnel > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "max": 1,
@@ -1764,7 +1764,7 @@ exports[`funnel > option is stable in look dark 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "label": {
@@ -1775,7 +1775,7 @@ exports[`funnel > option is stable in look dark 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "label": {
@@ -1786,7 +1786,7 @@ exports[`funnel > option is stable in look dark 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "label": {
@@ -1797,7 +1797,7 @@ exports[`funnel > option is stable in look dark 1`] = `
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "label": {
@@ -1813,7 +1813,7 @@ exports[`funnel > option is stable in look dark 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideLeft",
@@ -1864,7 +1864,7 @@ exports[`funnel > option is stable in look dark 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideRight",
@@ -1878,7 +1878,7 @@ exports[`funnel > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "max": 1,
@@ -1986,7 +1986,7 @@ exports[`funnel > option is stable in look newsletter 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideLeft",
@@ -2037,7 +2037,7 @@ exports[`funnel > option is stable in look newsletter 1`] = `
       "label": {
         "distance": 16,
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "insideRight",
@@ -2051,7 +2051,7 @@ exports[`funnel > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "max": 1,
@@ -2092,7 +2092,7 @@ exports[`gauge > option is stable in look bold 1`] = `
               "#e3ded6",
             ],
           ],
-          "width": 64,
+          "width": 59,
         },
       },
       "axisTick": {
@@ -2111,7 +2111,7 @@ exports[`gauge > option is stable in look bold 1`] = `
       "detail": {
         "color": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 64,
+        "fontSize": 128,
         "fontWeight": 800,
         "formatter": "[fn]",
         "offsetCenter": [
@@ -2132,7 +2132,7 @@ exports[`gauge > option is stable in look bold 1`] = `
         },
         "roundCap": true,
         "show": true,
-        "width": 64,
+        "width": 59,
       },
       "radius": "95%",
       "splitLine": {
@@ -2142,7 +2142,7 @@ exports[`gauge > option is stable in look bold 1`] = `
       "title": {
         "color": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "offsetCenter": [
           0,
           "24%",
@@ -2155,7 +2155,7 @@ exports[`gauge > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
 }
 `;
@@ -2180,7 +2180,7 @@ exports[`gauge > option is stable in look clean 1`] = `
               "#e3ded6",
             ],
           ],
-          "width": 65,
+          "width": 61,
         },
       },
       "axisTick": {
@@ -2199,7 +2199,7 @@ exports[`gauge > option is stable in look clean 1`] = `
       "detail": {
         "color": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 48,
+        "fontSize": 96,
         "fontWeight": 800,
         "formatter": "[fn]",
         "offsetCenter": [
@@ -2220,7 +2220,7 @@ exports[`gauge > option is stable in look clean 1`] = `
         },
         "roundCap": true,
         "show": true,
-        "width": 65,
+        "width": 61,
       },
       "radius": "95%",
       "splitLine": {
@@ -2230,7 +2230,7 @@ exports[`gauge > option is stable in look clean 1`] = `
       "title": {
         "color": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "offsetCenter": [
           0,
           "24%",
@@ -2243,7 +2243,7 @@ exports[`gauge > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -2268,7 +2268,7 @@ exports[`gauge > option is stable in look dark 1`] = `
               "#334155",
             ],
           ],
-          "width": 65,
+          "width": 61,
         },
       },
       "axisTick": {
@@ -2287,7 +2287,7 @@ exports[`gauge > option is stable in look dark 1`] = `
       "detail": {
         "color": "#f6f3ee",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 48,
+        "fontSize": 96,
         "fontWeight": 800,
         "formatter": "[fn]",
         "offsetCenter": [
@@ -2308,7 +2308,7 @@ exports[`gauge > option is stable in look dark 1`] = `
         },
         "roundCap": true,
         "show": true,
-        "width": 65,
+        "width": 61,
       },
       "radius": "95%",
       "splitLine": {
@@ -2318,7 +2318,7 @@ exports[`gauge > option is stable in look dark 1`] = `
       "title": {
         "color": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "offsetCenter": [
           0,
           "24%",
@@ -2331,7 +2331,7 @@ exports[`gauge > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -2356,7 +2356,7 @@ exports[`gauge > option is stable in look newsletter 1`] = `
               "#e3ded6",
             ],
           ],
-          "width": 65,
+          "width": 61,
         },
       },
       "axisTick": {
@@ -2375,7 +2375,7 @@ exports[`gauge > option is stable in look newsletter 1`] = `
       "detail": {
         "color": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 48,
+        "fontSize": 96,
         "fontWeight": 800,
         "formatter": "[fn]",
         "offsetCenter": [
@@ -2396,7 +2396,7 @@ exports[`gauge > option is stable in look newsletter 1`] = `
         },
         "roundCap": true,
         "show": true,
-        "width": 65,
+        "width": 61,
       },
       "radius": "95%",
       "splitLine": {
@@ -2406,7 +2406,7 @@ exports[`gauge > option is stable in look newsletter 1`] = `
       "title": {
         "color": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "offsetCenter": [
           0,
           "24%",
@@ -2419,7 +2419,7 @@ exports[`gauge > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -2489,16 +2489,16 @@ exports[`heatmap > option is stable in look bold 1`] = `
       ],
       "itemStyle": {
         "borderColor": "#ffffff",
-        "borderRadius": 6,
+        "borderRadius": 12,
         "borderWidth": 6,
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
-        "lineHeight": 22,
+        "lineHeight": 44,
         "show": true,
       },
       "type": "heatmap",
@@ -2507,7 +2507,7 @@ exports[`heatmap > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "visualMap": {
     "inRange": {
@@ -2606,16 +2606,16 @@ exports[`heatmap > option is stable in look clean 1`] = `
       ],
       "itemStyle": {
         "borderColor": "#ffffff",
-        "borderRadius": 6,
+        "borderRadius": 12,
         "borderWidth": 6,
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "show": true,
       },
       "type": "heatmap",
@@ -2624,7 +2624,7 @@ exports[`heatmap > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "visualMap": {
     "inRange": {
@@ -2723,16 +2723,16 @@ exports[`heatmap > option is stable in look dark 1`] = `
       ],
       "itemStyle": {
         "borderColor": "#1e293b",
-        "borderRadius": 6,
+        "borderRadius": 12,
         "borderWidth": 6,
       },
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "show": true,
       },
       "type": "heatmap",
@@ -2741,7 +2741,7 @@ exports[`heatmap > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "visualMap": {
     "inRange": {
@@ -2846,10 +2846,10 @@ exports[`heatmap > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "show": true,
       },
       "type": "heatmap",
@@ -2858,7 +2858,7 @@ exports[`heatmap > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "visualMap": {
     "inRange": {
@@ -2909,35 +2909,35 @@ exports[`horizontalBar > option is stable in look bold 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 5,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 10,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 15,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 25,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 45,
@@ -2946,7 +2946,7 @@ exports[`horizontalBar > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "right",
@@ -2961,13 +2961,13 @@ exports[`horizontalBar > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": false,
     },
@@ -2990,7 +2990,7 @@ exports[`horizontalBar > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3035,35 +3035,35 @@ exports[`horizontalBar > option is stable in look clean 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 5,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 10,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 15,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 25,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 45,
@@ -3072,7 +3072,7 @@ exports[`horizontalBar > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "right",
@@ -3087,13 +3087,13 @@ exports[`horizontalBar > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -3116,7 +3116,7 @@ exports[`horizontalBar > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3161,35 +3161,35 @@ exports[`horizontalBar > option is stable in look dark 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 5,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 10,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e0a33a",
           },
           "value": 15,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 25,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#0e9384",
           },
           "value": 45,
@@ -3198,7 +3198,7 @@ exports[`horizontalBar > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "right",
@@ -3213,13 +3213,13 @@ exports[`horizontalBar > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -3242,7 +3242,7 @@ exports[`horizontalBar > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3324,7 +3324,7 @@ exports[`horizontalBar > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "right",
@@ -3339,13 +3339,13 @@ exports[`horizontalBar > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -3368,7 +3368,7 @@ exports[`horizontalBar > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3406,12 +3406,12 @@ exports[`kpi > option is stable in look bold 1`] = `
       "style": {
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 301,
+        "fontSize": 275,
         "fontWeight": 800,
-        "lineHeight": 301,
+        "lineHeight": 275,
         "text": "87%",
       },
-      "top": 129,
+      "top": 118,
       "type": "text",
     },
     {
@@ -3419,10 +3419,10 @@ exports[`kpi > option is stable in look bold 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 23,
+        "fontSize": 52,
         "text": "Retention",
       },
-      "top": 442,
+      "top": 405,
       "type": "text",
     },
     {
@@ -3431,14 +3431,14 @@ exports[`kpi > option is stable in look bold 1`] = `
         "points": [
           [
             0,
-            13,
+            29,
           ],
           [
-            13,
-            13,
+            29,
+            29,
           ],
           [
-            6.5,
+            14.5,
             0,
           ],
         ],
@@ -3447,30 +3447,30 @@ exports[`kpi > option is stable in look bold 1`] = `
         "fill": "#0e9384",
       },
       "type": "polygon",
-      "x": 710,
-      "y": 321,
+      "x": 651,
+      "y": 301,
     },
     {
-      "left": 731,
+      "left": 688,
       "style": {
         "fill": "#0e9384",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 23,
+        "fontSize": 52,
         "fontWeight": 600,
         "text": "12 pts",
       },
-      "top": 316,
+      "top": 289,
       "type": "text",
     },
     {
-      "left": 710,
+      "left": 651,
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "text": "vs Last quarter (75%)",
       },
-      "top": 345,
+      "top": 353,
       "type": "text",
     },
   ],
@@ -3478,7 +3478,7 @@ exports[`kpi > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "show": false,
@@ -3499,12 +3499,12 @@ exports[`kpi > option is stable in look clean 1`] = `
       "style": {
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 305,
+        "fontSize": 285,
         "fontWeight": 800,
-        "lineHeight": 305,
+        "lineHeight": 285,
         "text": "87%",
       },
-      "top": 131,
+      "top": 122,
       "type": "text",
     },
     {
@@ -3512,10 +3512,10 @@ exports[`kpi > option is stable in look clean 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 20,
+        "fontSize": 47,
         "text": "Retention",
       },
-      "top": 448,
+      "top": 419,
       "type": "text",
     },
     {
@@ -3524,14 +3524,14 @@ exports[`kpi > option is stable in look clean 1`] = `
         "points": [
           [
             0,
-            11,
+            26,
           ],
           [
-            11,
-            11,
+            26,
+            26,
           ],
           [
-            5.5,
+            13,
             0,
           ],
         ],
@@ -3540,30 +3540,30 @@ exports[`kpi > option is stable in look clean 1`] = `
         "fill": "#0e9384",
       },
       "type": "polygon",
-      "x": 720,
-      "y": 325,
+      "x": 674,
+      "y": 310,
     },
     {
-      "left": 739,
+      "left": 708,
       "style": {
         "fill": "#0e9384",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 20,
+        "fontSize": 47,
         "fontWeight": 600,
         "text": "12 pts",
       },
-      "top": 320,
+      "top": 299,
       "type": "text",
     },
     {
-      "left": 720,
+      "left": 674,
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "vs Last quarter (75%)",
       },
-      "top": 344,
+      "top": 357,
       "type": "text",
     },
   ],
@@ -3571,7 +3571,7 @@ exports[`kpi > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "show": false,
@@ -3592,12 +3592,12 @@ exports[`kpi > option is stable in look dark 1`] = `
       "style": {
         "fill": "#f6f3ee",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 305,
+        "fontSize": 285,
         "fontWeight": 800,
-        "lineHeight": 305,
+        "lineHeight": 285,
         "text": "87%",
       },
-      "top": 131,
+      "top": 122,
       "type": "text",
     },
     {
@@ -3605,10 +3605,10 @@ exports[`kpi > option is stable in look dark 1`] = `
       "style": {
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 20,
+        "fontSize": 47,
         "text": "Retention",
       },
-      "top": 448,
+      "top": 419,
       "type": "text",
     },
     {
@@ -3617,14 +3617,14 @@ exports[`kpi > option is stable in look dark 1`] = `
         "points": [
           [
             0,
-            11,
+            26,
           ],
           [
-            11,
-            11,
+            26,
+            26,
           ],
           [
-            5.5,
+            13,
             0,
           ],
         ],
@@ -3633,30 +3633,30 @@ exports[`kpi > option is stable in look dark 1`] = `
         "fill": "#0e9384",
       },
       "type": "polygon",
-      "x": 720,
-      "y": 325,
+      "x": 674,
+      "y": 310,
     },
     {
-      "left": 739,
+      "left": 708,
       "style": {
         "fill": "#0e9384",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 20,
+        "fontSize": 47,
         "fontWeight": 600,
         "text": "12 pts",
       },
-      "top": 320,
+      "top": 299,
       "type": "text",
     },
     {
-      "left": 720,
+      "left": 674,
       "style": {
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "vs Last quarter (75%)",
       },
-      "top": 344,
+      "top": 357,
       "type": "text",
     },
   ],
@@ -3664,7 +3664,7 @@ exports[`kpi > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "show": false,
@@ -3685,12 +3685,12 @@ exports[`kpi > option is stable in look newsletter 1`] = `
       "style": {
         "fill": "#1e293b",
         "fontFamily": "'Bricolage Grotesque Variable', system-ui, sans-serif",
-        "fontSize": 305,
+        "fontSize": 285,
         "fontWeight": 800,
-        "lineHeight": 305,
+        "lineHeight": 285,
         "text": "87%",
       },
-      "top": 131,
+      "top": 122,
       "type": "text",
     },
     {
@@ -3698,10 +3698,10 @@ exports[`kpi > option is stable in look newsletter 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 20,
+        "fontSize": 47,
         "text": "Retention",
       },
-      "top": 448,
+      "top": 419,
       "type": "text",
     },
     {
@@ -3710,14 +3710,14 @@ exports[`kpi > option is stable in look newsletter 1`] = `
         "points": [
           [
             0,
-            11,
+            26,
           ],
           [
-            11,
-            11,
+            26,
+            26,
           ],
           [
-            5.5,
+            13,
             0,
           ],
         ],
@@ -3726,30 +3726,30 @@ exports[`kpi > option is stable in look newsletter 1`] = `
         "fill": "#0e9384",
       },
       "type": "polygon",
-      "x": 720,
-      "y": 325,
+      "x": 674,
+      "y": 310,
     },
     {
-      "left": 739,
+      "left": 708,
       "style": {
         "fill": "#0e9384",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 20,
+        "fontSize": 47,
         "fontWeight": 600,
         "text": "12 pts",
       },
-      "top": 320,
+      "top": 299,
       "type": "text",
     },
     {
-      "left": 720,
+      "left": 674,
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "text": "vs Last quarter (75%)",
       },
-      "top": 344,
+      "top": 357,
       "type": "text",
     },
   ],
@@ -3757,7 +3757,7 @@ exports[`kpi > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "show": false,
@@ -3792,7 +3792,7 @@ exports[`line > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -3827,13 +3827,13 @@ exports[`line > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3864,7 +3864,7 @@ exports[`line > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -3910,7 +3910,7 @@ exports[`line > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -3945,13 +3945,13 @@ exports[`line > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -3982,7 +3982,7 @@ exports[`line > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -4028,7 +4028,7 @@ exports[`line > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -4063,13 +4063,13 @@ exports[`line > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -4100,7 +4100,7 @@ exports[`line > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -4146,7 +4146,7 @@ exports[`line > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -4181,13 +4181,13 @@ exports[`line > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -4218,7 +4218,7 @@ exports[`line > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -4250,7 +4250,7 @@ exports[`matrix > option is stable in look bold 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "text": "Quick wins",
       },
@@ -4263,7 +4263,7 @@ exports[`matrix > option is stable in look bold 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "text": "Big bets",
       },
@@ -4276,7 +4276,7 @@ exports[`matrix > option is stable in look bold 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "text": "Fill-ins",
       },
@@ -4289,7 +4289,7 @@ exports[`matrix > option is stable in look bold 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "text": "Money pits",
       },
@@ -4370,7 +4370,7 @@ exports[`matrix > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -4405,7 +4405,7 @@ exports[`matrix > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
@@ -4454,7 +4454,7 @@ exports[`matrix > option is stable in look clean 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Quick wins",
       },
@@ -4467,7 +4467,7 @@ exports[`matrix > option is stable in look clean 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Big bets",
       },
@@ -4480,7 +4480,7 @@ exports[`matrix > option is stable in look clean 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Fill-ins",
       },
@@ -4493,7 +4493,7 @@ exports[`matrix > option is stable in look clean 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Money pits",
       },
@@ -4574,7 +4574,7 @@ exports[`matrix > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -4609,7 +4609,7 @@ exports[`matrix > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
@@ -4658,7 +4658,7 @@ exports[`matrix > option is stable in look dark 1`] = `
       "style": {
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Quick wins",
       },
@@ -4671,7 +4671,7 @@ exports[`matrix > option is stable in look dark 1`] = `
         "align": "right",
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Big bets",
       },
@@ -4684,7 +4684,7 @@ exports[`matrix > option is stable in look dark 1`] = `
       "style": {
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Fill-ins",
       },
@@ -4697,7 +4697,7 @@ exports[`matrix > option is stable in look dark 1`] = `
         "align": "right",
         "fill": "#cbd5e1",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Money pits",
       },
@@ -4778,7 +4778,7 @@ exports[`matrix > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -4813,7 +4813,7 @@ exports[`matrix > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
@@ -4862,7 +4862,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Quick wins",
       },
@@ -4875,7 +4875,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Big bets",
       },
@@ -4888,7 +4888,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
       "style": {
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Fill-ins",
       },
@@ -4901,7 +4901,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
         "align": "right",
         "fill": "#6b7280",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "text": "Money pits",
       },
@@ -4982,7 +4982,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -5017,7 +5017,7 @@ exports[`matrix > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
@@ -5101,9 +5101,9 @@ exports[`pie > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "formatter": "[fn]",
-        "lineHeight": 22,
+        "lineHeight": 44,
         "position": "outside",
         "show": true,
       },
@@ -5129,7 +5129,7 @@ exports[`pie > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
 }
 `;
@@ -5179,9 +5179,9 @@ exports[`pie > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -5207,7 +5207,7 @@ exports[`pie > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5257,9 +5257,9 @@ exports[`pie > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -5285,7 +5285,7 @@ exports[`pie > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5335,9 +5335,9 @@ exports[`pie > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "formatter": "[fn]",
-        "lineHeight": 19,
+        "lineHeight": 40,
         "position": "outside",
         "show": true,
       },
@@ -5363,7 +5363,7 @@ exports[`pie > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5381,7 +5381,7 @@ exports[`radar > option is stable in look bold 1`] = `
     "axisName": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
     "center": [
       "50%",
@@ -5456,7 +5456,7 @@ exports[`radar > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
 }
 `;
@@ -5474,7 +5474,7 @@ exports[`radar > option is stable in look clean 1`] = `
     "axisName": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
     "center": [
       "50%",
@@ -5549,7 +5549,7 @@ exports[`radar > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5567,7 +5567,7 @@ exports[`radar > option is stable in look dark 1`] = `
     "axisName": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
     "center": [
       "50%",
@@ -5642,7 +5642,7 @@ exports[`radar > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5660,7 +5660,7 @@ exports[`radar > option is stable in look newsletter 1`] = `
     "axisName": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
     "center": [
       "50%",
@@ -5735,7 +5735,7 @@ exports[`radar > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
 }
 `;
@@ -5813,7 +5813,7 @@ exports[`scatter > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -5829,13 +5829,13 @@ exports[`scatter > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -5854,7 +5854,7 @@ exports[`scatter > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -5949,7 +5949,7 @@ exports[`scatter > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -5965,13 +5965,13 @@ exports[`scatter > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -5990,7 +5990,7 @@ exports[`scatter > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6085,7 +6085,7 @@ exports[`scatter > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -6101,13 +6101,13 @@ exports[`scatter > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6126,7 +6126,7 @@ exports[`scatter > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6221,7 +6221,7 @@ exports[`scatter > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Variable', system-ui, sans-serif",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -6237,13 +6237,13 @@ exports[`scatter > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6262,7 +6262,7 @@ exports[`scatter > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6289,7 +6289,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 38,
+    "bottom": 60,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -6305,7 +6305,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
   },
   "series": [
@@ -6322,7 +6322,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6367,7 +6367,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6412,7 +6412,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6448,13 +6448,13 @@ exports[`stackedArea > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -6482,7 +6482,7 @@ exports[`stackedArea > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6509,7 +6509,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -6525,7 +6525,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -6542,7 +6542,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6587,7 +6587,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6632,7 +6632,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6668,13 +6668,13 @@ exports[`stackedArea > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -6702,7 +6702,7 @@ exports[`stackedArea > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6729,7 +6729,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -6745,7 +6745,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
     "textStyle": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -6762,7 +6762,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6807,7 +6807,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6852,7 +6852,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -6888,13 +6888,13 @@ exports[`stackedArea > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -6922,7 +6922,7 @@ exports[`stackedArea > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -6949,7 +6949,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -6965,7 +6965,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -6982,7 +6982,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -7027,7 +7027,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -7072,7 +7072,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -7108,13 +7108,13 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7142,7 +7142,7 @@ exports[`stackedArea > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7169,7 +7169,7 @@ exports[`stackedBar > option is stable in look bold 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 38,
+    "bottom": 60,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -7185,7 +7185,7 @@ exports[`stackedBar > option is stable in look bold 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
   },
   "series": [
@@ -7197,13 +7197,13 @@ exports[`stackedBar > option is stable in look bold 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7224,13 +7224,13 @@ exports[`stackedBar > option is stable in look bold 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7251,13 +7251,13 @@ exports[`stackedBar > option is stable in look bold 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7274,13 +7274,13 @@ exports[`stackedBar > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7307,7 +7307,7 @@ exports[`stackedBar > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7334,7 +7334,7 @@ exports[`stackedBar > option is stable in look clean 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -7350,7 +7350,7 @@ exports[`stackedBar > option is stable in look clean 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -7362,13 +7362,13 @@ exports[`stackedBar > option is stable in look clean 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7389,13 +7389,13 @@ exports[`stackedBar > option is stable in look clean 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7416,13 +7416,13 @@ exports[`stackedBar > option is stable in look clean 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7439,13 +7439,13 @@ exports[`stackedBar > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7472,7 +7472,7 @@ exports[`stackedBar > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7499,7 +7499,7 @@ exports[`stackedBar > option is stable in look dark 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -7515,7 +7515,7 @@ exports[`stackedBar > option is stable in look dark 1`] = `
     "textStyle": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -7527,13 +7527,13 @@ exports[`stackedBar > option is stable in look dark 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7554,13 +7554,13 @@ exports[`stackedBar > option is stable in look dark 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7581,13 +7581,13 @@ exports[`stackedBar > option is stable in look dark 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7604,13 +7604,13 @@ exports[`stackedBar > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7637,7 +7637,7 @@ exports[`stackedBar > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7664,7 +7664,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -7680,7 +7680,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -7698,7 +7698,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7725,7 +7725,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7752,7 +7752,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7769,13 +7769,13 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7802,7 +7802,7 @@ exports[`stackedBar > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7829,7 +7829,7 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 38,
+    "bottom": 60,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -7845,7 +7845,7 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
   },
   "series": [
@@ -7857,13 +7857,13 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
         24.2,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7884,13 +7884,13 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
         50,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7911,13 +7911,13 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
         25.8,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -7934,13 +7934,13 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -7967,7 +7967,7 @@ exports[`stackedColumn > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -7995,7 +7995,7 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8011,7 +8011,7 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -8023,13 +8023,13 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
         24.2,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8050,13 +8050,13 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
         50,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8077,13 +8077,13 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
         25.8,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8100,13 +8100,13 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8133,7 +8133,7 @@ exports[`stackedColumn > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -8161,7 +8161,7 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8177,7 +8177,7 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
     "textStyle": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -8189,13 +8189,13 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
         24.2,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8216,13 +8216,13 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
         50,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8243,13 +8243,13 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
         25.8,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8266,13 +8266,13 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8299,7 +8299,7 @@ exports[`stackedColumn > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -8327,7 +8327,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8343,7 +8343,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -8361,7 +8361,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8388,7 +8388,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8415,7 +8415,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8432,13 +8432,13 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8465,7 +8465,7 @@ exports[`stackedColumn > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -8493,7 +8493,7 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 38,
+    "bottom": 60,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8509,7 +8509,7 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
   },
   "series": [
@@ -8521,13 +8521,13 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8548,13 +8548,13 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8575,13 +8575,13 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8598,13 +8598,13 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": false,
     },
@@ -8627,7 +8627,7 @@ exports[`stackedHorizontal > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8658,7 +8658,7 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8674,7 +8674,7 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -8686,13 +8686,13 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8713,13 +8713,13 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8740,13 +8740,13 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8763,13 +8763,13 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -8792,7 +8792,7 @@ exports[`stackedHorizontal > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8823,7 +8823,7 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -8839,7 +8839,7 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
     "textStyle": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -8851,13 +8851,13 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
         15,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#0e9384",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8878,13 +8878,13 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
         31,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#1e293b",
       },
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8905,13 +8905,13 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
         16,
       ],
       "itemStyle": {
-        "borderRadius": 6,
+        "borderRadius": 12,
         "color": "#e0a33a",
       },
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -8928,13 +8928,13 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -8957,7 +8957,7 @@ exports[`stackedHorizontal > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -8988,7 +8988,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 0,
@@ -9004,7 +9004,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -9022,7 +9022,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -9049,7 +9049,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#ffffff",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -9076,7 +9076,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "inside",
@@ -9093,13 +9093,13 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": false,
     },
@@ -9122,7 +9122,7 @@ exports[`stackedHorizontal > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -9153,7 +9153,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 38,
+    "bottom": 60,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -9169,7 +9169,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
     },
   },
   "series": [
@@ -9182,7 +9182,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9223,7 +9223,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9264,7 +9264,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9300,13 +9300,13 @@ exports[`stackedLine > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -9334,7 +9334,7 @@ exports[`stackedLine > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -9361,7 +9361,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -9377,7 +9377,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -9390,7 +9390,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9431,7 +9431,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9472,7 +9472,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9508,13 +9508,13 @@ exports[`stackedLine > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -9542,7 +9542,7 @@ exports[`stackedLine > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -9569,7 +9569,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -9585,7 +9585,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
     "textStyle": {
       "color": "#f6f3ee",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -9598,7 +9598,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9639,7 +9639,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9680,7 +9680,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
       "endLabel": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9716,13 +9716,13 @@ exports[`stackedLine > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -9750,7 +9750,7 @@ exports[`stackedLine > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -9777,7 +9777,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
   "animation": false,
   "backgroundColor": "transparent",
   "grid": {
-    "bottom": 35,
+    "bottom": 56,
     "containLabel": true,
     "left": 0,
     "right": 181,
@@ -9793,7 +9793,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
     "textStyle": {
       "color": "#1e293b",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
     },
   },
   "series": [
@@ -9806,7 +9806,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9847,7 +9847,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9888,7 +9888,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
       "endLabel": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "offset": [
@@ -9924,13 +9924,13 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -9958,7 +9958,7 @@ exports[`stackedLine > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -9997,35 +9997,35 @@ exports[`threshold > option is stable in look bold 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 42,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 51,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 38,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 60,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 47,
@@ -10034,7 +10034,7 @@ exports[`threshold > option is stable in look bold 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 18,
+        "fontSize": 40,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -10055,7 +10055,7 @@ exports[`threshold > option is stable in look bold 1`] = `
         "label": {
           "color": "#1e293b",
           "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-          "fontSize": 17,
+          "fontSize": 40,
           "formatter": "avg 47.6",
           "position": "insideStartTop",
         },
@@ -10073,13 +10073,13 @@ exports[`threshold > option is stable in look bold 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 18,
+    "fontSize": 40,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 18,
+      "fontSize": 40,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -10108,7 +10108,7 @@ exports[`threshold > option is stable in look bold 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 16,
+      "fontSize": 40,
       "formatter": "[fn]",
       "show": true,
     },
@@ -10147,35 +10147,35 @@ exports[`threshold > option is stable in look clean 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 42,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 51,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 38,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 60,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#6b7280",
           },
           "value": 47,
@@ -10184,7 +10184,7 @@ exports[`threshold > option is stable in look clean 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -10205,7 +10205,7 @@ exports[`threshold > option is stable in look clean 1`] = `
         "label": {
           "color": "#1e293b",
           "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-          "fontSize": 14,
+          "fontSize": 36,
           "formatter": "avg 47.6",
           "position": "insideStartTop",
         },
@@ -10223,13 +10223,13 @@ exports[`threshold > option is stable in look clean 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -10258,7 +10258,7 @@ exports[`threshold > option is stable in look clean 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -10297,35 +10297,35 @@ exports[`threshold > option is stable in look dark 1`] = `
       "data": [
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#cbd5e1",
           },
           "value": 42,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#1e293b",
           },
           "value": 51,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#cbd5e1",
           },
           "value": 38,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#e26d5a",
           },
           "value": 60,
         },
         {
           "itemStyle": {
-            "borderRadius": 6,
+            "borderRadius": 12,
             "color": "#cbd5e1",
           },
           "value": 47,
@@ -10334,7 +10334,7 @@ exports[`threshold > option is stable in look dark 1`] = `
       "label": {
         "color": "#f6f3ee",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -10355,7 +10355,7 @@ exports[`threshold > option is stable in look dark 1`] = `
         "label": {
           "color": "#f6f3ee",
           "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-          "fontSize": 14,
+          "fontSize": 36,
           "formatter": "avg 47.6",
           "position": "insideStartTop",
         },
@@ -10373,13 +10373,13 @@ exports[`threshold > option is stable in look dark 1`] = `
   "textStyle": {
     "color": "#f6f3ee",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -10408,7 +10408,7 @@ exports[`threshold > option is stable in look dark 1`] = `
     "axisLabel": {
       "color": "#cbd5e1",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
@@ -10484,7 +10484,7 @@ exports[`threshold > option is stable in look newsletter 1`] = `
       "label": {
         "color": "#1e293b",
         "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-        "fontSize": 15,
+        "fontSize": 36,
         "fontWeight": 600,
         "formatter": "[fn]",
         "position": "top",
@@ -10505,7 +10505,7 @@ exports[`threshold > option is stable in look newsletter 1`] = `
         "label": {
           "color": "#1e293b",
           "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-          "fontSize": 14,
+          "fontSize": 36,
           "formatter": "avg 47.6",
           "position": "insideStartTop",
         },
@@ -10523,13 +10523,13 @@ exports[`threshold > option is stable in look newsletter 1`] = `
   "textStyle": {
     "color": "#1e293b",
     "fontFamily": "'Geist Variable', system-ui, sans-serif",
-    "fontSize": 15,
+    "fontSize": 36,
   },
   "xAxis": {
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Variable', system-ui, sans-serif",
-      "fontSize": 15,
+      "fontSize": 36,
       "hideOverlap": true,
       "interval": 0,
       "margin": 12,
@@ -10558,7 +10558,7 @@ exports[`threshold > option is stable in look newsletter 1`] = `
     "axisLabel": {
       "color": "#6b7280",
       "fontFamily": "'Geist Mono Variable', ui-monospace, monospace",
-      "fontSize": 13,
+      "fontSize": 36,
       "formatter": "[fn]",
       "show": true,
     },
