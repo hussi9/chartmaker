@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as ChartsRouteImport } from './routes/charts'
 import { Route as NewRouteImport } from './routes/new'
+import { Route as SeriesRouteImport } from './routes/series'
 import { Route as EditIdRouteImport } from './routes/edit.$id'
 import { Route as SIndexRouteImport } from './routes/s.index'
 import { Route as SStateRouteImport } from './routes/s.$state'
@@ -37,6 +38,11 @@ const NewRoute = NewRouteImport.update({
   path: '/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeriesRoute = SeriesRouteImport.update({
+  id: '/series',
+  path: '/series',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EditIdRoute = EditIdRouteImport.update({
   id: '/edit/$id',
   path: '/edit/$id',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
+  '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
   '/s/': typeof SIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
+  '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
   '/s': typeof SIndexRoute
@@ -77,21 +85,39 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/charts': typeof ChartsRoute
   '/new': typeof NewRoute
+  '/series': typeof SeriesRoute
   '/edit/$id': typeof EditIdRoute
   '/s/$state': typeof SStateRoute
   '/s/': typeof SIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$' | '/charts' | '/new' | '/edit/$id' | '/s/$state' | '/s/'
+  fullPaths:
+    | '/'
+    | '/$'
+    | '/charts'
+    | '/new'
+    | '/series'
+    | '/edit/$id'
+    | '/s/$state'
+    | '/s/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$' | '/charts' | '/new' | '/edit/$id' | '/s/$state' | '/s'
+  to:
+    | '/'
+    | '/$'
+    | '/charts'
+    | '/new'
+    | '/series'
+    | '/edit/$id'
+    | '/s/$state'
+    | '/s'
   id:
     | '__root__'
     | '/'
     | '/$'
     | '/charts'
     | '/new'
+    | '/series'
     | '/edit/$id'
     | '/s/$state'
     | '/s/'
@@ -102,6 +128,7 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   ChartsRoute: typeof ChartsRoute
   NewRoute: typeof NewRoute
+  SeriesRoute: typeof SeriesRoute
   EditIdRoute: typeof EditIdRoute
   SStateRoute: typeof SStateRoute
   SIndexRoute: typeof SIndexRoute
@@ -137,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/series': {
+      id: '/series'
+      path: '/series'
+      fullPath: '/series'
+      preLoaderRoute: typeof SeriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/edit/$id': {
       id: '/edit/$id'
       path: '/edit/$id'
@@ -166,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   ChartsRoute: ChartsRoute,
   NewRoute: NewRoute,
+  SeriesRoute: SeriesRoute,
   EditIdRoute: EditIdRoute,
   SStateRoute: SStateRoute,
   SIndexRoute: SIndexRoute,

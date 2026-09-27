@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Shell } from '../components/shell/Shell';
 import { openDb, db } from '../db';
 import { migrateFromLocalStorage } from '../db/migrate';
+import { notifyDue } from '../db/series';
 import { useUi } from '../store/ui';
 
 let booted: Promise<void> | null = null;
@@ -16,6 +17,7 @@ function boot(): Promise<void> {
         await migrateFromLocalStorage();
         const settings = await db.settings.get('settings');
         if (settings?.handle) useUi.setState({ handle: settings.handle });
+        void notifyDue();
       }
     })();
   }
