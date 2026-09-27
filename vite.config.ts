@@ -39,13 +39,29 @@ function rejectUnknownPages(req: { url?: string; headers: { accept?: string } },
 export default defineConfig({
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   build: {
+    // Vite's static import-graph analysis treats the OCR chunk as "likely
+    // needed" and injects a <link rel="modulepreload"> for it on every page.
+    // The chunk is precached (see injectManifest below) so this hint isn't
+    // needed for correctness, but suppressing it still saves a same-origin
+    // fetch on a visitor's very first request, before the service worker
+    // has installed.
+    modulePreload: { resolveDependencies: (_url, deps) => deps.filter((d) => !d.includes('/ocr-')) },
     rollupOptions: {
       output: {
         manualChunks(id: string) {
           if (/node_modules[\\/](echarts|zrender)[\\/]/.test(id)) return 'echarts'
           if (/node_modules[\\/](react|react-dom|scheduler|@tanstack|zustand|zundo|immer)[\\/]/.test(id)) return 'vendor'
-          // The OCR runtime (~10-15 MB with ORT's wasm/model assets) must never
-          // land in the app's precache — only fetched when a picture is used.
+          // Groups the on-device OCR libraries into their own chunk, reached
+          // only via a user-triggered dynamic import() inside src/ocr/engine.ts.
+          // Vite's shared dynamic-import runtime helper (an internal virtual
+          // module, id "\0vite/preload-helper.js") ends up co-located in
+          // whichever chunk Rollup judges "most central" among every chunk
+          // that performs a dynamic import — confirmed (via an unminified
+          // debug build) to be this one, which is why the main chunk
+          // statically imports from it on every route regardless of manual
+          // reassignment attempts here. That makes this chunk unconditionally
+          // fetched on every page load, so it must be precached (below)
+          // rather than excluded, or offline navigation breaks everywhere.
           if (/node_modules[\\/](ppu-paddle-ocr|onnxruntime-web|tesseract\.js|tesseract\.js-core)[\\/]/.test(id)) return 'ocr'
           return undefined
         },
@@ -62,7 +78,17 @@ export default defineConfig({
       strategies: 'injectManifest',
       srcDir: 'src',
       filename: 'sw.ts',
-      injectManifest: { globPatterns: ['**/*.{js,css,html,woff2,svg,png}'], globIgnores: ['**/resvg.wasm', '**/fonts/*.ttf', '**/ocr-*.js'], maximumFileSizeToCacheInBytes: 4_000_000 },
+      // The ocr-*.js chunk (~450 KB: the OCR libraries' JS glue only) is
+      // precached like any other build asset — seemingly at odds with
+      // keeping the OCR runtime out of the precache, until you note that the
+      // actual heavy weight (PaddleOCR's ONNX model, tesseract.js's wasm and
+      // trained-data files) is fetched at OCR-use time from external hosts
+      // (e.g. huggingface.co), never from this same-origin build output, so
+      // excluding this chunk was never actually saving the precache from a
+      // multi-MB cost. It WAS, unfixably (see manualChunks above), being
+      // fetched on every single page load anyway; not precaching it only
+      // meant that fetch broke the whole app offline (confirmed live).
+      injectManifest: { globPatterns: ['**/*.{js,css,html,woff2,svg,png}'], globIgnores: ['**/resvg.wasm', '**/fonts/*.ttf'], maximumFileSizeToCacheInBytes: 4_000_000 },
     }),
     {
     name: 'published-pages',
