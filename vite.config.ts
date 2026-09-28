@@ -5,8 +5,10 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
+import { execFileSync } from 'node:child_process'
 import type { PreviewServer, ViteDevServer } from 'vite'
-import { isAppPath, isPublishedRoute, routeMetadata } from './src/lib/routeMetadata.ts'
+import { isAppPath, isPublishedRoute, routeMetadata, type PublishedRoute } from './src/lib/routeMetadata.ts'
+import { structuredDataScript, buildSitemapXml } from './src/lib/seo.ts'
 
 function routeHtml(html: string, path: keyof typeof routeMetadata) {
   const meta = routeMetadata[path]
@@ -20,6 +22,27 @@ function routeHtml(html: string, path: keyof typeof routeMetadata) {
     .replace(/<meta property="og:description" content="[^"]*"\s*\/>/, `<meta property="og:description" content="${meta.description}" />`)
     .replace(/<meta name="twitter:title" content="[^"]*"\s*\/>/, `<meta name="twitter:title" content="${meta.title}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/, `<meta name="twitter:description" content="${meta.description}" />`)
+    .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">\n${structuredDataScript(path)}\n    <\/script>`)
+}
+
+// One line of real git history per published route's own source file, so the
+// sitemap's <lastmod> reflects an actual change instead of a hand-edited date
+// that goes stale the moment content changes. Falls back to the build date if
+// git is unavailable (e.g. a shallow/gitless build sandbox) rather than failing.
+const ROUTE_SOURCE_FILE: Record<PublishedRoute, string> = {
+  '/': 'src/routes/index.tsx',
+  '/pie-chart-maker': 'src/routes/pie-chart-maker.tsx',
+  '/bar-graph-maker': 'src/routes/bar-graph-maker.tsx',
+  '/convert-excel-to-chart': 'src/routes/convert-excel-to-chart.tsx',
+}
+
+function lastModFor(path: PublishedRoute): string | undefined {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cd', '--date=short', '--', ROUTE_SOURCE_FILE[path]], { encoding: 'utf8' }).trim()
+    return out || undefined
+  } catch {
+    return undefined
+  }
 }
 
 
@@ -117,12 +140,29 @@ export default defineConfig({
       server.middlewares.use(rejectUnknownPages)
     },
     closeBundle() {
+      // NOTE: despite the `published-pages` transformIndexHtml hook above,
+      // Vite's production build does not actually invoke it with ctx.path
+      // === '/' for the main entry (only `vite dev`/`vite preview` do, via
+      // configureServer/configurePreviewServer). Historically this was
+      // invisible because the hand-written index.html source already
+      // happened to match routeMetadata['/'] — but it means dist/index.html
+      // must be regenerated here too, explicitly, or it silently ships
+      // whatever is in source index.html untouched (stale JSON-LD included).
       const rootHtml = readFileSync(join('dist', 'index.html'), 'utf8')
-      for (const path of Object.keys(routeMetadata).filter(path => path !== '/') as (keyof typeof routeMetadata)[]) {
-        const outputPath = join('dist', path.slice(1), 'index.html')
-        mkdirSync(dirname(outputPath), { recursive: true })
-        writeFileSync(outputPath, routeHtml(rootHtml, path))
+      for (const path of Object.keys(routeMetadata) as PublishedRoute[]) {
+        const html = routeHtml(rootHtml, path)
+        if (path === '/') {
+          writeFileSync(join('dist', 'index.html'), html)
+        } else {
+          const outputPath = join('dist', path.slice(1), 'index.html')
+          mkdirSync(dirname(outputPath), { recursive: true })
+          writeFileSync(outputPath, html)
+        }
       }
+      const lastModByPath = Object.fromEntries(
+        (Object.keys(routeMetadata) as PublishedRoute[]).map((path) => [path, lastModFor(path)])
+      ) as Partial<Record<PublishedRoute, string>>
+      writeFileSync(join('dist', 'sitemap.xml'), buildSitemapXml(lastModByPath))
     }
   }],
   test: {

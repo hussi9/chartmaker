@@ -11,6 +11,11 @@ import { Button } from '../common/Button';
 
 const to = (p: string) => p as LinkProps['to'];
 
+// The other published tool pages, for a small cross-links row on each one
+// (internal linking between the SEO landing pages — none existed before).
+// Copy is reused verbatim from routeMetadata; nothing new is written here.
+const TOOL_ROUTES: PublishedRoute[] = ['/pie-chart-maker', '/bar-graph-maker', '/convert-excel-to-chart'];
+
 export interface LandingProps { route: PublishedRoute; type: ChartType; steps: string[]; intakeFirst?: boolean }
 
 export function Landing({ route, type, steps, intakeFirst }: LandingProps): React.JSX.Element {
@@ -48,6 +53,17 @@ export function Landing({ route, type, steps, intakeFirst }: LandingProps): Reac
         {CHART_TYPES.length} chart looks, four post sizes (X, LinkedIn, Story, Deck), PNG and SVG export, and a share link that unfurls as a card. Everything runs in your browser; charts are autosaved in this browser.
       </p>
       <Link to={to('/?templates=1')} className="cg-linkbtn">See every look →</Link>
+      {(() => {
+        const otherTools = TOOL_ROUTES.filter((r) => r !== route);
+        return otherTools.length > 0 ? (
+          <nav className="cg-landing-related" aria-label="Other chart tools">
+            <span className="cg-lbl">Also on ChartGenie</span>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {otherTools.map((r) => <Link key={r} to={to(r)} className="cg-linkbtn">{routeMetadata[r].heading} →</Link>)}
+            </div>
+          </nav>
+        ) : null;
+      })()}
     </div>
   );
 }
