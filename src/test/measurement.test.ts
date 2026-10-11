@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { beforeEach, expect, it, vi } from 'vitest';
-import { initGoogleAnalytics, track, trackPageView, setMeasurementConsent, measurementAllowed, pingAllowed, observeMeasurementRoutes, CONSENT_DEFAULTS, CONSENT_KEY } from '../lib/gtag';
+import { initGoogleAnalytics, track, trackPageView, setMeasurementConsent, measurementAllowed, pingAllowed, observeMeasurementRoutes, CONSENT_DEFAULTS, CONSENT_KEY, productionHost, PRODUCTION_HOSTS } from '../lib/gtag';
 
 function script() { return document.getElementById('ga4-gtag-script') as HTMLScriptElement | null; }
 function commands() { return (window.dataLayer ?? []) as IArguments[]; }
@@ -16,6 +16,18 @@ beforeEach(() => {
   window.history.replaceState({}, '', '/');
   (navigator as unknown as Record<string, unknown>).doNotTrack = null;
   Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: undefined });
+});
+
+it('exact production-host gate admits only the two live hosts and blocks preview origins', () => {
+  expect([...PRODUCTION_HOSTS]).toEqual(['chartgenie.xyz', 'www.chartgenie.xyz']);
+  // jsdom runs under https://chartgenie.xyz/, so the default host is production.
+  expect(productionHost()).toBe(true);
+  for (const h of ['chartgenie.xyz', 'www.chartgenie.xyz']) expect(productionHost(h)).toBe(true);
+  for (const h of ['localhost', '127.0.0.1', 'chartgenie-git-main.vercel.app', 'chartgenie-abc.vercel.app', 'preview.vercel.app', 'chartgenie.local', '', 'chartgenie.xyz.evil.com', 'evil-chartgenie.xyz']) expect(productionHost(h)).toBe(false);
+  // The gate is wired into every send gate (measurement, ping, Vercel).
+  const src = readFileSync(resolve(process.cwd(), 'src/lib/gtag.ts'), 'utf8');
+  expect(src).toMatch(/export const PRODUCTION_HOSTS = \['chartgenie\.xyz', 'www\.chartgenie\.xyz'\]/);
+  expect((src.match(/productionHost\(\)/g) || []).length).toBeGreaterThanOrEqual(3);
 });
 
 it('Consent Mode v2 defaults deny analytics storage and every ad signal', () => {

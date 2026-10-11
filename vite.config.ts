@@ -168,6 +168,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    // Run jsdom under the production origin so the exact-host measurement gate
+    // passes; a dedicated test pins that non-production hosts are no-ops.
+    environmentOptions: { jsdom: { url: 'https://chartgenie.xyz/' } },
     setupFiles: ['./src/test/setup.ts'],
     exclude: ['e2e/**', 'node_modules/**', '.archive/**', 'docs/**'],
   }

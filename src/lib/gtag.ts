@@ -17,6 +17,15 @@ let preferenceWriteFailed = false;
 let lastPageViewRoute: string | null = null;
 export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
 
+// Exact production-host gate: only the two live hosts may report to GA4. Every
+// other origin (localhost, 127.0.0.1, *.vercel.app previews, *.local) is a no-op
+// so developer and preview sessions never pollute production analytics.
+export const PRODUCTION_HOSTS = ['chartgenie.xyz', 'www.chartgenie.xyz'] as const;
+export function productionHost(host?: string | null): boolean {
+  const h = host ?? (typeof window === 'undefined' ? '' : window.location.hostname);
+  return (PRODUCTION_HOSTS as readonly string[]).includes(h);
+}
+
 // Consent Mode v2 defaults: analytics_storage denied → cookieless pings only.
 // Ad signals are denied at default and never upgraded.
 export const CONSENT_DEFAULTS = { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' } as const;
@@ -36,16 +45,16 @@ function savedChoice(): string | null {
 }
 // Full measurement (product events, Vercel monitoring): explicit grant required.
 export function measurementAllowed(): boolean {
-  try { return !!currentMeasurementRoute() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
+  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
 }
 // Cookieless-ping gate (Consent Mode v2): the tag loads with consent defaults
 // denied unless the visitor explicitly opted out, a privacy signal is on, the
 // release gate is closed, or the URL is not a clean allowlisted public route.
 export function pingAllowed(): boolean {
-  try { return !!currentMeasurementRoute() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() !== 'denied'; } catch { return false; }
+  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() !== 'denied'; } catch { return false; }
 }
 export function vercelWebAllowed(): boolean {
-  try { return !!currentMeasurementRoute() && !preferenceWriteFailed && VERCEL_WEB_READY && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
+  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && VERCEL_WEB_READY && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
 }
 function disableMeasurement(): void {
   (window as unknown as Record<string, unknown>)[`ga-disable-${getActiveGaMeasurementId()}`] = true;
