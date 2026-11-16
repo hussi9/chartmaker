@@ -41,3 +41,7 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **G-04 open**: owner decision on the consent default (granted shipped per owner choice; security review still flags EEA/UK/CH).
 - **G-02, G-03 open**: owner actions in Google (GA Viewer grant, Search Console verification).
 - **Incident (2026-11-16)**: a production deploy built from HEAD briefly reverted the owner's granted consent default. Rolled back, then redeployed with the granted set (`ccce88e`). Two deploys needed a manual `vercel alias set chartgenie.xyz` after reporting READY. Check the alias on every deploy.
+
+## Decision 2026-11-16
+
+- **G-04 closed by owner decision: keep analytics granted by default in all regions.** The security review's EEA/UK/CH concern is accepted as a risk for now. Revisit only if counsel advises otherwise. No code change.
