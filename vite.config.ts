@@ -9,11 +9,13 @@ import { execFileSync } from 'node:child_process'
 import type { PreviewServer, ViteDevServer } from 'vite'
 import { isAppPath, isPublishedRoute, routeMetadata, type PublishedRoute } from './src/lib/routeMetadata.ts'
 import { structuredDataScript, buildSitemapXml } from './src/lib/seo.ts'
+import { initialPageContent } from './src/lib/searchContent.ts'
 
 function routeHtml(html: string, path: keyof typeof routeMetadata) {
   const meta = routeMetadata[path]
   const canonical = `https://chartgenie.xyz${path}`
   return html
+    .replace(/<div id="root">[\s\S]*?<\/div>/, `<div id="root">${initialPageContent(path)}</div>`)
     .replace(/<title>[^<]*<\/title>/, `<title>${meta.title}</title>`)
     .replace(/<meta name="description" content="[^"]*"\s*\/>/, `<meta name="description" content="${meta.description}" />`)
     .replace(/<link rel="canonical" href="[^"]*"\s*\/>/, `<link rel="canonical" href="${canonical}" />`)
