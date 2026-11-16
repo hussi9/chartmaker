@@ -69,3 +69,11 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 ## Test flake (2026-11-16)
 
 - `src/test/index-route.test.tsx`, "shows the templates gallery for /?templates=1 even when a chart is already saved": failed once in a full run (693 tests), passed on the rerun and passes alone twice. Not caused by the embed change. Timing under load; record and watch.
+
+## Production record and deploy rules (2026-11-16, from the parent session's report)
+
+- **Production:** `growth/chartgenie-line-page` at `4c4a0fe`, deployment `dpl_2aa8YEASx6HrrTA61urdynZ2ZDqS`, built with `--prod` from the clean worktree `/private/tmp/cg-line-page`. Not a promoted preview, so production env applies.
+- **Rule:** deploy only from this worktree. Do not merge into or touch the main checkout at `~/devpro/chartmaker`, which the parent reports has about 40 uncommitted older files and is 12 commits behind this branch.
+- **Rule:** alias `chartgenie.xyz` only after a `--prod` deploy. Never alias `www`.
+- **Incident (alias):** the parent briefly aliased `www.chartgenie.xyz`, which overrode its project-level 307 to the apex and showed an SSO wall. Removed. `www` is 307 to the apex again.
+- **Verified by the parent after this deploy:** `chartgenie.xyz` 200 on a new bundle; consent default granted; GA id present; h1 on `/` and the four landing pages; sitemap and robots 200; unknown path 404; embed command in the lazy palette chunk.
