@@ -30,8 +30,8 @@ it('exact production-host gate admits only the two live hosts and blocks preview
   expect((src.match(/productionHost\(\)/g) || []).length).toBeGreaterThanOrEqual(3);
 });
 
-it('Consent Mode v2 defaults deny analytics storage and every ad signal', () => {
-  expect({ ...CONSENT_DEFAULTS }).toEqual({ analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+it('Consent Mode v2 defaults grant analytics storage in every region and deny every ad signal', () => {
+  expect({ ...CONSENT_DEFAULTS }).toEqual({ analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
 });
 
 it('issues consent defaults before the tag script and pushes Arguments objects, never arrays', () => {
@@ -213,4 +213,21 @@ it('rejects prototype event names and strips unknown fields from valid events', 
   track('export_one', { format: 'png', title: 'CANARY' } as never);
   expect(send).toHaveBeenCalledTimes(1);
   expect(JSON.stringify(send.mock.calls)).not.toContain('CANARY');
+});
+
+// Runs last: it exercises the module-level pageview dedup, so it resets that
+// state first and must not leave a route claimed for earlier tests.
+it('queues the granted consent state before the page_view hit for an already opted-in visit', () => {
+  // Regression: a page_view processed before its consent update goes out as a
+  // cookieless denied ping (gcs=G100) and never appears in GA4 reports.
+  setMeasurementConsent(false);
+  localStorage.setItem(CONSENT_KEY, 'granted');
+  initGoogleAnalytics();
+  script()!.dispatchEvent(new Event('load'));
+  const cmds = commands();
+  const viewIdx = cmds.findIndex((c) => c[0] === 'event' && c[1] === 'page_view');
+  expect(viewIdx).toBeGreaterThan(-1);
+  const grantIdx = cmds.findIndex((c) => c[0] === 'consent' && c[1] === 'update' && (c[2] as { analytics_storage?: string }).analytics_storage === 'granted');
+  expect(grantIdx).toBeGreaterThan(-1);
+  expect(grantIdx).toBeLessThan(viewIdx);
 });

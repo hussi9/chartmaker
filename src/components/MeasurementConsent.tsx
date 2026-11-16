@@ -22,8 +22,8 @@ export function MeasurementConsent() {
   const ready = measurementReady() || VERCEL_WEB_READY;
   const blocked = privacySignal();
   return <section aria-label="Privacy choices" style={{ padding: '12px 24px', fontSize: 13 }}>
-    <p>{!ready ? 'Optional measurement is not collecting while provider verification is pending.' : blocked ? 'Optional measurement is off because your browser requests privacy.' : allowed ? 'Optional usage measurement is on.' : 'Optional usage measurement is off (cookieless visit counts only).'} Guest tools work without it.</p>
-    {ready && !blocked && <button type="button" onClick={() => setMeasurementConsent(!allowed)}>{allowed ? 'Turn off measurement' : 'Allow optional measurement'}</button>}
-    <p>On public pages we count visits with cookieless Google Analytics pings: consent starts denied, so no cookies are set and no ad features run. Allowing upgrades consent (analytics cookies plus bounded product events); turning it off stops every send. Withdrawal stops new sends; it does not delete data already sent. <a href="/privacy.html">Privacy details</a></p>
+    <p>{!ready ? 'Measurement is not collecting while provider verification is pending.' : blocked ? 'Measurement is off because your browser requests privacy.' : allowed ? 'Usage measurement is on: aggregate page and tool events only, no ads, no profiling.' : 'Usage measurement is off for this browser: no analytics cookies are set and no data is sent.'} Guest tools work without it.</p>
+    {ready && !blocked && <button type="button" onClick={() => setMeasurementConsent(!allowed)}>{allowed ? 'Turn measurement off' : 'Turn measurement on'}</button>}
+    <p>Analytics is on by default so an ordinary visit is counted. There is no ad tracking and no data selling — only aggregate page and tool events. Turning measurement off stops every send from this browser. Withdrawal stops new sends; it does not delete data already sent. <a href="/privacy.html">Privacy details</a></p>
   </section>;
 }

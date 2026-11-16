@@ -15,7 +15,7 @@ export const CONSENT_KEY = 'chartgenie:measurement:v1';
 export const VERCEL_WEB_READY = import.meta.env.VITE_VERCEL_WEB_MEASUREMENT_READY !== 'false';
 let preferenceWriteFailed = false;
 let lastPageViewRoute: string | null = null;
-export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/line-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
+export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
 
 // Exact production-host gate: only the two live hosts may report to GA4. Every
 // other origin (localhost, 127.0.0.1, *.vercel.app previews, *.local) is a no-op
@@ -26,9 +26,13 @@ export function productionHost(host?: string | null): boolean {
   return (PRODUCTION_HOSTS as readonly string[]).includes(h);
 }
 
-// Consent Mode v2 defaults: analytics_storage denied → cookieless pings only.
-// Ad signals are denied at default and never upgraded.
-export const CONSENT_DEFAULTS = { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' } as const;
+// Consent Mode v2 defaults: analytics_storage granted in every region so visits
+// are counted in reports; ad signals stay denied and never upgrade. A visitor's
+// explicit "off" (or a browser privacy signal) still stops every send.
+// Trade-off (owner decision, 2026-10-16): granting analytics by default in the
+// EEA/UK/CH is stricter-consent territory under GDPR/ePrivacy; region-scoped
+// denial can be reintroduced by adding a `region` list to this default.
+export const CONSENT_DEFAULTS = { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' } as const;
 
 export function currentMeasurementRoute(): string | null {
   if (window.location.search || window.location.hash) return null;
@@ -43,9 +47,10 @@ export function privacySignal(): boolean {
 function savedChoice(): string | null {
   try { return localStorage.getItem(CONSENT_KEY); } catch { return null; }
 }
-// Full measurement (product events, Vercel monitoring): explicit grant required.
+// Full measurement (product events, Vercel monitoring): allowed unless the
+// visitor explicitly opted out or a browser privacy signal is present.
 export function measurementAllowed(): boolean {
-  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
+  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() !== 'denied'; } catch { return false; }
 }
 // Cookieless-ping gate (Consent Mode v2): the tag loads with consent defaults
 // denied unless the visitor explicitly opted out, a privacy signal is on, the
@@ -54,7 +59,7 @@ export function pingAllowed(): boolean {
   try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && measurementReady() && !privacySignal() && savedChoice() !== 'denied'; } catch { return false; }
 }
 export function vercelWebAllowed(): boolean {
-  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && VERCEL_WEB_READY && !privacySignal() && savedChoice() === 'granted'; } catch { return false; }
+  try { return !!currentMeasurementRoute() && productionHost() && !preferenceWriteFailed && VERCEL_WEB_READY && !privacySignal() && savedChoice() !== 'denied'; } catch { return false; }
 }
 function disableMeasurement(): void {
   (window as unknown as Record<string, unknown>)[`ga-disable-${getActiveGaMeasurementId()}`] = true;
@@ -110,6 +115,8 @@ export function setMeasurementConsent(granted: boolean): void {
   const allow = granted && !privacySignal();
   // Disable first so failures during preference storage or provider calls cannot defeat withdrawal.
   disableMeasurement();
+  // Consent changes never replay an earlier navigation; a pageview is owned by
+  // the route hook that observed it.
   if (!granted) lastPageViewRoute = null;
   try { localStorage.setItem(CONSENT_KEY, allow ? 'granted' : 'denied'); preferenceWriteFailed = false; } catch { preferenceWriteFailed = true; }
   const effectivePing = pingAllowed();
@@ -131,6 +138,10 @@ function context(route: string) {
 function sendPageView(route: string): void {
   if (!pingAllowed() || !window.gtag || document.getElementById('ga4-gtag-script')?.dataset.loaded !== 'true') return;
   if (lastPageViewRoute === route) return;
+  // Consent state must be queued BEFORE the hit: gtag.js processes the
+  // dataLayer in order, so a page_view sent while the queued state is still
+  // denied goes out as a cookieless ping and never reaches reports.
+  applyConsent();
   window.gtag?.('event', 'page_view', context(route));
   lastPageViewRoute = route;
 }
