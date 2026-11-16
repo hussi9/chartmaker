@@ -43,6 +43,10 @@
     {
       "source": "/convert-excel-to-chart",
       "destination": "/convert-excel-to-chart/index.html"
+    },
+    {
+      "source": "/line-graph-maker",
+      "destination": "/line-graph-maker/index.html"
     }
   ],
   "functions": {

@@ -94,14 +94,14 @@ describe('buildSitemapXml', () => {
   it('falls back to today when a route has no known lastmod', () => {
     const xml = buildSitemapXml({}, '2026-09-27');
     expect(xml).toContain('<lastmod>2026-09-27</lastmod>');
-    expect((xml.match(/<lastmod>2026-09-27<\/lastmod>/g) ?? []).length).toBe(4);
+    expect((xml.match(/<lastmod>2026-09-27<\/lastmod>/g) ?? []).length).toBe(5);
   });
 
   it('uses a real per-route lastmod when one is given', () => {
     const xml = buildSitemapXml({ '/pie-chart-maker': '2026-09-10' }, '2026-09-27');
     expect(xml).toContain('<loc>https://chartgenie.xyz/pie-chart-maker</loc>\n    <lastmod>2026-09-10</lastmod>');
-    // the other 3 routes still fall back to today
-    expect((xml.match(/<lastmod>2026-09-27<\/lastmod>/g) ?? []).length).toBe(3);
+    // the other 4 routes still fall back to today
+    expect((xml.match(/<lastmod>2026-09-27<\/lastmod>/g) ?? []).length).toBe(4);
   });
 
   it('ignores a malformed lastmod (defends against a bad git date) rather than emitting invalid XML content', () => {
@@ -109,18 +109,18 @@ describe('buildSitemapXml', () => {
     expect(xml).toContain('<loc>https://chartgenie.xyz/</loc>\n    <lastmod>2026-09-27</lastmod>');
   });
 
-  it('lists exactly the 4 published routes with the same priority/changefreq the hand-written sitemap used', () => {
+  it('lists exactly the 5 published routes with the same priority/changefreq the hand-written sitemap used', () => {
     const xml = buildSitemapXml({}, '2026-09-27');
     expect(xml).toContain('<loc>https://chartgenie.xyz/</loc>\n    <lastmod>2026-09-27</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>1.0</priority>');
     expect(xml).toContain('<changefreq>weekly</changefreq>\n    <priority>0.9</priority>');
     expect(xml).toContain('<priority>0.8</priority>');
-    expect(xml.match(/<url>/g)).toHaveLength(4);
+    expect(xml.match(/<url>/g)).toHaveLength(5);
   });
 
   it('is well-formed enough to parse as XML', () => {
     const xml = buildSitemapXml({}, '2026-09-27');
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     expect(doc.querySelector('parsererror')).toBeNull();
-    expect(doc.querySelectorAll('url')).toHaveLength(4);
+    expect(doc.querySelectorAll('url')).toHaveLength(5);
   });
 });

@@ -119,6 +119,7 @@ export const SITEMAP_ENTRIES: SitemapEntry[] = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
   { path: '/pie-chart-maker', changefreq: 'weekly', priority: '0.9' },
   { path: '/bar-graph-maker', changefreq: 'weekly', priority: '0.9' },
+  { path: '/line-graph-maker', changefreq: 'weekly', priority: '0.9' },
   { path: '/convert-excel-to-chart', changefreq: 'weekly', priority: '0.8' },
 ];
 

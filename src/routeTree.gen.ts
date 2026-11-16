@@ -15,6 +15,7 @@ import { Route as BarGraphMakerRouteImport } from './routes/bar-graph-maker'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as ChartsRouteImport } from './routes/charts'
 import { Route as ConvertExcelToChartRouteImport } from './routes/convert-excel-to-chart'
+import { Route as LineGraphMakerRouteImport } from './routes/line-graph-maker'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as PieChartMakerRouteImport } from './routes/pie-chart-maker'
 import { Route as SeriesRouteImport } from './routes/series'
@@ -50,6 +51,11 @@ const ChartsRoute = ChartsRouteImport.update({
 const ConvertExcelToChartRoute = ConvertExcelToChartRouteImport.update({
   id: '/convert-excel-to-chart',
   path: '/convert-excel-to-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LineGraphMakerRoute = LineGraphMakerRouteImport.update({
+  id: '/line-graph-maker',
+  path: '/line-graph-maker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewRoute = NewRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/brand': typeof BrandRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
   '/series': typeof SeriesRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/brand'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
     | '/series'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/brand'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
     | '/series'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/brand'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
     | '/series'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   BrandRoute: typeof BrandRoute
   ChartsRoute: typeof ChartsRoute
   ConvertExcelToChartRoute: typeof ConvertExcelToChartRoute
+  LineGraphMakerRoute: typeof LineGraphMakerRoute
   NewRoute: typeof NewRoute
   PieChartMakerRoute: typeof PieChartMakerRoute
   SeriesRoute: typeof SeriesRoute
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/convert-excel-to-chart'
       fullPath: '/convert-excel-to-chart'
       preLoaderRoute: typeof ConvertExcelToChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/line-graph-maker': {
+      id: '/line-graph-maker'
+      path: '/line-graph-maker'
+      fullPath: '/line-graph-maker'
+      preLoaderRoute: typeof LineGraphMakerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/new': {
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   BrandRoute: BrandRoute,
   ChartsRoute: ChartsRoute,
   ConvertExcelToChartRoute: ConvertExcelToChartRoute,
+  LineGraphMakerRoute: LineGraphMakerRoute,
   NewRoute: NewRoute,
   PieChartMakerRoute: PieChartMakerRoute,
   SeriesRoute: SeriesRoute,

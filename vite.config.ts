@@ -33,6 +33,7 @@ const ROUTE_SOURCE_FILE: Record<PublishedRoute, string> = {
   '/': 'src/routes/index.tsx',
   '/pie-chart-maker': 'src/routes/pie-chart-maker.tsx',
   '/bar-graph-maker': 'src/routes/bar-graph-maker.tsx',
+  '/line-graph-maker': 'src/routes/line-graph-maker.tsx',
   '/convert-excel-to-chart': 'src/routes/convert-excel-to-chart.tsx',
 }
 

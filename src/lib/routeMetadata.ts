@@ -14,6 +14,11 @@ export const routeMetadata = {
     description: 'Compare categories with a bar graph. Edit the example rows or paste your own values, then export PNG or SVG.',
     heading: 'Compare values with a bar graph'
   },
+  '/line-graph-maker': {
+    title: 'Line Graph Maker — ChartGenie',
+    description: 'Show change over time with a line graph. Edit the example points or paste your own dated values, then export PNG or SVG.',
+    heading: 'Show change over time with a line graph'
+  },
   '/convert-excel-to-chart': {
     title: 'Convert Excel Rows to a Chart — ChartGenie',
     description: 'Paste rows copied from Excel or a spreadsheet into ChartGenie, check the parsed values, then make a chart and export it.',
