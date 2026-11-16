@@ -45,3 +45,13 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 ## Decision 2026-11-16
 
 - **G-04 closed by owner decision: keep analytics granted by default in all regions.** The security review's EEA/UK/CH concern is accepted as a risk for now. Revisit only if counsel advises otherwise. No code change.
+
+## Verified reads 2026-11-16 (metrics.py, read-only; window 2026-10-18 to 2026-11-14)
+
+- **GA4** (property 556006890, hostName chartgenie.xyz only): 33 sessions, 32 users, 35 page views. Landing pages: `/` 31, `/brand` 1, `/new` 1. No sessions to any tool page in the window.
+- **Search Console**: 2 clicks, 13 impressions, average position 21.5. Pages: home only. Queries: "chart genie" 1 click, 6 impressions. No impressions for any tool-page query.
+- **Indexation** (URL Inspection, first 5 sitemap URLs): 1 of 5 indexed (home, last crawl 2026-10-19). Pie, bar, line and convert: "URL is unknown to Google".
+- **Corrections**: G-02 and G-03 are closed. The Google service account reads GA4 and Search Console for this property; the earlier "access denied" note (2026-09-29 doc) is stale. The 556006890 ID is confirmed by the hostName match.
+- **Sitemap**: already submitted by the parent session (HTTP 204, per the portal plan). Not re-submitted by this thread.
+- **Stage 4 (query map, redo)**: no measured tool-page demand in the window, only brand. Rivals from standard search are unchanged (see the 2026-11-16 entries above). No volumes: keyword tools need a plan, DataForSEO top-up is the owner's call.
+- **Consent (G-04)**: owner said "Keep granted" on 2026-11-16. The portal plan's "region list" wording conflicts. Not changed; owner to confirm which record stands.
