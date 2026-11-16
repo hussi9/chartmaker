@@ -65,3 +65,7 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **Banner:** `src/components/MeasurementConsent.tsx` says "Analytics is on by default" (commit `ccce88e`).
 - **Live:** `https://chartgenie.xyz` serves a bundle with the granted default (checked 2026-11-16 after the alias fix).
 - **Revisit:** only on the owner's instruction, or counsel's advice.
+
+## Test flake (2026-11-16)
+
+- `src/test/index-route.test.tsx`, "shows the templates gallery for /?templates=1 even when a chart is already saved": failed once in a full run (693 tests), passed on the rerun and passes alone twice. Not caused by the embed change. Timing under load; record and watch.
