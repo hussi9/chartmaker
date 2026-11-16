@@ -19,6 +19,7 @@
 - https://chartgenie.xyz/new — paste anything
 - https://chartgenie.xyz/pie-chart-maker — pie chart maker
 - https://chartgenie.xyz/bar-graph-maker — bar graph maker
+- https://chartgenie.xyz/line-graph-maker — line graph maker
 - https://chartgenie.xyz/convert-excel-to-chart — spreadsheet rows to a chart
 - https://chartgenie.xyz/sitemap.xml
 

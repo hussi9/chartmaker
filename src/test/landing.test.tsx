@@ -59,3 +59,13 @@ describe('Landing internal cross-links ("Also on ChartGenie")', () => {
     expect(await screen.findByRole('heading', { level: 1, name: routeMetadata['/convert-excel-to-chart'].heading }, { timeout: 3000 })).toBeInTheDocument();
   });
 });
+
+describe('Landing renders the same Q&A that the FAQ markup describes', () => {
+  it('shows every question for the line page as a heading', async () => {
+    const { searchContent } = await import('../lib/searchContent');
+    mount('/line-graph-maker');
+    for (const { question } of searchContent['/line-graph-maker'].questions) {
+      expect(await screen.findByRole('heading', { level: 2, name: question }, { timeout: 3000 })).toBeInTheDocument();
+    }
+  });
+});
