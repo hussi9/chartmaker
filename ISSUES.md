@@ -55,3 +55,13 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **Sitemap**: already submitted by the parent session (HTTP 204, per the portal plan). Not re-submitted by this thread.
 - **Stage 4 (query map, redo)**: no measured tool-page demand in the window, only brand. Rivals from standard search are unchanged (see the 2026-11-16 entries above). No volumes: keyword tools need a plan, DataForSEO top-up is the owner's call.
 - **Consent (G-04)**: owner said "Keep granted" on 2026-11-16. The portal plan's "region list" wording conflicts. Not changed; owner to confirm which record stands.
+
+## Decision record: consent (2026-11-16)
+
+- **Decision:** analytics is granted by default in every region. No region-based denial. Ad signals stay denied and never upgrade.
+- **Owner's words (chat, 2026-11-16):** "Keep granted".
+- **Context:** the owner had earlier decided granted by default (2026-10-16, see the `gtag.ts` comment). A security review flagged EEA/UK/CH. The owner chose to keep granted, which outranks the earlier general consent note in PLAN.md.
+- **Code:** `src/lib/gtag.ts` `CONSENT_DEFAULTS` `analytics_storage: 'granted'` (commit `ccce88e`).
+- **Banner:** `src/components/MeasurementConsent.tsx` says "Analytics is on by default" (commit `ccce88e`).
+- **Live:** `https://chartgenie.xyz` serves a bundle with the granted default (checked 2026-11-16 after the alias fix).
+- **Revisit:** only on the owner's instruction, or counsel's advice.
