@@ -32,3 +32,12 @@ Findings from the portal-growth SEO/GEO loop. Each row has evidence and an owner
 - 2026-01-15 (day 60): read again, record the decision.
 
 Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressions are unreadable, not zero.
+
+## Status update 2026-11-16 (same day, after owner authority to proceed)
+
+- **G-05 closed** in `b5f0fa6`. The landing now shows the same Q&A that the static HTML carries, and FAQPage is emitted from that same data. Test asserts they match on every route. Live: one FAQPage per page.
+- **G-06 closed** in `b5f0fa6`. llms.txt now links the line page. Live: confirmed. Owner note: the working-tree `public/llms.txt` has an uncommitted change that describes optional accounts with a Supabase identity. Accounts are not shipped, so that text was not included. Resolve it before committing that copy.
+- **G-07 unchanged**: low priority, no fix.
+- **G-04 open**: owner decision on the consent default (granted shipped per owner choice; security review still flags EEA/UK/CH).
+- **G-02, G-03 open**: owner actions in Google (GA Viewer grant, Search Console verification).
+- **Incident (2026-11-16)**: a production deploy built from HEAD briefly reverted the owner's granted consent default. Rolled back, then redeployed with the granted set (`ccce88e`). Two deploys needed a manual `vercel alias set chartgenie.xyz` after reporting READY. Check the alias on every deploy.
