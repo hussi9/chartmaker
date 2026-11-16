@@ -79,3 +79,19 @@ describe('Save chart (review item 13)', () => {
     expect(msgs).not.toContain('Saved');
   });
 });
+
+describe('Copy embed snippet command', () => {
+  it('copies an image-and-link snippet for a path-form share link', async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    mount();
+    await screen.findByText('Editor page');
+    await user.keyboard('{Meta>}k{/Meta}');
+    await user.type(screen.getByRole('combobox', { name: /search or command/i }), 'embed');
+    await user.click(await screen.findByRole('option', { name: /copy embed snippet/i }));
+    await waitFor(() => expect(writeText).toHaveBeenCalledTimes(1));
+    const copied = String(writeText.mock.calls[0][0]);
+    expect(copied).toMatch(/<a href="https?:\/\/[^"]+\/s\/[A-Za-z0-9_-]+"><img src="[^"]+\/s\/[A-Za-z0-9_-]+\/og\.png"/);
+  });
+});
