@@ -29,21 +29,21 @@ function mount(path: string) {
 }
 
 describe('Landing internal cross-links ("Also on ChartGenie")', () => {
-  it('/pie-chart-maker links to the other two tool pages, not to itself', async () => {
+  it('/pie-chart-maker links to the other three tool pages, not to itself', async () => {
     mount('/pie-chart-maker');
     const nav = await screen.findByRole('navigation', { name: /other chart tools/i }, { timeout: 3000 });
     const links = within(nav).getAllByRole('link');
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(3);
     expect(within(nav).getByRole('link', { name: new RegExp(routeMetadata['/bar-graph-maker'].heading) })).toHaveAttribute('href', '/bar-graph-maker');
     expect(within(nav).getByRole('link', { name: new RegExp(routeMetadata['/convert-excel-to-chart'].heading) })).toHaveAttribute('href', '/convert-excel-to-chart');
     expect(within(nav).queryByRole('link', { name: new RegExp(routeMetadata['/pie-chart-maker'].heading) })).toBeNull();
   });
 
-  it('/bar-graph-maker links to the other two tool pages, not to itself', async () => {
+  it('/bar-graph-maker links to the other three tool pages, not to itself', async () => {
     mount('/bar-graph-maker');
     const nav = await screen.findByRole('navigation', { name: /other chart tools/i }, { timeout: 3000 });
     const links = within(nav).getAllByRole('link');
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(3);
     expect(within(nav).queryByRole('link', { name: new RegExp(routeMetadata['/bar-graph-maker'].heading) })).toBeNull();
   });
 

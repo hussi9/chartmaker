@@ -14,7 +14,7 @@ const to = (p: string) => p as LinkProps['to'];
 // The other published tool pages, for a small cross-links row on each one
 // (internal linking between the SEO landing pages — none existed before).
 // Copy is reused verbatim from routeMetadata; nothing new is written here.
-const TOOL_ROUTES: PublishedRoute[] = ['/pie-chart-maker', '/bar-graph-maker', '/convert-excel-to-chart'];
+const TOOL_ROUTES: PublishedRoute[] = ['/pie-chart-maker', '/bar-graph-maker', '/line-graph-maker', '/convert-excel-to-chart'];
 
 export interface LandingProps { route: PublishedRoute; type: ChartType; steps: string[]; intakeFirst?: boolean }
 
