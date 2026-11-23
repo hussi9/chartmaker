@@ -77,3 +77,10 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **Rule:** alias `chartgenie.xyz` only after a `--prod` deploy. Never alias `www`.
 - **Incident (alias):** the parent briefly aliased `www.chartgenie.xyz`, which overrode its project-level 307 to the apex and showed an SSO wall. Removed. `www` is 307 to the apex again.
 - **Verified by the parent after this deploy:** `chartgenie.xyz` 200 on a new bundle; consent default granted; GA id present; h1 on `/` and the four landing pages; sitemap and robots 200; unknown path 404; embed command in the lazy palette chunk.
+
+## Production record 2026-11-23 (portal-growth weekly run)
+
+- **Release:** IndexNow key file `public/7afad35f….txt`, commit `82d3abe` on `growth/chartgenie-indexnow-2026-11-23` (base `0c63da3`). Tests 693/693, build passed. Preview `chartmaker-ahimpn3gz` smoke: key and `/pie-chart-maker` h1 served. Production `dpl_HWnADFMhecJQxqwbhdtm3aNZ5s7G`.
+- **Alias, again:** the `--prod` deploy did not move `chartgenie.xyz`, and `vercel alias set` now fails with "You don't have access to the domain". Fixed through the Vercel API (`POST /v2/deployments/<id>/aliases`, alias `chartgenie.xyz`, old `dpl_2aa8YEAS`). `www` untouched (307 to apex).
+- **Verified live:** key 200 with the right body; `/` and the four chart pages 200 with h1; sitemap, robots, llms.txt 200; unknown path 404; GA id `G-96D837GEH9` and `analytics_storage:"granted"` in the live bundle. IndexNow: five URLs sent, HTTP 202.
+- **Day-7 read:** the four chart pages are "URL is unknown to Google"; Search Console has never downloaded the sitemap (resubmitted 23 Nov, 204).
