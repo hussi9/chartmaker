@@ -91,3 +91,8 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **Guard:** `src/test/sister-links.test.ts` pins the four links to `public/privacy.html` and fails if a sister domain appears in any other shipped file.
 - **Checks:** vitest 697/697; `npm run build` passed; oxlint warnings only (pre-existing). Preview `chartmaker-lbsgq92oz` served the section. Production `dpl_KFPi6FbUdV6WiYMGNNswkNnohR8V`, aliased to `chartgenie.xyz` through the API (old `dpl_HWnADFMh`). `www` untouched (307 to apex).
 - **Verified live:** `/privacy.html` has each link once; `/`, `/pie-chart-maker`, sitemap, robots, IndexNow key 200 with no sister links; unknown path 404.
+
+## Findings 2026-11-23 (automated security review on push; pre-existing, not changed)
+
+- **G-07 (high, privacy copy, owner):** `public/privacy.html` says analytics_storage "start denied" and "Vercel page measurement runs only after an explicit allow". The code grants analytics by default (`src/lib/gtag.ts` `CONSENT_DEFAULTS`, owner decision "Keep granted", 2026-11-16) and `vercelWebAllowed()` only blocks an explicit denial. The page is false against shipped behaviour. Either the copy or the default must change; privacy wording needs the owner (and counsel for EEA/UK/CH).
+- **G-08 (medium, telemetry):** `src/components/MeasurementConsent.tsx` passes Vercel monitoring a route mapper that returns the raw path. `currentMeasurementRoute()` admits `/edit/<id>`, so the concrete local chart id can reach Vercel Analytics, contradicting the privacy page ("concrete chart ids mapped to their route pattern"). Fix: reuse `currentMeasurementRoute()` in the mapper so it reports `/edit/$id`. From commit `9f7194c`.
