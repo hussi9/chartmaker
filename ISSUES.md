@@ -84,3 +84,10 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **Alias, again:** the `--prod` deploy did not move `chartgenie.xyz`, and `vercel alias set` now fails with "You don't have access to the domain". Fixed through the Vercel API (`POST /v2/deployments/<id>/aliases`, alias `chartgenie.xyz`, old `dpl_2aa8YEAS`). `www` untouched (307 to apex).
 - **Verified live:** key 200 with the right body; `/` and the four chart pages 200 with h1; sitemap, robots, llms.txt 200; unknown path 404; GA id `G-96D837GEH9` and `analytics_storage:"granted"` in the live bundle. IndexNow: five URLs sent, HTTP 202.
 - **Day-7 read:** the four chart pages are "URL is unknown to Google"; Search Console has never downloaded the sitemap (resubmitted 23 Nov, 204).
+
+## Production record 2026-11-23 (sister-site links)
+
+- **Release:** "Who makes it" section on `/privacy.html` (ChartGenie's one footer-level info page; there is no About page) listing MakeMyCalculator, MoneyVibe and SignatureMaker, plus one "built by AIMasterz" link. Commit `fc1f325` on `growth/chartgenie-sister-links-2026-11-23` (base `04cf745`). Owner request 23 Nov; portal network rule keeps sister links on one page, never sitewide.
+- **Guard:** `src/test/sister-links.test.ts` pins the four links to `public/privacy.html` and fails if a sister domain appears in any other shipped file.
+- **Checks:** vitest 697/697; `npm run build` passed; oxlint warnings only (pre-existing). Preview `chartmaker-lbsgq92oz` served the section. Production `dpl_KFPi6FbUdV6WiYMGNNswkNnohR8V`, aliased to `chartgenie.xyz` through the API (old `dpl_HWnADFMh`). `www` untouched (307 to apex).
+- **Verified live:** `/privacy.html` has each link once; `/`, `/pie-chart-maker`, sitemap, robots, IndexNow key 200 with no sister links; unknown path 404.
