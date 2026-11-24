@@ -118,3 +118,7 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - Claims checked against code: sizes 1600x900, 1080x1080, 1080x1920, 1600x1200; crop overlay; post-ready checks; export set with caption.txt and alt-text.txt; SVG with three fonts embedded; XLSX not imported. Alt text is drafted by the app, not asked for.
 - Tests: vitest 728/728, tsc, oxlint (existing warnings only), build, bundle budget, api smoke. Production `dpl_EeRHtRvZoNQadhXpD7r5rUohbfRF`, aliased to `chartgenie.xyz` through the API (no www alias). Live: three guides 200 with own title and canonical, sitemap lists 8 URLs, llms.txt lists the guides. Sitemap resubmitted, 0 errors.
 - Read on 7 and 21 Dec: impressions and indexed count for the three guides. Undo: remove the three entries from the files above.
+
+## 2026-11-23 IndexNow key
+
+- Published `public/5025f81b6a64226195617e38228512a0.txt` (commit on `growth/cg-niche-guides`), deployed as `dpl_4mE3oHPqDHZFJqTV5MUucyhWs1gv`, aliased to `chartgenie.xyz` through the API, key file 200 on the live domain. IndexNow submission for the 8 sitemap URLs returned 202 (accepted, key check pending). SignatureMaker's 15 URLs returned 200.
