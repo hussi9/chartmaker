@@ -96,3 +96,12 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 
 - **G-07 (high, privacy copy, owner):** `public/privacy.html` says analytics_storage "start denied" and "Vercel page measurement runs only after an explicit allow". The code grants analytics by default (`src/lib/gtag.ts` `CONSENT_DEFAULTS`, owner decision "Keep granted", 2026-11-16) and `vercelWebAllowed()` only blocks an explicit denial. The page is false against shipped behaviour. Either the copy or the default must change; privacy wording needs the owner (and counsel for EEA/UK/CH).
 - **G-08 (medium, telemetry):** `src/components/MeasurementConsent.tsx` passes Vercel monitoring a route mapper that returns the raw path. `currentMeasurementRoute()` admits `/edit/<id>`, so the concrete local chart id can reach Vercel Analytics, contradicting the privacy page ("concrete chart ids mapped to their route pattern"). Fix: reuse `currentMeasurementRoute()` in the mapper so it reports `/edit/$id`. From commit `9f7194c`.
+
+
+## 2026-11-23 privacy fixes (G-07 privacy copy, G-08 chart id to Vercel; IDs as logged in 540e489, they reuse two older G-07/G-08 numbers)
+
+- G-08 fixed: `vercelRoute()` in `src/lib/gtag.ts` sends Vercel monitoring the allowlisted pattern (`/edit/$id`), never the local chart id. `MeasurementConsent.tsx` uses it.
+- G-07 fixed: `public/privacy.html` now says analytics is on by default (owner decision kept 2026-11-16), ad signals never, Vercel follows the same choice. Remaining risk for the owner: a granted default in the EEA, UK and Switzerland is stricter-consent territory; region-scoped denial is a one-line change in `CONSENT_DEFAULTS` if counsel advises it.
+- Also: `/line-graph-maker` was missing from `PUBLIC_ROUTES`, so that live page was never measured; added.
+- Commit `5254466` on `fix/privacy-g07-g08` (base `540e489`). Tests: new `src/test/privacy-g07-g08.test.ts`; vitest 699/700 (one timing-sensitive UI test also fails on base); tsc, build, budget, api smoke pass. Production `dpl_CNvee99twQV6DzvqVfyzTdCAfmER`, aliased to `chartgenie.xyz` and `www` via the API. Live check: privacy page has the new text and none of the old; `/`, the four tool pages, sitemap 200; sister links still on the privacy page.
+- Note: preview URLs sit behind Vercel deployment protection (302), so preview checks need the bypass header; check on the real domain after promoting.
