@@ -15,7 +15,7 @@ export const CONSENT_KEY = 'chartgenie:measurement:v1';
 export const VERCEL_WEB_READY = import.meta.env.VITE_VERCEL_WEB_MEASUREMENT_READY !== 'false';
 let preferenceWriteFailed = false;
 let lastPageViewRoute: string | null = null;
-export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/line-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
+export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/line-graph-maker', '/convert-excel-to-chart', '/chart-for-linkedin-post', '/export-chart-as-svg', '/chart-maker-no-signup', '/edit/$id'] as const;
 
 // Exact production-host gate: only the two live hosts may report to GA4. Every
 // other origin (localhost, 127.0.0.1, *.vercel.app previews, *.local) is a no-op

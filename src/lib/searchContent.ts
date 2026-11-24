@@ -1,7 +1,9 @@
 import { routeMetadata, type PublishedRoute } from './routeMetadata.ts';
+import { GUIDE_CONTENT, type GuideSection } from './guideContent.ts';
 
 // Shared by the visible app and initial HTML so crawler answers stay in sync.
-export const searchContent: Record<PublishedRoute, { answer: string; questions: { question: string; answer: string }[] }> = {
+export interface SearchContent { answer: string; questions: { question: string; answer: string }[]; sections?: GuideSection[]; cta?: { href: string; label: string } }
+export const searchContent: Record<PublishedRoute, SearchContent> = {
   '/': {
     answer: 'ChartGenie is a free online chart maker for social posts and slides. Paste spreadsheet rows or enter your own numbers, check the data, choose a chart look, and download a PNG or SVG. Editing and saved charts stay in your browser; an account is optional.',
     questions: [
@@ -42,6 +44,7 @@ export const searchContent: Record<PublishedRoute, { answer: string; questions: 
       { question: 'Does a line graph need an account?', answer: 'No. You can create and export PNG and SVG line charts without signing in. Charts are saved in this browser, so export a JSON backup if you need to keep or move your work.' },
     ],
   },
+  ...GUIDE_CONTENT,
 };
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]!));
@@ -50,5 +53,5 @@ export function initialPageContent(path: PublishedRoute): string {
   const meta = routeMetadata[path];
   const content = searchContent[path];
   const related = (Object.keys(routeMetadata) as PublishedRoute[]).filter((route) => route !== path);
-  return `<main class="cg-page cg-landing"><h1>${escapeHtml(meta.heading)}</h1><p>${escapeHtml(content.answer)}</p><p><a href="/new">Paste your numbers and create a chart</a></p><section aria-label="Chart questions">${content.questions.map(({ question, answer }) => `<h2>${escapeHtml(question)}</h2><p>${escapeHtml(answer)}</p>`).join('')}</section><nav aria-label="Chart tools">${related.map((route) => `<p><a href="${route}">${escapeHtml(routeMetadata[route].heading)}</a></p>`).join('')}</nav><p><a href="/privacy.html">Privacy and data storage</a> · <a href="mailto:admin@aimasterz.com">Contact support</a></p><noscript><p>Enable JavaScript to use the chart editor. The guides above are available without JavaScript.</p></noscript></main>`;
+  return `<main class="cg-page cg-landing"><h1>${escapeHtml(meta.heading)}</h1><p>${escapeHtml(content.answer)}</p>${(content.sections ?? []).map(({ heading, paragraphs }) => `<h2>${escapeHtml(heading)}</h2>${paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join('')}`).join('')}${content.cta ? `<p><a href="${content.cta.href}">${escapeHtml(content.cta.label)}</a></p>` : ''}<p><a href="/new">Paste your numbers and create a chart</a></p><section aria-label="Chart questions">${content.questions.map(({ question, answer }) => `<h2>${escapeHtml(question)}</h2><p>${escapeHtml(answer)}</p>`).join('')}</section><nav aria-label="Chart tools">${related.map((route) => `<p><a href="${route}">${escapeHtml(routeMetadata[route].heading)}</a></p>`).join('')}</nav><p><a href="/privacy.html">Privacy and data storage</a> · <a href="mailto:admin@aimasterz.com">Contact support</a></p><noscript><p>Enable JavaScript to use the chart editor. The guides above are available without JavaScript.</p></noscript></main>`;
 }

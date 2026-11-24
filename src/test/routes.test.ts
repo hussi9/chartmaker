@@ -20,7 +20,10 @@ describe('route HTTP contract', () => {
     ['/', 'ChartGenie'],
     ['/pie-chart-maker', 'Pie Chart Maker'],
     ['/bar-graph-maker', 'Bar Graph Maker'],
-    ['/convert-excel-to-chart', 'Excel']
+    ['/convert-excel-to-chart', 'Excel'],
+    ['/chart-for-linkedin-post', 'LinkedIn'],
+    ['/export-chart-as-svg', 'SVG'],
+    ['/chart-maker-no-signup', 'No Signup']
   ]) {
     it(`serves ${path} with its own canonical and title`, async () => {
       const response = await fetch(`${origin}${path}`, { headers: { accept: 'text/html' } });

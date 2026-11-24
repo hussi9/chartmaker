@@ -23,10 +23,28 @@ export const routeMetadata = {
     title: 'Convert Excel Rows to a Chart — ChartGenie',
     description: 'Paste rows copied from Excel or a spreadsheet into ChartGenie, check the parsed values, then make a chart and export it.',
     heading: 'Turn spreadsheet rows into a chart'
+  },
+  '/chart-for-linkedin-post': {
+    title: 'Make a Chart for a LinkedIn Post — ChartGenie',
+    description: 'How to turn a few numbers into a LinkedIn-ready chart: the 1080 by 1080 square size, safe zones, readable labels, alt text and a PNG export.',
+    heading: 'How to make a chart for a LinkedIn post'
+  },
+  '/export-chart-as-svg': {
+    title: 'Export a Chart as SVG (Vector File) — ChartGenie',
+    description: 'How to export a chart as a real SVG file with its fonts embedded, when SVG beats PNG, and how to open or edit the file in slides and design tools.',
+    heading: 'How to export a chart as an SVG file'
+  },
+  '/chart-maker-no-signup': {
+    title: 'Chart Maker With No Signup or Account — ChartGenie',
+    description: 'Make and download a chart without an account: paste numbers, check the rows, export PNG or SVG, and how saving and backups work in your browser.',
+    heading: 'Make a chart without signing up'
   }
 } as const;
 
 export type PublishedRoute = keyof typeof routeMetadata;
+
+// The how-to guides, as distinct from the four chart-tool pages.
+export const GUIDE_ROUTES = ['/chart-for-linkedin-post', '/export-chart-as-svg', '/chart-maker-no-signup'] as const satisfies readonly PublishedRoute[];
 
 export function isPublishedRoute(pathname: string): pathname is PublishedRoute {
   return Object.hasOwn(routeMetadata, pathname);

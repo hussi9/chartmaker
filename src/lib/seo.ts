@@ -145,6 +145,9 @@ export const SITEMAP_ENTRIES: SitemapEntry[] = [
   { path: "/bar-graph-maker", changefreq: "weekly", priority: "0.9" },
   { path: "/line-graph-maker", changefreq: "weekly", priority: "0.9" },
   { path: "/convert-excel-to-chart", changefreq: "weekly", priority: "0.8" },
+  { path: "/chart-for-linkedin-post", changefreq: "monthly", priority: "0.7" },
+  { path: "/export-chart-as-svg", changefreq: "monthly", priority: "0.7" },
+  { path: "/chart-maker-no-signup", changefreq: "monthly", priority: "0.7" },
 ];
 
 const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;

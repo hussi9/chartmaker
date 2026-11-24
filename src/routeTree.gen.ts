@@ -13,8 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as BarGraphMakerRouteImport } from './routes/bar-graph-maker'
 import { Route as BrandRouteImport } from './routes/brand'
+import { Route as ChartForLinkedinPostRouteImport } from './routes/chart-for-linkedin-post'
+import { Route as ChartMakerNoSignupRouteImport } from './routes/chart-maker-no-signup'
 import { Route as ChartsRouteImport } from './routes/charts'
 import { Route as ConvertExcelToChartRouteImport } from './routes/convert-excel-to-chart'
+import { Route as ExportChartAsSvgRouteImport } from './routes/export-chart-as-svg'
 import { Route as LineGraphMakerRouteImport } from './routes/line-graph-maker'
 import { Route as NewRouteImport } from './routes/new'
 import { Route as PieChartMakerRouteImport } from './routes/pie-chart-maker'
@@ -43,6 +46,16 @@ const BrandRoute = BrandRouteImport.update({
   path: '/brand',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChartForLinkedinPostRoute = ChartForLinkedinPostRouteImport.update({
+  id: '/chart-for-linkedin-post',
+  path: '/chart-for-linkedin-post',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChartMakerNoSignupRoute = ChartMakerNoSignupRouteImport.update({
+  id: '/chart-maker-no-signup',
+  path: '/chart-maker-no-signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChartsRoute = ChartsRouteImport.update({
   id: '/charts',
   path: '/charts',
@@ -51,6 +64,11 @@ const ChartsRoute = ChartsRouteImport.update({
 const ConvertExcelToChartRoute = ConvertExcelToChartRouteImport.update({
   id: '/convert-excel-to-chart',
   path: '/convert-excel-to-chart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExportChartAsSvgRoute = ExportChartAsSvgRouteImport.update({
+  id: '/export-chart-as-svg',
+  path: '/export-chart-as-svg',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LineGraphMakerRoute = LineGraphMakerRouteImport.update({
@@ -94,8 +112,11 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
+  '/chart-for-linkedin-post': typeof ChartForLinkedinPostRoute
+  '/chart-maker-no-signup': typeof ChartMakerNoSignupRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/export-chart-as-svg': typeof ExportChartAsSvgRoute
   '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
@@ -109,8 +130,11 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
+  '/chart-for-linkedin-post': typeof ChartForLinkedinPostRoute
+  '/chart-maker-no-signup': typeof ChartMakerNoSignupRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/export-chart-as-svg': typeof ExportChartAsSvgRoute
   '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
@@ -125,8 +149,11 @@ export interface FileRoutesById {
   '/$': typeof SplatRoute
   '/bar-graph-maker': typeof BarGraphMakerRoute
   '/brand': typeof BrandRoute
+  '/chart-for-linkedin-post': typeof ChartForLinkedinPostRoute
+  '/chart-maker-no-signup': typeof ChartMakerNoSignupRoute
   '/charts': typeof ChartsRoute
   '/convert-excel-to-chart': typeof ConvertExcelToChartRoute
+  '/export-chart-as-svg': typeof ExportChartAsSvgRoute
   '/line-graph-maker': typeof LineGraphMakerRoute
   '/new': typeof NewRoute
   '/pie-chart-maker': typeof PieChartMakerRoute
@@ -142,8 +169,11 @@ export interface FileRouteTypes {
     | '/$'
     | '/bar-graph-maker'
     | '/brand'
+    | '/chart-for-linkedin-post'
+    | '/chart-maker-no-signup'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/export-chart-as-svg'
     | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
@@ -157,8 +187,11 @@ export interface FileRouteTypes {
     | '/$'
     | '/bar-graph-maker'
     | '/brand'
+    | '/chart-for-linkedin-post'
+    | '/chart-maker-no-signup'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/export-chart-as-svg'
     | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
@@ -172,8 +205,11 @@ export interface FileRouteTypes {
     | '/$'
     | '/bar-graph-maker'
     | '/brand'
+    | '/chart-for-linkedin-post'
+    | '/chart-maker-no-signup'
     | '/charts'
     | '/convert-excel-to-chart'
+    | '/export-chart-as-svg'
     | '/line-graph-maker'
     | '/new'
     | '/pie-chart-maker'
@@ -188,8 +224,11 @@ export interface RootRouteChildren {
   SplatRoute: typeof SplatRoute
   BarGraphMakerRoute: typeof BarGraphMakerRoute
   BrandRoute: typeof BrandRoute
+  ChartForLinkedinPostRoute: typeof ChartForLinkedinPostRoute
+  ChartMakerNoSignupRoute: typeof ChartMakerNoSignupRoute
   ChartsRoute: typeof ChartsRoute
   ConvertExcelToChartRoute: typeof ConvertExcelToChartRoute
+  ExportChartAsSvgRoute: typeof ExportChartAsSvgRoute
   LineGraphMakerRoute: typeof LineGraphMakerRoute
   NewRoute: typeof NewRoute
   PieChartMakerRoute: typeof PieChartMakerRoute
@@ -229,6 +268,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrandRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chart-for-linkedin-post': {
+      id: '/chart-for-linkedin-post'
+      path: '/chart-for-linkedin-post'
+      fullPath: '/chart-for-linkedin-post'
+      preLoaderRoute: typeof ChartForLinkedinPostRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chart-maker-no-signup': {
+      id: '/chart-maker-no-signup'
+      path: '/chart-maker-no-signup'
+      fullPath: '/chart-maker-no-signup'
+      preLoaderRoute: typeof ChartMakerNoSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/charts': {
       id: '/charts'
       path: '/charts'
@@ -241,6 +294,13 @@ declare module '@tanstack/react-router' {
       path: '/convert-excel-to-chart'
       fullPath: '/convert-excel-to-chart'
       preLoaderRoute: typeof ConvertExcelToChartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/export-chart-as-svg': {
+      id: '/export-chart-as-svg'
+      path: '/export-chart-as-svg'
+      fullPath: '/export-chart-as-svg'
+      preLoaderRoute: typeof ExportChartAsSvgRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/line-graph-maker': {
@@ -300,8 +360,11 @@ const rootRouteChildren: RootRouteChildren = {
   SplatRoute: SplatRoute,
   BarGraphMakerRoute: BarGraphMakerRoute,
   BrandRoute: BrandRoute,
+  ChartForLinkedinPostRoute: ChartForLinkedinPostRoute,
+  ChartMakerNoSignupRoute: ChartMakerNoSignupRoute,
   ChartsRoute: ChartsRoute,
   ConvertExcelToChartRoute: ConvertExcelToChartRoute,
+  ExportChartAsSvgRoute: ExportChartAsSvgRoute,
   LineGraphMakerRoute: LineGraphMakerRoute,
   NewRoute: NewRoute,
   PieChartMakerRoute: PieChartMakerRoute,

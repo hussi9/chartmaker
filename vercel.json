@@ -47,6 +47,18 @@
     {
       "source": "/line-graph-maker",
       "destination": "/line-graph-maker/index.html"
+    },
+    {
+      "source": "/chart-for-linkedin-post",
+      "destination": "/chart-for-linkedin-post/index.html"
+    },
+    {
+      "source": "/export-chart-as-svg",
+      "destination": "/export-chart-as-svg/index.html"
+    },
+    {
+      "source": "/chart-maker-no-signup",
+      "destination": "/chart-maker-no-signup/index.html"
     }
   ],
   "functions": {

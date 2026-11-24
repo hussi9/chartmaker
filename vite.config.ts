@@ -37,6 +37,9 @@ const ROUTE_SOURCE_FILE: Record<PublishedRoute, string> = {
   '/bar-graph-maker': 'src/routes/bar-graph-maker.tsx',
   '/line-graph-maker': 'src/routes/line-graph-maker.tsx',
   '/convert-excel-to-chart': 'src/routes/convert-excel-to-chart.tsx',
+  '/chart-for-linkedin-post': 'src/routes/chart-for-linkedin-post.tsx',
+  '/export-chart-as-svg': 'src/routes/export-chart-as-svg.tsx',
+  '/chart-maker-no-signup': 'src/routes/chart-maker-no-signup.tsx',
 }
 
 function lastModFor(path: PublishedRoute): string | undefined {

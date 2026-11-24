@@ -6,7 +6,7 @@ import { useDoc } from "../../store/document";
 import { Chart } from "../../chart/render/Chart";
 import { PLOTS } from "../../chart/plots";
 import { CHART_TYPES, defaultSpec, type ChartType } from "../../chart/types";
-import { routeMetadata, type PublishedRoute } from "../../lib/routeMetadata";
+import { routeMetadata, GUIDE_ROUTES, type PublishedRoute } from "../../lib/routeMetadata";
 import { searchContent } from "../../lib/searchContent";
 import { Button } from "../common/Button";
 
@@ -95,6 +95,29 @@ export function Landing({
           ))}
         </ol>
       </div>
+      {(searchContent[route].sections ?? []).length > 0 ? (
+        <article
+          aria-label="Guide"
+          className="cg-landing-guide"
+          style={{ marginTop: 24, display: "grid", gap: 20, maxWidth: "70ch" }}
+        >
+          {searchContent[route].sections!.map(({ heading, paragraphs }) => (
+            <section key={heading}>
+              <h2 style={{ fontSize: 22, margin: "0 0 8px" }}>{heading}</h2>
+              {paragraphs.map((p) => (
+                <p key={p} style={{ margin: "0 0 10px" }}>
+                  {p}
+                </p>
+              ))}
+            </section>
+          ))}
+          {searchContent[route].cta ? (
+            <Link to={to(searchContent[route].cta!.href)} className="cg-linkbtn">
+              {searchContent[route].cta!.label} →
+            </Link>
+          ) : null}
+        </article>
+      ) : null}
       <p className="cg-hint" style={{ fontSize: 13 }}>
         {CHART_TYPES.length} chart looks, four post sizes (X, LinkedIn, Story,
         Deck), PNG and SVG export, and a share link that unfurls as a card.
@@ -129,6 +152,21 @@ export function Landing({
             </div>
           </nav>
         ) : null;
+      })()}
+      {(() => {
+        const guides = GUIDE_ROUTES.filter((r) => r !== route);
+        return (
+          <nav className="cg-landing-related" aria-label="ChartGenie guides">
+            <span className="cg-lbl">Guides</span>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {guides.map((r) => (
+                <Link key={r} to={to(r)} className="cg-linkbtn">
+                  {routeMetadata[r].heading} →
+                </Link>
+              ))}
+            </div>
+          </nav>
+        );
       })()}
     </div>
   );

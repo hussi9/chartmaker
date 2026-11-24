@@ -21,6 +21,9 @@
 - https://chartgenie.xyz/bar-graph-maker — bar graph maker
 - https://chartgenie.xyz/line-graph-maker — line graph maker
 - https://chartgenie.xyz/convert-excel-to-chart — spreadsheet rows to a chart
+- https://chartgenie.xyz/chart-for-linkedin-post — guide: make a chart for a LinkedIn post (1080×1080, safe zones, alt text)
+- https://chartgenie.xyz/export-chart-as-svg — guide: export a chart as a real SVG file with fonts embedded
+- https://chartgenie.xyz/chart-maker-no-signup — guide: make and download a chart with no account, and how browser saving works
 - https://chartgenie.xyz/sitemap.xml
 
 ## Privacy
