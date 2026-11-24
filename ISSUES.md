@@ -109,3 +109,12 @@ Until G-02 and G-03 close, no growth claim is made. Zero visits or zero impressi
 - **G-08 (medium, telemetry) — fixed 2026-11-23, see below:** `src/components/MeasurementConsent.tsx` passes Vercel monitoring a route mapper that returns the raw path. `currentMeasurementRoute()` admits `/edit/<id>`, so the concrete local chart id can reach Vercel Analytics, contradicting the privacy page ("concrete chart ids mapped to their route pattern"). Fix: reuse `currentMeasurementRoute()` in the mapper so it reports `/edit/$id`. From commit `9f7194c`.
 
 - **G-08 fixed (2026-11-23):** the Vercel route mapper now returns `currentMeasurementRoute()`, so an editor visit reports `/edit/$id`. Guard: `src/test/vercel-route-mapper.test.tsx` (failed first with `/edit/chart-8f3a2c`). vitest 700/700 once machine load dropped; under load average 141 the `findByRole` 1 s waits in `index-route`, `landing` and other screen tests timed out at random, on the old component too.
+
+## 2026-11-23 release (niche guides)
+
+- Finding: Search Console showed 18 impressions in 90 days, only for the brand name; 1 of 5 sitemap URLs indexed. The four tool pages face Canva, Adobe and Visme on head terms.
+- Change: commit `76818ed` on `growth/cg-niche-guides` (base `fbe8bb9`). Three guides of 725-916 crawler-HTML words each: `/chart-for-linkedin-post`, `/export-chart-as-svg`, `/chart-maker-no-signup`. Text lives in `src/lib/guideContent.ts`, rendered by `Landing.tsx` and the prerender; each is in `routeMetadata`, `SITEMAP_ENTRIES`, `gtag.ts` PUBLIC_ROUTES, `vercel.json`, `llms.txt`, `vite.config.ts` ROUTE_SOURCE_FILE. Test: `src/test/guides.test.ts`.
+- The planned "paste spreadsheet rows" guide was replaced by `/chart-maker-no-signup` because `/convert-excel-to-chart` already owns that query (cannibalisation).
+- Claims checked against code: sizes 1600x900, 1080x1080, 1080x1920, 1600x1200; crop overlay; post-ready checks; export set with caption.txt and alt-text.txt; SVG with three fonts embedded; XLSX not imported. Alt text is drafted by the app, not asked for.
+- Tests: vitest 728/728, tsc, oxlint (existing warnings only), build, bundle budget, api smoke. Production `dpl_EeRHtRvZoNQadhXpD7r5rUohbfRF`, aliased to `chartgenie.xyz` through the API (no www alias). Live: three guides 200 with own title and canonical, sitemap lists 8 URLs, llms.txt lists the guides. Sitemap resubmitted, 0 errors.
+- Read on 7 and 21 Dec: impressions and indexed count for the three guides. Undo: remove the three entries from the files above.
