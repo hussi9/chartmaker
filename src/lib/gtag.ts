@@ -15,7 +15,7 @@ export const CONSENT_KEY = 'chartgenie:measurement:v1';
 export const VERCEL_WEB_READY = import.meta.env.VITE_VERCEL_WEB_MEASUREMENT_READY !== 'false';
 let preferenceWriteFailed = false;
 let lastPageViewRoute: string | null = null;
-export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
+export const PUBLIC_ROUTES = ['/', '/new', '/charts', '/brand', '/series', '/pie-chart-maker', '/bar-graph-maker', '/line-graph-maker', '/convert-excel-to-chart', '/edit/$id'] as const;
 
 // Exact production-host gate: only the two live hosts may report to GA4. Every
 // other origin (localhost, 127.0.0.1, *.vercel.app previews, *.local) is a no-op
@@ -39,6 +39,11 @@ export function currentMeasurementRoute(): string | null {
   const path = window.location.pathname;
   if (/^\/edit\/[^/]+$/.test(path)) return '/edit/$id';
   return (PUBLIC_ROUTES as readonly string[]).includes(path) ? path : null;
+}
+// Route reported to Vercel monitoring (G-08): the same allowlisted pattern GA4 gets, so a
+// concrete local chart id in /edit/<id> is never sent. Null skips the send.
+export function vercelRoute(path: string): string | null {
+  return path === window.location.pathname ? currentMeasurementRoute() : null;
 }
 export function measurementReady(): boolean { return import.meta.env.VITE_GA_MEASUREMENT_READY === 'true'; }
 export function privacySignal(): boolean {
