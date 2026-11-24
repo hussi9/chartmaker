@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { measurementAllowed, measurementReady, privacySignal, setMeasurementConsent, VERCEL_WEB_READY, vercelWebAllowed } from '../lib/gtag';
+import { currentMeasurementRoute, measurementAllowed, measurementReady, privacySignal, setMeasurementConsent, VERCEL_WEB_READY, vercelWebAllowed } from '../lib/gtag';
 import { installMonitoring } from '../lib/browser-monitoring';
 
 export function MeasurementConsent() {
@@ -9,7 +9,7 @@ export function MeasurementConsent() {
     const update = () => {
       setAllowed(measurementAllowed() || vercelWebAllowed());
       if (vercelWebAllowed()) {
-        if (!vercelController.current) vercelController.current = installMonitoring({ window, document, allowed: vercelWebAllowed, route: (path: string) => path === window.location.pathname && !window.location.search && !window.location.hash ? path : null, speedRoute: () => null });
+        if (!vercelController.current) vercelController.current = installMonitoring({ window, document, allowed: vercelWebAllowed, route: (path: string) => path === window.location.pathname ? currentMeasurementRoute() : null, speedRoute: () => null });
         else vercelController.current.refresh();
       }
       // Keep the installed hook: it checks current consent on every send.
